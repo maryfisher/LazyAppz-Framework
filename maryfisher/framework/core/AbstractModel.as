@@ -4,15 +4,15 @@ package maryfisher.framework.core {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class AbstractGlobalModel{
-		static public const DATA_READY:String = "modelDataReady";		
+	public class AbstractModel{
+		//static public const DATA_READY:String = "modelDataReady";		
 		public static const DATA_LOADED:String = 'modelDataLoaded';
 		public static const DATA_WAITING:String = 'modelDataWaiting';
 		
 		protected var _updateSignal:Signal;
 		protected var _status:String;
 		
-		public function AbstractGlobalModel() {
+		public function AbstractModel() {
 			_updateSignal = new Signal(String);
 			_status = DATA_WAITING;
 		}

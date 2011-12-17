@@ -34,20 +34,20 @@ package maryfisher.framework.core {
 			var dataLoaded:Boolean = true;
 			
 			for each(var modelname:String in _models) {
-				if ((this['_' + modelname] as AbstractGlobalModel).status == AbstractGlobalModel.DATA_WAITING) {
+				if ((this[modelname] as AbstractModel).status == AbstractModel.DATA_WAITING) {
 					dataLoaded = false;
 				}
 			}
 			
 			if (dataLoaded) {
-				_updateSignal.dispatch(AbstractGlobalModel.DATA_LOADED);
+				_updateSignal.dispatch(AbstractModel.DATA_LOADED);
 			}
 		}
 		
 		//public function registerForUpdate(updater:IProxyUpdate, param:Vector.<String> = null):void {
 		public function registerForUpdate(callback:Function):void {
 			for each(var modelname:String in _models) {
-				(this['_' + modelname] as AbstractGlobalModel).registerForUpdate(this);
+				(this[modelname] as AbstractModel).registerForUpdate(this);
 			}
 			_updateSignal.add(callback);
 			dataFinishedLoading();
@@ -59,7 +59,7 @@ package maryfisher.framework.core {
 		//}
 		
 		public function updateFromModel(cmd:String):void {
-			if (cmd == AbstractGlobalModel.DATA_LOADED) {
+			if (cmd == AbstractModel.DATA_LOADED) {
 				dataFinishedLoading();
 			}else {
 				/** TODO
@@ -73,7 +73,7 @@ package maryfisher.framework.core {
 		public function destroy():void {
 			_updateSignal.removeAll();
 			for each(var modelname:String in _models) {
-				(this['_' + modelname] as AbstractGlobalModel).unregisterForUpdate(this);
+				(this['_' + modelname] as AbstractModel).unregisterForUpdate(this);
 			}
 		}
 	}

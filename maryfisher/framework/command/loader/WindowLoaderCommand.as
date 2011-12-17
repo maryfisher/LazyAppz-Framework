@@ -4,7 +4,6 @@ package maryfisher.framework.command.loader {
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
 	import flash.utils.getQualifiedClassName;
-	import matchmaker.component.button.value.ValueButton;
 	
 	import flash.display.Loader;
 	import flash.display.MovieClip;

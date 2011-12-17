@@ -25,13 +25,34 @@ package maryfisher.framework.core {
 		}
 		
 		static public function registerProxy(abstractProxy:AbstractProxy):void {
-			
-			var typeXML:XML = describeType(abstractProxy);
+			if (!_instance._models) {
+				return;
+			}
+			_instance.register(abstractProxy);
+			//var typeXML:XML = describeType(abstractProxy);
+			//for each(var intFace:XML in typeXML.implementsInterface) {
+				//var classDef:Class = getDefinitionByName(intFace.@type) as Class;
+				//
+				//var model:AbstractModel = _instance._models[classDef];
+				//var model:AbstractModel = _instance._models[intFace.@type];
+				//if (model != null) {
+					//var modelName:String = getQualifiedClassName(model);
+					//var accessors:XMLList = typeXML.accessor.(@type == modelName);
+					//if (accessors) {
+						//abstractProxy[accessors[0].@name] = model;
+					//}
+				//}
+			//}
+		}
+		
+		private function register(registered:*):void {
+			var typeXML:XML = describeType(registered);
 			for each(var intFace:XML in typeXML.implementsInterface) {
-				var classDef:Class = getDefinitionByName(intFace.@type) as Class;
+				//var classDef:Class = getDefinitionByName(intFace.@type) as Class;
 				
-				var model:AbstractGlobalModel = _instance._models[classDef];
-				if (model != null) {
+				//var model:AbstractModel = _instance._models[classDef];
+				var model:AbstractModel = _models[intFace.@type];
+				if (!model) {
 					var modelName:String = getQualifiedClassName(model);
 					var accessors:XMLList = typeXML.accessor.(@type == modelName);
 					if (accessors) {
@@ -39,6 +60,10 @@ package maryfisher.framework.core {
 					}
 				}
 			}
+		}
+		
+		static public function registerForModel():void {
+			
 		}
 	}
 }
