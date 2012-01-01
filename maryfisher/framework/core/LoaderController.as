@@ -1,67 +1,94 @@
 package maryfisher.framework.core {
-	import maryfisher.framework.command.loader.AssetLoaderCommand;
-	import maryfisher.framework.command.loader.ILoaderCommandReceiver;
-	import maryfisher.framework.command.loader.LoaderCommand;
-	import maryfisher.framework.command.loader.WindowLoaderCommand;
-	import maryfisher.framework.command.view.ViewCommand;
 	import flash.utils.Dictionary;
-	import flash.utils.getDefinitionByName;
-	import flash.utils.getQualifiedClassName;
-	import maryfisher.framework.core.ILoaderView;
+	import maryfisher.framework.command.loader.IViewLoadingCallback;
+	import maryfisher.framework.command.loader.LoaderCommand;
+	import maryfisher.framework.command.loader.LoadViewCommand;
+	import maryfisher.framework.command.view.ViewCommand;;
+	import maryfisher.framework.data.LoaderData;
+	import maryfisher.framework.view.ILoaderView;
+	import maryfisher.framework.view.IViewComponent;
+	
 	/**
-	 * initial Loading?? über Event, auf das der GameController horcht und dann den 
-	 * activityController initialisiert?
-	 * kann dann auch neu gemacht werden, wenn GameMenu load/new
+	 * 
 	 * @author mary_fisher
 	 */
-	public class LoaderController implements ILoaderCommandReceiver {
+	public class LoaderController implements IViewLoadingCallback{
+		
+		static private var _instance:LoaderController;
+		
+		private var _paths:Dictionary; /* loaderid => LoaderData */
 		
 		protected var _activeLoader:Vector.<LoaderCommand>;
+		protected var _queuedLoader:Vector.<LoaderCommand>;
+		protected var _prioritizedLoader:Vector.<LoaderCommand>;
 		protected var _loaderView:ILoaderView;
 		protected var _cachedAssets:Dictionary;
 		
 		public function LoaderController() {
+			_activeLoader = new Vector.<LoaderCommand>();
+			_queuedLoader = new Vector.<LoaderCommand>();
+			_prioritizedLoader = new Vector.<LoaderCommand>();
 			
+			_cachedAssets = new Dictionary();
 		}
 		
-		public function init():void {
-			_activeLoader = new Vector.<LoaderCommand>();
-			//_loaderView = new LoaderView();
-			_cachedAssets = new Dictionary();
-			//CommandController.registerForLoaderCommand(this);
-			new ViewCommand(_loaderView);
+		static public function getInstance():LoaderController {
+			if (!_instance) {
+				_instance = new LoaderController();
+				
+			}
+			return _instance;
+		}
+		
+		static public function init(paths:Dictionary, loadingScreenPath:String = null):void {
+			getInstance()._paths = paths;
+			
+			if (loadingScreenPath) {
+				new LoadViewCommand(loadingScreenPath, _instance);
+			}
 		}
 		
 		public function set loaderCommand(cmd:LoaderCommand):void {
 			/* TODO
-			 * when finished irgendetwas speichern: Class/XML
 			 * _activeLoader nach Prio ordnen
+			 * nach Tick loaden
 			 */
-			//trace('start loading ...');
-			if(_cachedAssets[cmd.id] == null){
-				
-				if (!isLoading(cmd)) {
-					_loaderView.show();
-					_activeLoader.push(cmd);
-					cmd.percentLoading.add(setPercent);
-					cmd.finishedLoading.addOnce(finishedLoading);					
-					cmd.loadAsset();
-				}
-				
-				
-			}else {
+			
+			if (_cachedAssets[cmd.id] != null) {
 				cmd.asset = _cachedAssets[cmd.id];
-				//if (cmd is AssetLoaderCommand) {
-					//(cmd as AssetLoaderCommand).assetLoaderCommand = _cachedAssets[cmd.id]
-					//(cmd as AssetLoaderCommand).assetDomain = _cachedAssets[cmd.id]
-					//cmd.setFinished();
-				//}else{
-					
-				//}
+				return;
 			}
+			
+			if (cmd is LoadViewCommand) {
+				var loaderData:LoaderData = _paths[cmd.id];
+				var lcmd:LoaderCommand = new loaderData.type(cmd.id, cmd.priority);
+				lcmd.finishedLoading.addOnce(cmd.leachLoading);
+				return;
+			}
+			
+			if (isLoading(cmd)) {
+				return;
+			}
+			
+			_activeLoader.push(cmd);
+			cmd.percentLoading.add(setPercent);
+			cmd.finishedLoading.addOnce(finishedLoading);					
+			cmd.loadAsset(_paths[cmd.id]);
+			_loaderView && _loaderView.show();			
+		}
+		
+		public function set loaderView(value:ILoaderView):void {
+			_loaderView = value;
+		}
+		
+		public function unloadAsset(id:String):void {
+			_cachedAssets[id] = null;
 		}
 		
 		private function isLoading(cmd:LoaderCommand):Boolean {
+			/* TODO
+			 * _activeLoader zu einem Dictionary machen, so dass schneller id gefunden wird
+			 */
 			for each(var lcmd:LoaderCommand in _activeLoader) {
 				if (lcmd.id == cmd.id) {
 					lcmd.finishedLoading.addOnce(cmd.leachLoading);
@@ -74,34 +101,35 @@ package maryfisher.framework.core {
 		
 		
 		protected function finishedLoading(cmd:LoaderCommand):void {
+			
 			_activeLoader.splice(_activeLoader.indexOf(cmd), 1);
-			//trace('finish loading _activeLoader.length ' + _activeLoader.length);
-			if (_activeLoader.length == 0) _loaderView.hide();
-			//if (!(cmd is WindowLoaderCommand)) {
-				//var cl:Class = getDefinitionByName(getQualifiedClassName((cmd as WindowLoaderCommand).asset)) as Class;
-				//_cachedAssets[cmd.id] = cl;
-			//}else 
-			//if (cmd is AssetLoaderCommand) {
-				if (cmd.doCache) {
-					//_cachedAssets[cmd.id] = cmd;
-					_cachedAssets[cmd.id] = cmd.asset;
-				}
-			//}
+			if (cmd.loaderData.doCache) {
+				_cachedAssets[cmd.id] = cmd.asset;
+			}
+			
+			if (_activeLoader.length == 0) {
+				_loaderView && _loaderView.hide();
+			}
 		}
 		
 		protected function setPercent(cmd:LoaderCommand):void{
-			/* TODO
-			 * progress anzeigen
-			 */
 			
 			var percent:Number = 0;
 			for each(var cmd:LoaderCommand in _activeLoader) {
-				//trace('percent ' + cmd.percent , cmd);
 				percent += cmd.percent;
 			}
 			percent = percent / _activeLoader.length;
-			_loaderView.changePercent(percent);
+			_loaderView && _loaderView.changePercent(percent);
+		}
+		
+		public static function registerCommand(cmd:LoaderCommand):void {
+			_instance.loaderCommand = cmd;
+		}
+		
+		/* INTERFACE maryfisher.framework.command.loader.IViewLoadingCallback */
+		
+		public function viewLoadingFinished(cmd:LoadViewCommand):void {
+			_loaderView = cmd.viewComponent as ILoaderView;
 		}
 	}
-
 }

@@ -1,43 +1,36 @@
 package maryfisher.framework.command.loader {
-	import controller.command.global.GlobalCommand;
-	import flash.events.Event;
-	import flash.events.ProgressEvent;
+	import maryfisher.framework.config.LoaderConfig;
+	import maryfisher.framework.core.LoaderController;
+	import maryfisher.framework.data.LoaderData;
 	import org.osflash.signals.Signal;
-	import org.papervision3d.events.FileLoadEvent;
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class LoaderCommand extends GlobalCommand{
+	public class LoaderCommand{
 		
 		private var _percent:Number = 0;
 		private var _id:String;
 		private var _priority:int;
-		private var _finishedLoading:Signal;
+		protected var _finishedLoading:Signal;
 		private var _percentLoading:Signal;
-		private var _description:String;
+		protected var _loaderData:LoaderData;
 		
-		protected var _assetPath:String;
-		protected var _callback:ILoadingCallback;
-		protected var _doCache:Boolean;
-		
-		public function LoaderCommand(id:String, assetPath:String, callback:ILoadingCallback, description:String = '', doCache:Boolean = false) {
-			_assetPath = assetPath;
-			_description = description;
-			_doCache = doCache;
-			
+		public function LoaderCommand(id:String, priority:int = LoaderConfig.WHENEVER_PRIORITY) {
+			_priority = priority;	
 			_id = id;
-			/** TODO
-			 * mit eigenen Interfaces spezifizieren und in XMLLoaderCommand ect auslagern
-			 */
-			_callback = callback;
-			_finishedLoading = new Signal(LoaderCommand);
+			if (!_finishedLoading) _finishedLoading = new Signal(LoaderCommand);
 			_percentLoading = new Signal(LoaderCommand);
-			_finishedLoading.addOnce(_callback.loadingFinished);
 			execute();
 		}
 		
-		public function loadAsset():void {
+		private function execute():void {
+			LoaderController.registerCommand(this);
+		}
+		
+		public function loadAsset(loaderData:LoaderData):void {
+			_loaderData = loaderData;
+			
 			
 		}
 		
@@ -63,20 +56,11 @@ package maryfisher.framework.command.loader {
 		
 		public function leachLoading(cmd:LoaderCommand):void {
 			asset = cmd.asset;
-			//if (cmd.asset != null) {
-				//assetClass = cmd.assetClass;
-			//}else {
-				//
-			//}
+			setFinished();
 		}
 		
 		public function get finishedLoading():Signal { return _finishedLoading; }
 		public function get percentLoading():Signal { return _percentLoading; }
-		
-		public function get description():String { return _description; }
-		public function set description(value:String):void {
-			_description = value;
-		}
 		
 		public function get priority():int { return _priority; }
 		public function set priority(value:int):void {
@@ -85,7 +69,9 @@ package maryfisher.framework.command.loader {
 		
 		public function get id():String { return _id; }
 		
-		public function get doCache():Boolean { return _doCache; }
+		public function get loaderData():LoaderData {
+			return _loaderData;
+		}
 	}
 
 }

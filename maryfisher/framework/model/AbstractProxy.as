@@ -1,6 +1,7 @@
-package maryfisher.framework.core {
+package maryfisher.framework.model {
 	
 	import flash.utils.describeType;
+	import maryfisher.framework.core.ModelController;
 	
 	import org.osflash.signals.Signal;
 	/**

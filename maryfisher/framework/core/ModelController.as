@@ -4,6 +4,8 @@ package maryfisher.framework.core {
 	import flash.utils.Dictionary;
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
+	import maryfisher.framework.model.AbstractModel;
+	import maryfisher.framework.model.AbstractProxy;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -14,14 +16,19 @@ package maryfisher.framework.core {
 		static private var _instance:ModelController;
 		
 		public function ModelController() {
-			_instance = this;
+			
 		}
 		
-		public function init(models:Dictionary):void {
-			_models = models;
-			/* TODO
-			 * getQualifiedClassName
-			 */
+		static private function getInstance():ModelController {
+			if (!_instance) {
+				_instance = new ModelController();
+				
+			}
+			return _instance;
+		}
+		
+		static public function init(models:Dictionary):void {
+			getInstance()._models = models;
 		}
 		
 		static public function registerProxy(abstractProxy:AbstractProxy):void {
@@ -47,16 +54,19 @@ package maryfisher.framework.core {
 		
 		private function register(registered:*):void {
 			var typeXML:XML = describeType(registered);
+			
 			for each(var intFace:XML in typeXML.implementsInterface) {
 				//var classDef:Class = getDefinitionByName(intFace.@type) as Class;
 				
 				//var model:AbstractModel = _instance._models[classDef];
-				var model:AbstractModel = _models[intFace.@type];
-				if (!model) {
+				
+				var str:String = intFace.@type;
+				var model:AbstractModel = _models[str];
+				if (model) {
 					var modelName:String = getQualifiedClassName(model);
 					var accessors:XMLList = typeXML.accessor.(@type == modelName);
 					if (accessors) {
-						abstractProxy[accessors[0].@name] = model;
+						registered[accessors[0].@name] = model;
 					}
 				}
 			}

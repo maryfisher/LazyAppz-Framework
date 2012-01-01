@@ -1,4 +1,4 @@
-package maryfisher.framework.core {
+package maryfisher.framework.model {
 	import org.osflash.signals.Signal;
 	/**
 	 * ...

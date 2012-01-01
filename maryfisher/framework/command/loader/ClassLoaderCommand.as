@@ -1,46 +1,35 @@
 package maryfisher.framework.command.loader {
-	
 	import flash.display.Loader;
-	import flash.display.Sprite;
+	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.ProgressEvent;
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
-	import flash.utils.getQualifiedClassName;
-	import maryfisher.framework.config.LoaderConfig;
 	import maryfisher.framework.data.LoaderData;
-	
-	
-	
 	
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class AssetLoaderCommand extends LoaderCommand{
+	public class ClassLoaderCommand extends LoaderCommand {
 		
 		protected var _assetDomain:ApplicationDomain;
 		protected var _loader:Loader;
-		protected var _asset:Sprite;
 		
-		/* TODO
-		 * assetType => SWF, PNG/JPG
-		 */
-		public function AssetLoaderCommand(id:String, priority:int = LoaderConfig.WHENEVER_PRIORITY) {
+		public function ClassLoaderCommand(id:String) {
 			super(id);
 		}
 		
 		override public function loadAsset(loaderData:LoaderData):void {
 			super.loadAsset(loaderData);
-			
-			//_assetDomain = new ApplicationDomain();
-			//var context:LoaderContext = new LoaderContext(false, _assetDomain);
+			_assetDomain = new ApplicationDomain();
 			_loader = new Loader();
+			var context:LoaderContext = new LoaderContext(false, _assetDomain);
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAssetLoaded, false, 0, true);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
-			_loader.load(new URLRequest(_loaderData.path + ".swf"));
+			_loader.load(new URLRequest(_loaderData.path + ".swf"), context);
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadingProgress, false, 0, true);
 		}
 		
@@ -53,34 +42,45 @@ package maryfisher.framework.command.loader {
 		}
 		
 		protected function onAssetLoaded(ev:Event):void {
-			//_asset = (_loader.content as MovieClip).getChildAt(0) as Sprite;
-			//trace(_loader.content, (_loader.content as Sprite).numChildren);
-			_asset = _loader.content as Sprite;
 			setFinished();
 			_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onAssetLoaded, false);
-			//_loader.unload();
 		}
 		
-		public function get content():Sprite {
-			return _asset; 
-		}
-		
-		override public function get asset():Object {
-			if (_asset) {
-				
-				var classname:String = getQualifiedClassName(_asset);
-				var assetClass:Class = _loader.contentLoaderInfo.applicationDomain.getDefinition(classname) as Class;
-				
-				return assetClass;
+		public function getClass(classname:String):Class {
+			//if (_loader.contentLoaderInfo.applicationDomain.hasDefinition(classname)) {
+				//return _loader.contentLoaderInfo.applicationDomain.getDefinition(classname) as Class;
+			//}
+			if (_assetDomain.hasDefinition(classname)) {
+				return _assetDomain.getDefinition(classname) as Class;
 			}
+			
 			return null;
 		}
 		
+		//public function set assetLoaderCommand(cmd:AssetLoaderCommand):void {
+			/* TODO
+			 * hier die assetdomain ect übernehmen
+			 */
+			//_loader = cmd.loader;
+			//_assetDomain = cmd.assetDomain;
+		//}
+		
+		public function get assetDomain():ApplicationDomain { return _assetDomain; }
+		
 		override public function set asset(value:Object):void {
-			if (value is Class) {
-				_asset = new value();
+			if (value is ApplicationDomain) {
+				_assetDomain = value as ApplicationDomain;
 				setFinished();
 			}
 		}
+		
+		override public function get asset():Object {
+			return _assetDomain;
+		}
+		
+		//public function set assetDomain(value:ApplicationDomain):void {
+			//_assetDomain = value;
+		//}
 	}
+
 }

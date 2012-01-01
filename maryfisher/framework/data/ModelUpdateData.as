@@ -1,4 +1,4 @@
-package maryfisher.framework.core {
+package maryfisher.framework.data {
 	import flash.utils.Dictionary;
 	/**
 	 * Alle spezifischeren Updates mit spezifischen Objekten leiten von dieser Klasse ab
@@ -6,12 +6,12 @@ package maryfisher.framework.core {
 	 * man übergibt updateObjects an ein Dictionary, nach Typ/Klasse geordnet
 	 * @author mary_fisher
 	 */
-	public class ModelUpdate {
+	public class ModelUpdateData {
 		
 		private var _updateType:String;
 		//private var _updateObjects:Dictionary; /* Class/Type => Object */
 		
-		public function ModelUpdate(updateType:String) {
+		public function ModelUpdateData(updateType:String) {
 			_updateType = updateType;
 			
 		}

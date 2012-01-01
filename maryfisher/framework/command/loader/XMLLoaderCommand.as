@@ -6,6 +6,7 @@ package maryfisher.framework.command.loader {
 	import flash.net.URLLoader;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
+	import maryfisher.framework.data.LoaderData;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -14,15 +15,15 @@ package maryfisher.framework.command.loader {
 		
 		private var _xml:XML;
 		
-		public function XMLLoaderCommand(path:String, id:String, callback:ILoadingCallback, description:String = '') {
-			super(id, path, callback, description);
+		public function XMLLoaderCommand(id:String, callback:IXMLLoadingCallback) {
+			super(id);
 			
 			
 		}
 		
-		override public function loadAsset():void {
-			
-			var urlRequest:URLRequest = new URLRequest(_assetPath + '.xml');
+		override public function loadAsset(loaderData:LoaderData):void {
+			super.loadAsset(loaderData);
+			var urlRequest:URLRequest = new URLRequest(_loaderData.path + '.xml');
 			//if (xmldata != null) {				
 				//urlRequest.data = xmldata;
 				//urlRequest.contentType = "text/xml";
@@ -58,11 +59,14 @@ package maryfisher.framework.command.loader {
 		
 		public function get xml():XML { return _xml; }
 		
-		//override public function set asset(value:Object):void {
-			//if () {
-				//
-			//}
-		//}
+		override public function get asset():Object {
+			return _xml;
+		}
+		
+		override public function set asset(value:Object):void {
+			_xml = XML(value);
+			//setFinished();
+		}
 	}
 
 }
