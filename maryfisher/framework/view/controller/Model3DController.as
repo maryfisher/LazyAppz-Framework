@@ -4,8 +4,11 @@ package maryfisher.framework.view.controller {
 	import away3d.containers.Scene3D;
 	import away3d.containers.View3D;
 	import away3d.controllers.HoverController;
+	import away3d.library.AssetLibrary;
 	import away3d.lights.DirectionalLight;
 	import away3d.lights.PointLight;
+	import away3d.loaders.parsers.MD5AnimParser;
+	import away3d.loaders.parsers.MD5MeshParser;
 	import away3d.loaders.parsers.Parsers;
 	import away3d.materials.ColorMaterial;
 	import away3d.materials.MaterialBase;
@@ -42,7 +45,10 @@ package maryfisher.framework.view.controller {
 		private var lastMouseY:Number;
 		
 		public function Model3DController() {
-			
+			Parsers.enableAllBundled();
+			//AssetLibrary.enableParsers(Parsers.ALL_BUNDLED);
+			//AssetLibrary.enableParser(MD5AnimParser);
+			//AssetLibrary.enableParser(MD5MeshParser);
 		}
 		
 		public function setUp(stage:Stage, controller:ViewController):void {
@@ -63,7 +69,6 @@ package maryfisher.framework.view.controller {
 			_view.scene = _scene;
 			_view.camera = _camera;
 			
-			Parsers.enableAllBundled();
 			
 			_stage.addChild(_view);
 			
