@@ -3,15 +3,26 @@ package maryfisher.framework.core {
 	import away3d.containers.ObjectContainer3D;
 	import away3d.containers.Scene3D;
 	import away3d.containers.View3D;
+	import away3d.controllers.HoverController;
+	import away3d.lights.DirectionalLight;
 	import away3d.loaders.parsers.Parsers;
 	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
+	import flash.events.Event;
+	import flash.events.MouseEvent;
+	import flash.geom.Vector3D;
+	import flash.utils.Dictionary;
+	import flash.utils.getTimer;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.ViewController;
+	import maryfisher.framework.view.controller.DisplayController;
+	import maryfisher.framework.view.controller.IViewController;
+	import maryfisher.framework.view.controller.Model3DController;
+	import maryfisher.framework.view.controller.StarlingController;
+	import maryfisher.framework.view.IResizableObject;
+	import maryfisher.framework.view.ITickedObject;
 	import maryfisher.framework.view.IViewComponent;
-	import starling.core.Starling;
-	import starling.display.DisplayObject;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -24,21 +35,12 @@ package maryfisher.framework.core {
 		
 		static private var _instance:ViewController;
 		
-		
-		/**
-		 * Sprite
-		 */
 		private var _stage:Stage;
+		private var _viewController:Dictionary; /* of IViewController */
+		private var _rootClass:Class;
 		
-		/**
-		 * Starling
-		 */
-		
-		private var _tickedObjects:Vector.<IViewComponent>;
-		private var _starling:Starling;
-		private var _view:View3D;
-		private var _camera:Camera3D;
-		private var _scene:Scene3D;
+		private var _tickedObjects:Vector.<ITickedObject>;
+		private var _resiableObjects:Vector.<IResizableObject>;
 		
 		public function ViewController() {
 			
@@ -51,38 +53,33 @@ package maryfisher.framework.core {
 			return _instance;
 		}
 		
-		static public function init(stage:Stage, comp:String, rootClass:Class = null):void {
-			getInstance()._stage = stage;
+		static public function init(stage:Stage, comps:Array, rootClass:Class = null):void {
 			
-			_instance.prepareStage(comp, rootClass);
+			getInstance().prepareStage(stage, comps, rootClass);
 		}
 		
-		private function prepareStage(comp:String, rootClass:Class):void {
-			if (comp == SPRITE) {
-				return;
+		private function prepareStage(stage:Stage, comps:Array, rootClass:Class):void {
+			_rootClass = rootClass;
+			_stage = stage;
+			_viewController = new Dictionary();
+			
+			for each(var comp:String in comps) {
+				var viewcontroller:IViewController;
+				if (comp == STARLING) {
+					viewcontroller = new StarlingController();
+				}else if (comp == MODEL3D) {
+					viewcontroller = new Model3DController();
+				}else if (comp == SPRITE) {
+					viewcontroller = new DisplayController();
+				}
+				
+				_viewController[comp] = viewcontroller;
+				viewcontroller && viewcontroller.setUp(_stage, this);
 			}
 			
-			if (comp == MODEL3D) {
-				_scene = new Scene3D();
 			
-				//setup camera for optimal shadow rendering
-				_camera = new Camera3D();
-				_camera.lens.far = 2100;
-				
-				_view = new View3D();
-				_view.scene = _scene;
-				_view.camera = _camera;
-				
-				Parsers.enableAllBundled();
-				
-				_stage.addChild(_view);
-				return;
-			}
 			
-			if (comp == STARLING) {
-				_starling = new Starling(rootClass, _stage);
-				_starling.start();
-			}
+			
 		}
 		
 		static public function registerCommand(viewCommand:ViewCommand):void {
@@ -91,51 +88,49 @@ package maryfisher.framework.core {
 		}
 		
 		private function executeCommand(viewCommand:ViewCommand):void {
+			var viewcontroller:IViewController = (_viewController[viewCommand.view.componentType] as IViewController);
+			
+			if (!viewcontroller) {
+				checkForCallbacks(viewCommand);
+				return;
+			}
 			
 			switch (viewCommand.viewCommandType) {
 				case ViewCommand.ADD_VIEW:
-					addView(viewCommand.view);
+					viewcontroller.addView(viewCommand.view);
 					break;
 				case ViewCommand.REMOVE_VIEW:
-					removeView(viewCommand.view);
+					viewcontroller.removeView(viewCommand.view);
 					break;
 				case ViewCommand.TOGGLE_FULL_SCREEN:
 					toggleFullScreen();
 					break;
 				case ViewCommand.PAUSE:
-					_starling && _starling.stop();
+					viewcontroller.pauseView();
 					break;
 				case ViewCommand.CONTINUE:
-					_starling && _starling.start();
+					viewcontroller.continueView();
 					break;
 				default:
 			}
 		}
 		
-		private function addView(view:IViewComponent):void {
-			if(view.componentType == SPRITE){
-				_stage.addChild(view as flash.display.DisplayObject);
-				return;
+		private function checkForCallbacks(viewCommand:ViewCommand):void {
+			var doAdd:Boolean = (viewCommand.viewCommandType == ViewCommand.ADD_VIEW)
+			if (viewCommand.view is IResizableObject) {
+				if (doAdd) {
+					_resiableObjects.push(viewCommand.view as IResizableObject);
+				}else {
+					
+				}
 			}
 			
-			if (view.componentType == MODEL3D) {
-				_scene.addChild(view as ObjectContainer3D);
-				return;
-			}
-			
-			if (view.componentType == STARLING) {
-				_starling.stage.addChild(view as starling.display.DisplayObject);
-			}
-		}
-		
-		private function removeView(view:IViewComponent):void {
-			if(view.componentType == SPRITE){
-				_stage.removeChild(view as flash.display.DisplayObject);
-				return;
-			}
-			
-			if (view.componentType == STARLING) {
-				_starling.stage.removeChild(view as starling.display.DisplayObject);
+			if (viewCommand.view is ITickedObject) {
+				if (doAdd) {
+					_resiableObjects.push(viewCommand.view as IResizableObject);
+				}else {
+					
+				}
 			}
 		}
 		
@@ -151,6 +146,10 @@ package maryfisher.framework.core {
 					_stage.displayState = StageDisplayState.FULL_SCREEN;
 					break;
 			}
+		}
+		
+		public function get rootClass():Class {
+			return _rootClass;
 		}
 		
 	}
