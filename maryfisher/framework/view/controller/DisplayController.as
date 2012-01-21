@@ -43,6 +43,10 @@ package maryfisher.framework.view.controller {
 			
 		}
 		
+		public function get controllerId():String {
+			return ViewController.SPRITE;
+		}
+		
 	}
 
 }

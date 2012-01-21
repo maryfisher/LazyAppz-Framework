@@ -13,6 +13,7 @@ package maryfisher.framework.view.controller {
 		function setUp(stage:Stage, controller:ViewController):void
 		function pauseView():void;
 		function continueView():void;
+		function get controllerId():String;
 	}
 	
 }

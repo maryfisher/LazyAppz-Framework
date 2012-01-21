@@ -49,6 +49,10 @@ package maryfisher.framework.view.controller {
 			_starling && _starling.start();
 		}
 		
+		public function get controllerId():String {
+			return ViewController.STARLING;
+		}
+		
 	}
 
 }

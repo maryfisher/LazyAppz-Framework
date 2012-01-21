@@ -37,7 +37,6 @@ package maryfisher.framework.core {
 		
 		private var _stage:Stage;
 		private var _viewController:Dictionary; /* of IViewController */
-		private var _rootClass:Class;
 		
 		private var _tickedObjects:Vector.<ITickedObject>;
 		private var _resiableObjects:Vector.<IResizableObject>;
@@ -53,32 +52,37 @@ package maryfisher.framework.core {
 			return _instance;
 		}
 		
-		static public function init(stage:Stage, comps:Array, rootClass:Class = null):void {
+		//static public function init(stage:Stage, comps:Array, rootClass:Class = null):void {
+		static public function init(stage:Stage, comps:Array):void {
 			
-			getInstance().prepareStage(stage, comps, rootClass);
+			getInstance().prepareStage(stage, comps);
 		}
 		
-		private function prepareStage(stage:Stage, comps:Array, rootClass:Class):void {
-			_rootClass = rootClass;
+		private function prepareStage(stage:Stage, comps:Array):void {
+			
 			_stage = stage;
 			_viewController = new Dictionary();
 			
-			for each(var comp:String in comps) {
-				var viewcontroller:IViewController;
-				if (comp == STARLING) {
-					viewcontroller = new StarlingController();
-				}else if (comp == MODEL3D) {
-					viewcontroller = new Model3DController();
-				}else if (comp == SPRITE) {
-					viewcontroller = new DisplayController();
-				}
+			for each(var viewcontroller:IViewController in comps) {
+				//var viewcontroller:IViewController;
+				//if (comp == STARLING) {
+					//viewcontroller = new StarlingController();
+				//}else if (comp == MODEL3D) {
+					//viewcontroller = new Model3DController();
+				//}else if (comp == SPRITE) {
+					//viewcontroller = new DisplayController();
+				//}
 				
-				_viewController[comp] = viewcontroller;
+				_viewController[viewcontroller.controllerId] = viewcontroller;
 				viewcontroller && viewcontroller.setUp(_stage, this);
 			}
 			
+			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 			
 			
+		}
+		
+		private function handleEnterFrame(e:Event):void {
 			
 		}
 		
@@ -90,10 +94,10 @@ package maryfisher.framework.core {
 		private function executeCommand(viewCommand:ViewCommand):void {
 			var viewcontroller:IViewController = (_viewController[viewCommand.view.componentType] as IViewController);
 			
-			if (!viewcontroller) {
+			//if (!viewcontroller) {
 				checkForCallbacks(viewCommand);
-				return;
-			}
+				//return;
+			//}
 			
 			switch (viewCommand.viewCommandType) {
 				case ViewCommand.ADD_VIEW:
@@ -127,7 +131,7 @@ package maryfisher.framework.core {
 			
 			if (viewCommand.view is ITickedObject) {
 				if (doAdd) {
-					_resiableObjects.push(viewCommand.view as IResizableObject);
+					_tickedObjects.push(viewCommand.view as ITickedObject);
 				}else {
 					
 				}
@@ -147,11 +151,5 @@ package maryfisher.framework.core {
 					break;
 			}
 		}
-		
-		public function get rootClass():Class {
-			return _rootClass;
-		}
-		
 	}
-
 }
