@@ -1,6 +1,5 @@
 package maryfisher.framework.command.loader {
 	
-	import flash.utils.describeType;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.view.IAssetBuilder;
