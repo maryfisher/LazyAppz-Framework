@@ -1,11 +1,4 @@
 package maryfisher.framework.core {
-	import away3d.cameras.Camera3D;
-	import away3d.containers.ObjectContainer3D;
-	import away3d.containers.Scene3D;
-	import away3d.containers.View3D;
-	import away3d.controllers.HoverController;
-	import away3d.lights.DirectionalLight;
-	import away3d.loaders.parsers.Parsers;
 	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
@@ -64,14 +57,6 @@ package maryfisher.framework.core {
 			_viewController = new Dictionary();
 			
 			for each(var viewcontroller:IViewController in comps) {
-				//var viewcontroller:IViewController;
-				//if (comp == STARLING) {
-					//viewcontroller = new StarlingController();
-				//}else if (comp == MODEL3D) {
-					//viewcontroller = new Model3DController();
-				//}else if (comp == SPRITE) {
-					//viewcontroller = new DisplayController();
-				//}
 				
 				_viewController[viewcontroller.controllerId] = viewcontroller;
 				viewcontroller && viewcontroller.setUp(_stage, this);

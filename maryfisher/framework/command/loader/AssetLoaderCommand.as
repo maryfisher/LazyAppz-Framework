@@ -1,6 +1,7 @@
 package maryfisher.framework.command.loader {
 	
-	import flash.display.Loader;
+	//import flash.display.Loader;
+	import com.wispagency.display.Loader;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
@@ -8,6 +9,7 @@ package maryfisher.framework.command.loader {
 	import flash.net.URLRequest;
 	import flash.system.ApplicationDomain;
 	import flash.system.LoaderContext;
+	import flash.system.SecurityDomain;
 	import flash.utils.getQualifiedClassName;
 	import maryfisher.framework.config.LoaderConfig;
 	import maryfisher.framework.data.LoaderData;
@@ -36,11 +38,16 @@ package maryfisher.framework.command.loader {
 			super.loadAsset(loaderData);
 			
 			//_assetDomain = new ApplicationDomain();
-			//var context:LoaderContext = new LoaderContext(false, _assetDomain);
+			var context:LoaderContext = new LoaderContext(false, ApplicationDomain.currentDomain);
+			context.allowCodeImport = true;
+			
+			
 			_loader = new Loader();
+			
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAssetLoaded, false, 0, true);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
-			_loader.load(new URLRequest(_loaderData.path + ".swf"));
+			_loader.load(new URLRequest(_loaderData.path + ".swf"), context);
+			//_loader.load(new URLRequest(_loaderData.path + ".swf"));
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadingProgress, false, 0, true);
 		}
 		

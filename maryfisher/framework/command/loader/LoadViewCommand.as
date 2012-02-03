@@ -1,7 +1,8 @@
 package maryfisher.framework.command.loader {
+	
+	import flash.utils.describeType;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.data.LoaderData;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IViewComponent;
 	import org.osflash.signals.Signal;
@@ -30,10 +31,6 @@ package maryfisher.framework.command.loader {
 		}
 		
 		override public function set asset(value:Object):void {
-			//if (value is IViewComponent) {
-				//_viewComponent = value as IViewComponent;
-				//return;
-			//}
 			var obj:Object = new value();
 			if (obj is IAssetBuilder) {
 				_assetBuilder = obj as IAssetBuilder;
