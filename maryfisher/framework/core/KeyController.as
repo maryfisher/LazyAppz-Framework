@@ -28,7 +28,7 @@ package maryfisher.framework.core {
 		
 		public static function init(stage:Stage):void {
 			getInstance()._stage = stage;
-			
+			_instance.activate();
 		}
 		
 		public static function getInstance():KeyController {

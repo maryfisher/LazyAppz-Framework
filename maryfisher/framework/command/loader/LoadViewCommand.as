@@ -32,7 +32,8 @@ package maryfisher.framework.command.loader {
 		
 		override public function set asset(value:Object):void {
 			var obj:Object = new value();
-			if (obj is IAssetBuilder) {
+			//trace(describeType(obj));
+			if (obj is maryfisher.framework.view.IAssetBuilder) {
 				_assetBuilder = obj as IAssetBuilder;
 				if (_assetBuilderId) {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
