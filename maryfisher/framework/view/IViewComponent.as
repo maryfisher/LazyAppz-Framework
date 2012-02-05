@@ -7,6 +7,7 @@ package maryfisher.framework.view {
 	public interface IViewComponent{
 		function get componentType():String;
 		function destroy():void;
+		//function addComponent(comp:IViewComponent):void;
 	}
 	
 }

@@ -1,5 +1,6 @@
 package maryfisher.framework.command.loader {
 	
+	import flash.display.BitmapData;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.view.IAssetBuilder;
@@ -15,7 +16,7 @@ package maryfisher.framework.command.loader {
 		private var _viewComponent:IViewComponent;
 		private var _assetBuilderId:String;
 		private var _assetBuilder:IAssetBuilder;
-		private var _loaderCommand:LoaderCommand;
+		private var _bitmapData:BitmapData;
 		
 		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, assetBuilderId:String = null) {
 			_assetBuilderId = assetBuilderId;
@@ -26,7 +27,7 @@ package maryfisher.framework.command.loader {
 		}
 		
 		override public function get asset():Object {
-			return _assetBuilder || _viewComponent;
+			return _assetBuilder || _viewComponent || _bitmapData;
 		}
 		
 		override public function set asset(value:Object):void {
@@ -41,12 +42,10 @@ package maryfisher.framework.command.loader {
 			}else if (obj is IViewComponent) {
 				_viewComponent = obj as IViewComponent;
 				new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+			}else if (obj is BitmapData) {
+				_bitmapData = obj as BitmapData;
 			}
 			setFinished();
-		}
-		
-		public function set loaderCommand(value:LoaderCommand):void {
-			_loaderCommand = value;
 		}
 		
 		public function get assetBuilder():IAssetBuilder {
@@ -55,6 +54,10 @@ package maryfisher.framework.command.loader {
 		
 		public function get viewComponent():IViewComponent {
 			return _viewComponent;
+		}
+		
+		public function get bitmapData():BitmapData {
+			return _bitmapData;
 		}
 	}
 

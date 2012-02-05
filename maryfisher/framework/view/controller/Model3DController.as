@@ -33,6 +33,7 @@ package maryfisher.framework.view.controller {
 		private var _view:View3D;
 		//private var _camera:Camera3D;
 		private var _scene:Scene3D;
+		//_cameraObjects
 		
 		//private var _cameraController:HoverController;
 		//private var light:PointLight;
@@ -91,15 +92,14 @@ package maryfisher.framework.view.controller {
 			//onResize();
 		}
 		
-		//private function onEnterFrame(event:Event):void
-		//{
+		private function onEnterFrame(event:Event):void {
 			//if (move) {
 				//_cameraController.panAngle = 0.3 * (_stage.mouseX - lastMouseX) + lastPanAngle;
 				//_cameraController.tiltAngle = 0.3 * (_stage.mouseY - lastMouseY) + lastTiltAngle;
 			//}
 			//
-			//_view.render();
-		//}
+			//_view.onEnterFrame();
+		}
 		
 		/**
 		 * Mouse down listener for navigation

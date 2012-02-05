@@ -1,5 +1,6 @@
 package maryfisher.framework.core {
 	import flash.utils.Dictionary;
+	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.IViewLoadingCallback;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.loader.LoadViewCommand;
@@ -61,7 +62,8 @@ package maryfisher.framework.core {
 			
 			if (cmd is LoadViewCommand) {
 				var loaderData:LoaderData = _paths[cmd.id];
-				var lcmd:LoaderCommand = new loaderData.type(cmd.id, cmd.priority);
+				//var lcmd:LoaderCommand = new loaderData.type(cmd.id, cmd.priority);
+				var lcmd:LoaderCommand = new AssetLoaderCommand(cmd.id, cmd.priority);
 				lcmd.finishedLoading.addOnce(cmd.leachLoading);
 				return;
 			}
