@@ -1,9 +1,11 @@
 package maryfisher.framework.command.loader {
+	import avmplus.getQualifiedClassName;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
+	import flash.utils.getDefinitionByName;
 	import maryfisher.framework.config.LoaderConfig;
 	import maryfisher.framework.data.LoaderData;
 	/**
@@ -12,25 +14,30 @@ package maryfisher.framework.command.loader {
 	 */
 	public class BaseURLLoaderCommand extends LoaderCommand {
 		
-		private var _data:*;
-		private var _fileId:String;
+		protected var _data:*;
 		protected var _dataFormat:String;
+		protected var _fileId:String;
 		
-		public function BaseURLLoaderCommand(id:String, fileId:String, priority:int=LoaderConfig.WHENEVER_PRIORITY) {
+		public function BaseURLLoaderCommand(id:String, fileId:String, 
+					priority:int=LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
 			_fileId = fileId;
-			super(id, priority);
+			super(id, priority, executeInstantly);
 			
+		}
+		
+		override public function get fileId():String {
+			return _fileId;
 		}
 		
 		public override function loadAsset(loaderData:LoaderData):void {
 			super.loadAsset(loaderData);
 			
 			
-			var urlLoader : URLLoader = new URLLoader();
-			urlLoader.dataFormat = _dataFormat;
-			urlLoader.addEventListener(Event.COMPLETE, onLoaderComplete);
-			urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onLoaderError);
-			urlLoader.load(new URLRequest(loaderData.path + _fileId));
+			var _urlLoader : URLLoader = new URLLoader();
+			_urlLoader.dataFormat = _dataFormat;
+			_urlLoader.addEventListener(Event.COMPLETE, onLoaderComplete);
+			_urlLoader.addEventListener(IOErrorEvent.IO_ERROR, onLoaderError);
+			_urlLoader.load(new URLRequest(loaderData.path + _fileId));
 		}
 		
 		private function onLoaderError(e:IOErrorEvent):void {
@@ -49,10 +56,21 @@ package maryfisher.framework.command.loader {
 		
 		override public function get asset():Object {
 			return _data as Object;
+			//if (_data) {
+				//
+				//var classname:String = getQualifiedClassName(_data);
+				//var assetClass:Class = getDefinitionByName(classname) as Class;
+				//
+				//return assetClass;
+			//}
+			//return null;
 		}
 		
 		public override function set asset(value:Object):void {
 			_data = value;
+			//if (value is Class) {
+				//_data = new value();
+			//}
 		}
 	}
 

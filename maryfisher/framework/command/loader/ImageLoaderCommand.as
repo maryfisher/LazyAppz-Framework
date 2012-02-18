@@ -14,18 +14,24 @@ package maryfisher.framework.command.loader {
 		
 		private var _image:BitmapData;
 		private var _callback:IImageLoadingCallback;
+		private var _fileId:String;
 		
-		public function ImageLoaderCommand(callback:IImageLoadingCallback, id:String, priority:int=LoaderConfig.WHENEVER_PRIORITY) {
+		public function ImageLoaderCommand(callback:IImageLoadingCallback, id:String, fileId:String, priority:int=LoaderConfig.WHENEVER_PRIORITY) {
+			_fileId = fileId;
 			_callback = callback;
 			_finishedLoading = new Signal(ImageLoaderCommand);
 			_finishedLoading.add(_callback.imageLoadingFinished);
 			super(id, priority);
 		}
 		
+		override public function get fileId():String {
+			return _fileId;
+		}
+		
 		override public function loadAsset(loaderData:LoaderData):void {
 			super.loadAsset(loaderData);
 			
-			_loader.load(new URLRequest(_loaderData.path));
+			_loader.load(new URLRequest(_loaderData.path + _fileId));
 		}
 		
 		protected override function onAssetLoaded(e:Event):void {

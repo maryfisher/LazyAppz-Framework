@@ -9,12 +9,12 @@ package maryfisher.framework.command.loader {
 	 */
 	public class TextLoaderCommand extends BaseURLLoaderCommand {
 		
-		public function TextLoaderCommand(callback:ITextLoadingCallback, id:String, fileId:String, priority:int=LoaderConfig.WHENEVER_PRIORITY) {
+		public function TextLoaderCommand(callback:ITextLoadingCallback, id:String, fileId:String, priority:int=LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
 			
 			_finishedLoading = new Signal(TextLoaderCommand);
 			_finishedLoading.addOnce(callback.textLoadingFinished);
 			_dataFormat = URLLoaderDataFormat.TEXT;
-			super(id, fileId, priority);
+			super(id, fileId, priority, executeInstantly);
 		}
 		
 	}

@@ -1,18 +1,11 @@
 package maryfisher.framework.core {
-	import flash.display.DisplayObject;
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
-	import flash.geom.Vector3D;
 	import flash.utils.Dictionary;
-	import flash.utils.getTimer;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.ViewController;
-	import maryfisher.framework.view.controller.DisplayController;
 	import maryfisher.framework.view.controller.IViewController;
-	import maryfisher.framework.view.controller.Model3DController;
-	import maryfisher.framework.view.controller.StarlingController;
 	import maryfisher.framework.view.IResizableObject;
 	import maryfisher.framework.view.ITickedObject;
 	import maryfisher.framework.view.IViewComponent;
@@ -35,7 +28,8 @@ package maryfisher.framework.core {
 		private var _resiableObjects:Vector.<IResizableObject>;
 		
 		public function ViewController() {
-			
+			_tickedObjects = new Vector.<ITickedObject>;
+			_resiableObjects = new Vector.<IResizableObject>();
 		}
 		
 		static public function getInstance():ViewController {
@@ -68,7 +62,9 @@ package maryfisher.framework.core {
 		}
 		
 		private function handleEnterFrame(e:Event):void {
-			
+			for each(var obj:ITickedObject in _tickedObjects) {
+				obj.nextTick();	
+			}
 		}
 		
 		static public function registerCommand(viewCommand:ViewCommand):void {
@@ -77,16 +73,18 @@ package maryfisher.framework.core {
 		}
 		
 		private function executeCommand(viewCommand:ViewCommand):void {
-			var viewcontroller:IViewController = (_viewController[viewCommand.view.componentType] as IViewController);
+			
+			var viewcontroller:IViewController = (_viewController[viewCommand.viewType] as IViewController);
 			
 			//if (!viewcontroller) {
-				checkForCallbacks(viewCommand);
+				
 				//return;
 			//}
 			
 			switch (viewCommand.viewCommandType) {
 				case ViewCommand.ADD_VIEW:
 					viewcontroller.addView(viewCommand.view);
+					//checkForCallbacks(viewCommand.view);
 					break;
 				case ViewCommand.REMOVE_VIEW:
 					viewcontroller.removeView(viewCommand.view);
@@ -100,26 +98,37 @@ package maryfisher.framework.core {
 				case ViewCommand.CONTINUE:
 					viewcontroller.continueView();
 					break;
+				case ViewCommand.REGISTER_VIEW:
+					viewcontroller.registerView(viewCommand.view);
+					checkForCallbacks(viewCommand.view);
+					break;
+				case ViewCommand.UNREGISTER_VIEW:
+					viewcontroller.unRegisterView(viewCommand.view);
+					removeCallbacks(viewCommand.view);
+					break;
 				default:
+					viewcontroller.registerCommand(viewCommand);
+					break;
 			}
 		}
 		
-		private function checkForCallbacks(viewCommand:ViewCommand):void {
-			var doAdd:Boolean = (viewCommand.viewCommandType == ViewCommand.ADD_VIEW)
-			if (viewCommand.view is IResizableObject) {
-				if (doAdd) {
-					_resiableObjects.push(viewCommand.view as IResizableObject);
-				}else {
-					
-				}
+		private function checkForCallbacks(view:IViewComponent):void {
+			if (view is IResizableObject) {
+				_resiableObjects.push(view as IResizableObject);
 			}
 			
-			if (viewCommand.view is ITickedObject) {
-				if (doAdd) {
-					_tickedObjects.push(viewCommand.view as ITickedObject);
-				}else {
-					
-				}
+			if (view is ITickedObject) {
+				_tickedObjects.push(view as ITickedObject);
+			}
+		}
+		
+		private function removeCallbacks(view:IViewComponent):void {
+			if (view is IResizableObject) {
+				//_resiableObjects.push(viewCommand.view as IResizableObject);
+			}
+			
+			if (view is ITickedObject) {
+				_tickedObjects.splice(_tickedObjects.indexOf(view as ITickedObject), 1);
 			}
 		}
 		

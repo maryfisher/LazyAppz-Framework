@@ -1,5 +1,6 @@
 package maryfisher.framework.view.controller {
 	import flash.display.Stage;
+	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.view.IViewComponent;
 	
@@ -13,6 +14,12 @@ package maryfisher.framework.view.controller {
 		function setUp(stage:Stage, controller:ViewController):void
 		function pauseView():void;
 		function continueView():void;
+		
+		function registerView(view:IViewComponent):void;
+		function unRegisterView(view:IViewComponent):void;
+		
+		function registerCommand(viewCommand:ViewCommand):void;
+		
 		function get controllerId():String;
 	}
 	

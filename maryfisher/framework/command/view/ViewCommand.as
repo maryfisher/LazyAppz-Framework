@@ -7,18 +7,26 @@ package maryfisher.framework.command.view {
 	 */
 	public class ViewCommand {
 		
+		public static const REGISTER_VIEW:String = 'registerView';
+		static public const UNREGISTER_VIEW:String = 'unregisterView';
+		
 		public static const TOGGLE_FULL_SCREEN:String = 'toggleFullScreen';
+		public static const PAUSE:String = 'pause';
+		public static const CONTINUE:String = 'continue';
+		
 		static public const ADD_VIEW:String = 'addView';
 		static public const REMOVE_VIEW:String = 'removeView';
-		public static const PAUSE:String = "pause";
-		public static const CONTINUE:String = "continue";
-		static public const TO_TOP_VIEW:String = 'toTopView';
-		static public const TO_BOTTOM_VIEW:String = 'toBottomView';
+		
+		//static public const TO_TOP_VIEW:String = 'toTopView';
+		//static public const TO_BOTTOM_VIEW:String = 'toBottomView';
 		
 		protected var _view:IViewComponent;
 		protected var _viewCommandType:String;
+		protected var _viewType:String;
 		
-		public function ViewCommand(tview:IViewComponent = null, viewCommandType:String = ADD_VIEW) {
+		public function ViewCommand(tview:IViewComponent = null, viewCommandType:String = ADD_VIEW, viewType:String = null) {
+
+			_viewType = viewType;
 			_viewCommandType = viewCommandType;
 			_view = tview;
 			execute();
@@ -34,5 +42,11 @@ package maryfisher.framework.command.view {
 			return _viewCommandType;
 		}
 		
+		public function get viewType():String {
+			if (view) {
+				return view.componentType;
+			}
+			return _viewType;
+		}
 	}
 }

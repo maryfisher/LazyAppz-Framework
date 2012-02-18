@@ -42,7 +42,7 @@ package maryfisher.framework.core {
 		}
 		
 		protected function handleKeyDown(event:KeyboardEvent):void {
-			trace('keydown ' + event.keyCode);
+			//trace('keydown ' + event.keyCode);
 			
 			var key:int = event.keyCode;
 			if (_keysDeactivated.indexOf(key) == -1) {

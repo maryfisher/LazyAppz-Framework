@@ -10,21 +10,21 @@ package maryfisher.framework.command.loader {
 	public class LoaderCommand{
 		
 		private var _percent:Number = 0;
-		private var _id:String;
+		protected var _id:String;
 		private var _priority:int;
 		protected var _finishedLoading:Signal;
 		private var _percentLoading:Signal;
 		protected var _loaderData:LoaderData;
 		
-		public function LoaderCommand(id:String, priority:int = LoaderConfig.WHENEVER_PRIORITY) {
+		public function LoaderCommand(id:String, priority:int = LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
 			_priority = priority;	
 			_id = id;
 			if (!_finishedLoading) _finishedLoading = new Signal(LoaderCommand);
 			_percentLoading = new Signal(LoaderCommand);
-			execute();
+			if(executeInstantly) execute();
 		}
 		
-		private function execute():void {
+		public function execute():void {
 			LoaderController.registerCommand(this);
 		}
 		
@@ -71,6 +71,10 @@ package maryfisher.framework.command.loader {
 		
 		public function get loaderData():LoaderData {
 			return _loaderData;
+		}
+		
+		public function get fileId():String {
+			return _id;
 		}
 	}
 
