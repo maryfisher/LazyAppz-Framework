@@ -20,6 +20,9 @@ package maryfisher.framework.core {
 		private var _paths:Dictionary; /* loaderid => LoaderData */
 		
 		protected var _activeLoader:Vector.<LoaderCommand>;
+		/* TODO
+		 * these are not in use as of yet
+		 */
 		protected var _queuedLoader:Vector.<LoaderCommand>;
 		protected var _prioritizedLoader:Vector.<LoaderCommand>;
 		protected var _loaderView:ILoaderView;
