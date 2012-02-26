@@ -1,4 +1,4 @@
-package maryfisher.framework.view.controller {
+package maryfisher.framework.core {
 	import flash.display.Stage;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.ViewController;

@@ -1,5 +1,4 @@
 package maryfisher.framework.command.loader {
-	import maryfisher.framework.config.LoaderConfig;
 	import maryfisher.framework.core.LoaderController;
 	import maryfisher.framework.data.LoaderData;
 	import org.osflash.signals.Signal;
@@ -16,7 +15,7 @@ package maryfisher.framework.command.loader {
 		private var _percentLoading:Signal;
 		protected var _loaderData:LoaderData;
 		
-		public function LoaderCommand(id:String, priority:int = LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
+		public function LoaderCommand(id:String, priority:int = 0, executeInstantly:Boolean = true) {
 			_priority = priority;	
 			_id = id;
 			if (!_finishedLoading) _finishedLoading = new Signal(LoaderCommand);

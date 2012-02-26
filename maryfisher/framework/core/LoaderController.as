@@ -1,13 +1,12 @@
 package maryfisher.framework.core {
 	import flash.utils.Dictionary;
+	import maryfisher.framework.command.CommandSequencer;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.IViewLoadingCallback;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.loader.LoadViewCommand;
-	import maryfisher.framework.command.view.ViewCommand;;
 	import maryfisher.framework.data.LoaderData;
 	import maryfisher.framework.view.ILoaderView;
-	import maryfisher.framework.view.IViewComponent;
 	
 	/**
 	 * 
@@ -127,10 +126,13 @@ package maryfisher.framework.core {
 			_loaderView && _loaderView.changePercent(percent);
 		}
 		
-		public static function registerCommand(cmd:LoaderCommand):void {
+		static public function registerCommand(cmd:LoaderCommand):void {
 			_instance.loaderCommand = cmd;
 		}
 		
+		static public function registerSequence(sequence:CommandSequencer):void {
+			
+		}
 		/* INTERFACE maryfisher.framework.command.loader.IViewLoadingCallback */
 		
 		public function viewLoadingFinished(cmd:LoadViewCommand):void {

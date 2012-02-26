@@ -4,8 +4,6 @@ package maryfisher.framework.core {
 	import flash.events.Event;
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.core.ViewController;
-	import maryfisher.framework.view.controller.IViewController;
 	import maryfisher.framework.view.IResizableObject;
 	import maryfisher.framework.view.ITickedObject;
 	import maryfisher.framework.view.IViewComponent;
@@ -15,9 +13,9 @@ package maryfisher.framework.core {
 	 */
 	public class ViewController {
 		
-		public static const SPRITE:String = "sprite";
-		public static const STARLING:String = "starling";
-		public static const MODEL3D:String = "model3d";
+		//public static const SPRITE:String = "sprite";
+		//public static const STARLING:String = "starling";
+		//public static const MODEL3D:String = "model3d";
 		
 		static private var _instance:ViewController;
 		
@@ -77,14 +75,12 @@ package maryfisher.framework.core {
 			var viewcontroller:IViewController = (_viewController[viewCommand.viewType] as IViewController);
 			
 			//if (!viewcontroller) {
-				
 				//return;
 			//}
 			
 			switch (viewCommand.viewCommandType) {
 				case ViewCommand.ADD_VIEW:
 					viewcontroller.addView(viewCommand.view);
-					//checkForCallbacks(viewCommand.view);
 					break;
 				case ViewCommand.REMOVE_VIEW:
 					viewcontroller.removeView(viewCommand.view);

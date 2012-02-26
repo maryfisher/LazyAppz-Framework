@@ -17,8 +17,10 @@ package maryfisher.framework.command.loader {
 		private var _assetBuilderId:String;
 		private var _assetBuilder:IAssetBuilder;
 		private var _bitmapData:BitmapData;
+		private var _addView:Boolean;
 		
-		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, assetBuilderId:String = null) {
+		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, addView:Boolean = false, assetBuilderId:String = null) {
+			_addView = addView;
 			_assetBuilderId = assetBuilderId;
 			_callback = callback;
 			_finishedLoading = new Signal(LoadViewCommand);
@@ -37,14 +39,20 @@ package maryfisher.framework.command.loader {
 				_assetBuilder = obj as IAssetBuilder;
 				if (_assetBuilderId) {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
-					new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+					if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+					_viewComponent.finishedSignal.add(onViewFinished);
+					return;
 				}
 			}else if (obj is IViewComponent) {
 				_viewComponent = obj as IViewComponent;
-				new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+				if(_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			}else if (obj is BitmapData) {
 				_bitmapData = obj as BitmapData;
 			}
+			setFinished();
+		}
+		
+		private function onViewFinished():void {
 			setFinished();
 		}
 		
