@@ -1,4 +1,4 @@
-package maryfisher.framework.command.loader {
+package maryfisher.framework.command {
 	
 	/**
 	 * ...

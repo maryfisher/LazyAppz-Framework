@@ -1,4 +1,5 @@
 package maryfisher.framework.command.loader {
+	import org.osflash.signals.Signal;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -7,17 +8,20 @@ package maryfisher.framework.command.loader {
 		
 		private var _loaderCommands:Vector.<LoaderCommand>;
 		private var _autoPlay:Boolean;
+		private var _sequenceFinished:Signal;
 		
 		public function SquenceLoader() {
 			_loaderCommands = new Vector.<LoaderCommand>();
+			_sequenceFinished = new Signal();
 		}
 		
 		public function addCommand(cmd:LoaderCommand):void {
 			_loaderCommands.push(cmd);
 		}
 		
-		public function startSequence(autoPlay:Boolean = true):void {
+		public function startSequence(autoPlay:Boolean = true, finishedCallback:Function = null):void {
 			_autoPlay = autoPlay;
+			if (finishedCallback != null) _sequenceFinished.add(finishedCallback);
 			executeCommand();
 		}
 		
@@ -30,9 +34,7 @@ package maryfisher.framework.command.loader {
 				return;
 			}
 			if (!executeCommand()) {
-				/* TODO
-				 * callback?
-				 */
+				_sequenceFinished.dispatch();
 			}
 		}
 		

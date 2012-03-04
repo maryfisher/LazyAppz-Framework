@@ -2,9 +2,9 @@ package maryfisher.framework.core {
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.CommandSequencer;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
-	import maryfisher.framework.command.loader.IViewLoadingCallback;
+	import maryfisher.framework.command.IViewLoadingCallback;
 	import maryfisher.framework.command.loader.LoaderCommand;
-	import maryfisher.framework.command.loader.LoadViewCommand;
+	import maryfisher.framework.command.LoadViewCommand;
 	import maryfisher.framework.data.LoaderData;
 	import maryfisher.framework.view.ILoaderView;
 	
@@ -47,7 +47,7 @@ package maryfisher.framework.core {
 			getInstance()._paths = paths;
 			
 			if (loadingScreenPath) {
-				new LoadViewCommand(loadingScreenPath, _instance);
+				//new LoadViewCommand(loadingScreenPath, _instance);
 			}
 		}
 		
@@ -62,13 +62,13 @@ package maryfisher.framework.core {
 				return;
 			}
 			
-			if (cmd is LoadViewCommand) {
-				var loaderData:LoaderData = _paths[cmd.id];
+			//if (cmd is LoadViewCommand) {
+				//var loaderData:LoaderData = _paths[cmd.id];
 				//var lcmd:LoaderCommand = new loaderData.type(cmd.id, cmd.priority);
-				var lcmd:LoaderCommand = new AssetLoaderCommand(cmd.id, cmd.priority);
-				lcmd.finishedLoading.addOnce(cmd.leachLoading);
-				return;
-			}
+				//var lcmd:LoaderCommand = new AssetLoaderCommand(cmd.id, cmd.fileId, cmd.priority);
+				//lcmd.finishedLoading.addOnce(cmd.leachLoading);
+				//return;
+			//}
 			
 			if (isLoading(cmd)) {
 				return;

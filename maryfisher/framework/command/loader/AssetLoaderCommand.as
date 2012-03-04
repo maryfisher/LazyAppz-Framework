@@ -13,6 +13,7 @@ package maryfisher.framework.command.loader {
 	import flash.utils.getQualifiedClassName;
 	import maryfisher.framework.config.LoaderConfig;
 	import maryfisher.framework.data.LoaderData;
+	import org.osflash.signals.Signal;
 	
 	
 	
@@ -22,7 +23,6 @@ package maryfisher.framework.command.loader {
 	 * @author mary_fisher
 	 */
 	public class AssetLoaderCommand extends LoaderCommand{
-		
 		protected var _assetDomain:ApplicationDomain;
 		protected var _loader:Loader;
 		protected var _asset:Sprite;
@@ -30,8 +30,10 @@ package maryfisher.framework.command.loader {
 		/* TODO
 		 * assetType => SWF, PNG/JPG
 		 */
-		public function AssetLoaderCommand(id:String, priority:int = LoaderConfig.WHENEVER_PRIORITY) {
-			super(id);
+		public function AssetLoaderCommand(id:String, fileId:String, callback:Function, priority:int = LoaderConfig.WHENEVER_PRIORITY) {
+			_finishedLoading = new Signal(LoaderCommand);
+			_finishedLoading.addOnce(callback);
+			super(id, fileId, priority);
 		}
 		
 		override public function loadAsset(loaderData:LoaderData):void {
@@ -46,7 +48,7 @@ package maryfisher.framework.command.loader {
 			
 			_loader.contentLoaderInfo.addEventListener(Event.COMPLETE, onAssetLoaded, false, 0, true);
 			_loader.contentLoaderInfo.addEventListener(IOErrorEvent.IO_ERROR, onError, false, 0, true);
-			_loader.load(new URLRequest(_loaderData.path + ".swf"), context);
+			_loader.load(new URLRequest(_loaderData.path + _fileId + ".swf"), context);
 			//_loader.load(new URLRequest(_loaderData.path + ".swf"));
 			_loader.contentLoaderInfo.addEventListener(ProgressEvent.PROGRESS, onLoadingProgress, false, 0, true);
 		}
@@ -68,11 +70,7 @@ package maryfisher.framework.command.loader {
 			//_loader.unload();
 		}
 		
-		public function get content():Sprite {
-			return _asset; 
-		}
-		
-		override public function get asset():Object {
+		public function get assetClass():Class {
 			if (_asset) {
 				
 				var classname:String = getQualifiedClassName(_asset);
@@ -81,6 +79,14 @@ package maryfisher.framework.command.loader {
 				return assetClass;
 			}
 			return null;
+		}
+		
+		public function get content():Sprite {
+			return _asset; 
+		}
+		
+		override public function get asset():Object {
+			return assetClass;
 		}
 		
 		override public function set asset(value:Object):void {

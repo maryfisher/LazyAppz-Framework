@@ -129,8 +129,8 @@
 		}
 		
 		private function handleURLLoadError(event:IOErrorEvent):void{
-			//trace("URLLoader: " + event.text);
-			loaderInfo.dispatchEvent(event);
+			trace("URLLoader: " + event.text);
+			//loaderInfo.dispatchEvent(event);
 		}		
 		private function handleLoadComplete(event:Event):void {
 			realLoader.loadBytes(loader.data,loaderContext)

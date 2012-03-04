@@ -16,17 +16,12 @@ package maryfisher.framework.command.loader {
 		
 		protected var _data:*;
 		protected var _dataFormat:String;
-		protected var _fileId:String;
 		
 		public function BaseURLLoaderCommand(id:String, fileId:String, 
 					priority:int=LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
-			_fileId = fileId;
-			super(id, priority, executeInstantly);
 			
-		}
-		
-		override public function get fileId():String {
-			return _fileId;
+			super(id, fileId, priority, executeInstantly);
+			
 		}
 		
 		public override function loadAsset(loaderData:LoaderData):void {

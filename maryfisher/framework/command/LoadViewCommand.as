@@ -1,6 +1,8 @@
-package maryfisher.framework.command.loader {
+package maryfisher.framework.command {
 	
 	import flash.display.BitmapData;
+	import flash.display.Sprite;
+	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.view.IAssetBuilder;
@@ -10,30 +12,41 @@ package maryfisher.framework.command.loader {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class LoadViewCommand extends LoaderCommand {
+	public class LoadViewCommand {
 		
-		private var _callback:IViewLoadingCallback;
+		//private var _callback:IViewLoadingCallback;
 		private var _viewComponent:IViewComponent;
 		private var _assetBuilderId:String;
 		private var _assetBuilder:IAssetBuilder;
 		private var _bitmapData:BitmapData;
 		private var _addView:Boolean;
+		private var _finishedLoading:Signal;
+		private var _id:String;
 		
-		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, addView:Boolean = false, assetBuilderId:String = null) {
+		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, fileId:String = "", addView:Boolean = false, assetBuilderId:String = null) {
+			_id = id;
+			trace(id, fileId);
 			_addView = addView;
 			_assetBuilderId = assetBuilderId;
-			_callback = callback;
+			//_callback = callback;
 			_finishedLoading = new Signal(LoadViewCommand);
-			_finishedLoading.addOnce(_callback.viewLoadingFinished);
-			super(id);
+			_finishedLoading.addOnce(callback.viewLoadingFinished);
+			//super(id, fileId);
+			
+			new AssetLoaderCommand(id, fileId, onAssetFinished);
 		}
 		
-		override public function get asset():Object {
-			return _assetBuilder || _viewComponent || _bitmapData;
-		}
+		private function onAssetFinished(cmd:LoaderCommand):void {
+			
+		//}
 		
-		override public function set asset(value:Object):void {
-			var obj:Object = new value();
+		//override public function get asset():Object {
+			//return _assetBuilder || _viewComponent || _bitmapData;
+		//}
+		
+		//override public function set asset(value:Object):void {
+			//var obj:Object = new value();
+			var obj:Sprite = (cmd as AssetLoaderCommand).content;
 			//trace(describeType(obj));
 			if (obj is maryfisher.framework.view.IAssetBuilder) {
 				_assetBuilder = obj as IAssetBuilder;
@@ -41,7 +54,7 @@ package maryfisher.framework.command.loader {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
 					if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 					_viewComponent.finishedSignal.add(onViewFinished);
-					return;
+					//return;
 				}
 			}else if (obj is IViewComponent) {
 				_viewComponent = obj as IViewComponent;
@@ -50,6 +63,10 @@ package maryfisher.framework.command.loader {
 				_bitmapData = obj as BitmapData;
 			}
 			setFinished();
+		}
+		
+		public function setFinished():void {
+			_finishedLoading.dispatch(this);
 		}
 		
 		private function onViewFinished():void {
@@ -66,6 +83,10 @@ package maryfisher.framework.command.loader {
 		
 		public function get bitmapData():BitmapData {
 			return _bitmapData;
+		}
+		
+		public function get id():String {
+			return _id;
 		}
 	}
 
