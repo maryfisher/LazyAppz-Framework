@@ -86,10 +86,17 @@ package maryfisher.framework.command.loader {
 		}
 		
 		override public function get asset():Object {
+			if (_loaderData.reuse) {
+				return _asset;
+			}
 			return assetClass;
 		}
 		
 		override public function set asset(value:Object):void {
+			if (value is Sprite) {
+				_asset = value as Sprite;
+			}
+			
 			if (value is Class) {
 				_asset = new value();
 				setFinished();

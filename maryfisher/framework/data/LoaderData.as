@@ -5,29 +5,18 @@ package maryfisher.framework.data {
 	 */
 	public class LoaderData {
 		
-		private var _id:String;
-		private var _path:String;
+		//private var _id:String;
+		public var path:String;
 		//private var _type:Class; /* LoaderCommand type => xml, view, file ect */
-		private var _description:String;
-		private var _doCache:Boolean;
+		public var description:String;
+		public var doCache:Boolean;
+		public var reuse:Boolean;
 		
-		public function LoaderData(id:String, path:String, doCache:Boolean = false, description:String = "") {
-			_id = id;
-			_description = description;
-			_path = path;
-			_doCache = doCache;
-		}
-		
-		public function get path():String {
-			return _path;
-		}
-		
-		public function get doCache():Boolean {
-			return _doCache;
-		}
-		
-		public function get description():String {
-			return _description;
+		public function LoaderData(path:String, doCache:Boolean = false, reuse:Boolean = false, description:String = "") {
+			this.description = description;
+			this.path = path;
+			this.doCache = doCache;
+			this.reuse = reuse;
 		}
 		
 	}
