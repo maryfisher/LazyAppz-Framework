@@ -53,7 +53,7 @@ package maryfisher.framework.command {
 				if (_assetBuilderId) {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
 					if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
-					_viewComponent.finishedSignal.add(onViewFinished);
+					_viewComponent.addOnFinished(onViewFinished);
 					//return;
 				}
 			}else if (obj is IViewComponent) {
