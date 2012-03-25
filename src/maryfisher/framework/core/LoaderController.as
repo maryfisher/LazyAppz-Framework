@@ -5,14 +5,15 @@ package maryfisher.framework.core {
 	import maryfisher.framework.command.IViewLoadingCallback;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.LoadViewCommand;
+	import maryfisher.framework.command.view.LoadingProgress;
 	import maryfisher.framework.data.LoaderData;
 	import maryfisher.framework.view.ILoaderView;
 	
 	/**
-	 * 
+	 *
 	 * @author mary_fisher
 	 */
-	public class LoaderController implements IViewLoadingCallback{
+	public class LoaderController {
 		
 		static private var _instance:LoaderController;
 		
@@ -24,7 +25,6 @@ package maryfisher.framework.core {
 		 */
 		protected var _queuedLoader:Vector.<LoaderCommand>;
 		protected var _prioritizedLoader:Vector.<LoaderCommand>;
-		protected var _loaderView:ILoaderView;
 		protected var _cachedAssets:Dictionary;
 		
 		public function LoaderController() {
@@ -75,14 +75,12 @@ package maryfisher.framework.core {
 			}
 			
 			_activeLoader.push(cmd);
-			cmd.percentLoading.add(setPercent);
-			cmd.finishedLoading.addOnce(finishedLoading);					
+			
+			//cmd.percentLoading.add(setPercent);
+			new LoadingProgress(cmd, _paths[cmd.id]);
+			cmd.finishedLoading.addOnce(finishedLoading);
 			cmd.loadAsset(_paths[cmd.id]);
-			_loaderView && _loaderView.show();			
-		}
-		
-		public function set loaderView(value:ILoaderView):void {
-			_loaderView = value;
+			//_loaderView && _loaderView.show();
 		}
 		
 		public function unloadAsset(id:String):void {
@@ -111,20 +109,20 @@ package maryfisher.framework.core {
 				_cachedAssets[cmd.fileId] = cmd.asset;
 			}
 			
-			if (_activeLoader.length == 0) {
-				_loaderView && _loaderView.hide();
-			}
+			//if (_activeLoader.length == 0) {
+				//_loaderView && _loaderView.hide();
+			//}
 		}
 		
-		protected function setPercent(cmd:LoaderCommand):void{
-			
-			var percent:Number = 0;
-			for each(var cmd:LoaderCommand in _activeLoader) {
-				percent += cmd.percent;
-			}
-			percent = percent / _activeLoader.length;
-			_loaderView && _loaderView.changePercent(percent);
-		}
+		//protected function setPercent(cmd:LoaderCommand):void{
+			//
+			//var percent:Number = 0;
+			//for each(var cmd:LoaderCommand in _activeLoader) {
+				//percent += cmd.percent;
+			//}
+			//percent = percent / _activeLoader.length;
+			//_loaderView && _loaderView.changePercent(percent);
+		//}
 		
 		static public function registerCommand(cmd:LoaderCommand):void {
 			_instance.loaderCommand = cmd;
@@ -132,11 +130,6 @@ package maryfisher.framework.core {
 		
 		static public function registerSequence(sequence:CommandSequencer):void {
 			
-		}
-		/* INTERFACE maryfisher.framework.command.loader.IViewLoadingCallback */
-		
-		public function viewLoadingFinished(cmd:LoadViewCommand):void {
-			_loaderView = cmd.viewComponent as ILoaderView;
 		}
 	}
 }

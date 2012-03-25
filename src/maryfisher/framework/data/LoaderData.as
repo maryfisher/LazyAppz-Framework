@@ -19,6 +19,10 @@ package maryfisher.framework.data {
 			this.reuse = reuse;
 		}
 		
+		public function toString():String {
+			return "[LoaderData path=" + path + " description=" + description + " doCache=" + doCache + " reuse=" + reuse +
+						"]";
+		}
 	}
 
 }

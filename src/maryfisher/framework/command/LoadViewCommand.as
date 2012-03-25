@@ -25,7 +25,7 @@ package maryfisher.framework.command {
 		
 		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, fileId:String = "", addView:Boolean = false, assetBuilderId:String = null) {
 			_id = id;
-			trace(id, fileId);
+			//trace(id, fileId);
 			_addView = addView;
 			_assetBuilderId = assetBuilderId;
 			//_callback = callback;
@@ -50,15 +50,18 @@ package maryfisher.framework.command {
 			//trace(describeType(obj));
 			if (obj is maryfisher.framework.view.IAssetBuilder) {
 				_assetBuilder = obj as IAssetBuilder;
-				if (_assetBuilderId) {
+				//trace("id", _id, "assetBuilderId", _assetBuilderId, _assetBuilderId != null)
+				if (_assetBuilderId != null) {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
-					if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+					//if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 					_viewComponent.addOnFinished(onViewFinished);
-					//return;
+					return;
 				}
 			}else if (obj is IViewComponent) {
 				_viewComponent = obj as IViewComponent;
-				if(_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+				_viewComponent.addOnFinished(onViewFinished);
+				return;
+				//if(_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			}else if (obj is BitmapData) {
 				_bitmapData = obj as BitmapData;
 			}
@@ -70,6 +73,7 @@ package maryfisher.framework.command {
 		}
 		
 		private function onViewFinished():void {
+			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			setFinished();
 		}
 		
