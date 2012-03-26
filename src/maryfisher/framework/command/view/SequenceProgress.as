@@ -29,7 +29,10 @@ package maryfisher.framework.command.view {
 		}
 		
 		override public function getDescription():String {
-			if (_stepDescriptions && _currentStep != -1 && _stepDescriptions.length > _currentStep) {
+			if (_stepDescriptions && _currentStep != -1){
+				if (_stepDescriptions.length <= _currentStep) {
+					return _stepDescriptions[0];
+				}
 				return _stepDescriptions[_currentStep];
 			}
 			trace("Sequence Progress: no description: _currentStep - ", _currentStep);
@@ -39,6 +42,10 @@ package maryfisher.framework.command.view {
 		public function addStep(descript:String):void {
 			_steps++;
 			_stepDescriptions && _stepDescriptions.push(descript);
+		}
+		
+		public function get currentStep():int {
+			return _currentStep;
 		}
 	}
 

@@ -5,15 +5,16 @@ package maryfisher.framework.model {
 	 * @author mary_fisher
 	 */
 	public class AbstractModel{
-		//static public const DATA_READY:String = "modelDataReady";		
+		//static public const DATA_READY:String = "modelDataReady";
 		public static const DATA_LOADED:String = 'modelDataLoaded';
 		public static const DATA_WAITING:String = 'modelDataWaiting';
 		
-		protected var _updateSignal:Signal;
-		protected var _status:String;
+		private var _updateSignal:Signal;
+		private var _status:String;
+		private var _signature:Class; /* eg IThisModelProxy */
 		
 		public function AbstractModel() {
-			_updateSignal = new Signal(String);
+			_updateSignal = new Signal(BaseModelUpdate);
 			_status = DATA_WAITING;
 		}
 		
@@ -31,11 +32,19 @@ package maryfisher.framework.model {
 		
 		public function set status(value:String):void {
 			_status = value;
-			_updateSignal.dispatch(_status);
+			_updateSignal.dispatch(new BaseModelUpdate(_status, _signature));
 		}
 		
-		public function dispatch(cmd:String):void {
-			_updateSignal.dispatch(cmd);
+		public function set signature(value:Class):void {
+			_signature = value;
+		}
+		
+		protected function getBaseUpdate(id:String):BaseModelUpdate {
+			return new BaseModelUpdate(id, _signature);
+		}
+		
+		public function dispatch(update:BaseModelUpdate):void {
+			_updateSignal.dispatch(update);
 		}
 	}
 

@@ -7,6 +7,7 @@ package maryfisher.framework.command.loader {
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import maryfisher.framework.data.LoaderData;
+	import org.osflash.signals.Signal;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -15,16 +16,18 @@ package maryfisher.framework.command.loader {
 		
 		private var _xml:XML;
 		
-		public function XMLLoaderCommand(id:String, callback:IXMLLoadingCallback) {
-			super(id);
+		public function XMLLoaderCommand(id:String, fileId:String, callback:IXMLLoadingCallback, executeInstantly:Boolean = true) {
+			_finishedLoading = new Signal(LoaderCommand);
+			_finishedLoading.addOnce(callback.loadingXMLFinished);
+			super(id, fileId, 0, executeInstantly);
 			
 			
 		}
 		
 		override public function loadAsset(loaderData:LoaderData):void {
 			super.loadAsset(loaderData);
-			var urlRequest:URLRequest = new URLRequest(_loaderData.path + '.xml');
-			//if (xmldata != null) {				
+			var urlRequest:URLRequest = new URLRequest(_loaderData.path + _fileId + '.xml');
+			//if (xmldata != null) {
 				//urlRequest.data = xmldata;
 				//urlRequest.contentType = "text/xml";
 				//urlRequest.method = URLRequestMethod.POST;

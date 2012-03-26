@@ -75,14 +75,14 @@ package maryfisher.framework.core {
 		public function registerCommand(viewCommand:ViewCommand):void {
 			
 			var abstractProgress:AbstractProgress = viewCommand as AbstractProgress;
-			trace("register new command", abstractProgress)
+			//trace("register new command", abstractProgress)
 			if (!_activeProgress) {
-				trace("and it's the new active");
+				//trace("and it's the new active");
 				_loadingView && _loadingView.changePercent(0);
 				_loadingView && _loadingView.show();
 				_activeProgress = abstractProgress;
 			}else {
-				trace("and it has to be processed in line");
+				//trace("and it has to be processed in line");
 				_progressCommands.push(abstractProgress);
 			}
 			
@@ -90,14 +90,14 @@ package maryfisher.framework.core {
 		}
 		
 		private function onFinished(cmd:AbstractProgress):void {
-			trace("onFinished", cmd);
+			//trace("onFinished", cmd);
 			if (cmd == _activeProgress) {
 				_loadingView && _loadingView.changePercent(1);
 				_activeProgress = null;
-				trace("onFinished, commands left:", _progressCommands.length);
+				//trace("onFinished, commands left:", _progressCommands.length);
 				if (_progressCommands.length > 0) {
 					_activeProgress = _progressCommands.shift();
-					trace("new active Loader", _activeProgress)
+					//trace("new active Loader", _activeProgress)
 					onProgress(_activeProgress);
 					return;
 				}
@@ -109,7 +109,7 @@ package maryfisher.framework.core {
 			
 			_progressCommands.splice(_progressCommands.indexOf(cmd), 1);
 			if (_progressCommands.length == 0) {
-				trace("so we have no commands left but also no active Loader?", _activeProgress);
+				//trace("so we have no commands left but also no active Loader?", _activeProgress);
 			}
 				//_loadingView && _loadingView.hide();
 			

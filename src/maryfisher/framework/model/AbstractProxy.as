@@ -31,7 +31,7 @@ package maryfisher.framework.model {
 		
 		public function get updateSignal():Signal { return _updateSignal; }
 		
-		public function dataFinishedLoading():void { 
+		public function dataFinishedLoading():void {
 			var dataLoaded:Boolean = true;
 			
 			for each(var modelname:String in _models) {
@@ -41,12 +41,12 @@ package maryfisher.framework.model {
 			}
 			
 			if (dataLoaded) {
-				_updateSignal.dispatch(AbstractModel.DATA_LOADED);
+				_updateSignal.dispatch(new BaseModelUpdate(AbstractModel.DATA_LOADED));
 			}
 		}
 		
 		//public function registerForUpdate(updater:IProxyUpdate, param:Vector.<String> = null):void {
-		public function registerForUpdate(callback:Function):void {
+		public function registerForUpdate(callback:Function, param:Vector.<String> = null):void {
 			for each(var modelname:String in _models) {
 				(this[modelname] as AbstractModel).registerForUpdate(this);
 			}
@@ -54,20 +54,11 @@ package maryfisher.framework.model {
 			dataFinishedLoading();
 		}
 		
-		//public function registerForEvent(event:String, callback:Funktion):void {
-			//var model:AbstractModel = _events[event];
-			//model['registerFor' + event](callback);
-		//}
-		
-		public function updateFromModel(cmd:String):void {
-			if (cmd == AbstractModel.DATA_LOADED) {
+		public function updateFromModel(update:BaseModelUpdate):void {
+			if (update.updateId == AbstractModel.DATA_LOADED) {
 				dataFinishedLoading();
 			}else {
-				/** TODO
-				 * statt cmd:String könnte man cmd:ModelUpdate machen
-				 * ModelUpdate hat einen cmdType:String und dann alle, die davon ableiten noch zusätzliche Objekte
-				 */
-				_updateSignal.dispatch(cmd);
+				_updateSignal.dispatch(update);
 			}
 		}
 		
