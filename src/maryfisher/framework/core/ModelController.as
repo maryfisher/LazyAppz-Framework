@@ -72,8 +72,11 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		static public function registerForModel():void {
-			
+		static public function registerForModel(reg:*):void {
+			if (!_instance._models) {
+				return;
+			}
+			_instance.register(reg);
 		}
 	}
 }

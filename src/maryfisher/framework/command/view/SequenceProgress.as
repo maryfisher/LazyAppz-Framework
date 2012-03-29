@@ -35,7 +35,7 @@ package maryfisher.framework.command.view {
 				}
 				return _stepDescriptions[_currentStep];
 			}
-			trace("Sequence Progress: no description: _currentStep - ", _currentStep);
+			//trace("Sequence Progress: no description: _currentStep - ", _currentStep);
 			return "";
 		}
 		

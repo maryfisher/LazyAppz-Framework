@@ -23,7 +23,7 @@ package maryfisher.framework.command.view {
 		public function onProgress(cmd:LoaderCommand):void {
 			_progress = cmd.percent;
 			getProgress();
-			trace("LoadingProgress:", _progress, getDescription());
+			//trace("LoadingProgress:", _progress, getDescription());
 		}
 		
 		override public function getDescription():String {

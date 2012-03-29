@@ -77,7 +77,9 @@ package maryfisher.framework.core {
 			_activeLoader.push(cmd);
 			
 			//cmd.percentLoading.add(setPercent);
-			new LoadingProgress(cmd, _paths[cmd.id]);
+			if ((_paths[cmd.id] as LoaderData).description) {
+				new LoadingProgress(cmd, _paths[cmd.id]);
+			}
 			cmd.finishedLoading.addOnce(finishedLoading);
 			cmd.loadAsset(_paths[cmd.id]);
 			//_loaderView && _loaderView.show();
