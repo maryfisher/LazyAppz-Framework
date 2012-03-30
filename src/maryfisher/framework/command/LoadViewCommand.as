@@ -22,8 +22,10 @@ package maryfisher.framework.command {
 		private var _addView:Boolean;
 		private var _finishedLoading:Signal;
 		private var _id:String;
+		private var _fileId:String;
 		
 		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, fileId:String = "", addView:Boolean = false, assetBuilderId:String = null) {
+			_fileId = fileId;
 			_id = id;
 			//trace(id, fileId);
 			_addView = addView;
@@ -91,6 +93,10 @@ package maryfisher.framework.command {
 		
 		public function get id():String {
 			return _id;
+		}
+		
+		public function get fileId():String {
+			return _fileId;
 		}
 	}
 
