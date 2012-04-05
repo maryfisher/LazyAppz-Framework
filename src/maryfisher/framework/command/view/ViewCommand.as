@@ -32,7 +32,7 @@ package maryfisher.framework.command.view {
 			execute();
 		}
 		
-		private function execute():void {
+		protected function execute():void {
 			ViewController.registerCommand(this);
 		}
 		

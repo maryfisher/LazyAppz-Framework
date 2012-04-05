@@ -1,11 +1,10 @@
 package maryfisher.framework.core {
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
-	import flash.events.Event;
+	import flash.display.Stage;
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.view.AbstractProgress;
 	import maryfisher.framework.command.view.ViewCommand;
-	import flash.display.Stage;
 	import maryfisher.framework.view.ILoaderView;
 	import maryfisher.framework.view.IViewComponent;
 	/**
@@ -17,8 +16,12 @@ package maryfisher.framework.core {
 		static public const LOADING_VIEW:String = "loadingView";
 		static public const ADD_SEQUENCE:String = "addSequence";
 		
+		static public const START_GLOBAL_SEQUENCE:String = "startGlobalSequence";
+		
 		private var _progressCommands:Vector.<AbstractProgress>;
+		
 		private var _activeProgress:AbstractProgress;
+		//private var _globalSequenceProgress:GlobalSequenceProgress;
 		
 		private var _loadingView:ILoaderView;
 		private var _loadingViews:Dictionary;
@@ -73,8 +76,26 @@ package maryfisher.framework.core {
 		}
 		
 		public function registerCommand(viewCommand:ViewCommand):void {
+			//if (!(viewCommand is AbstractProgress)) {
+				//if (viewCommand.viewCommandType == START_GLOBAL_SEQUENCE) {
+					//_globalSequenceProgress = new SequenceProgress()
+				//}
+				//return;
+			//}
+			
 			
 			var abstractProgress:AbstractProgress = viewCommand as AbstractProgress;
+			
+			//if (abstractProgress is GlobalSequenceProgress) {
+				//_globalSequenceProgress = abstractProgress as GlobalSequenceProgress;
+				//abstractProgress.addFinishedListener(onProgress, onFinished);
+				//return;
+			//}
+			
+			//if (abstractProgress is SequenceProgress && _globalSequenceProgress) {
+				//_globalSequenceProgress.addSequence(abstractProgress as SequenceProgress);
+				//return;
+			//}
 			//trace("register new command", abstractProgress)
 			if (!_activeProgress) {
 				//trace("and it's the new active");
@@ -101,8 +122,10 @@ package maryfisher.framework.core {
 					onProgress(_activeProgress);
 					return;
 				}
-				
-				_loadingView && _loadingView.hide();
+				//if(_globalSequenceProgress.steps){
+				//if(!_globalSequenceProgress){
+					_loadingView && _loadingView.hide();
+				//}
 				
 				return;
 			}
@@ -127,9 +150,9 @@ package maryfisher.framework.core {
 			//if (cmd != _activeProgress) {
 				_loadingView.resetDescriptions();
 				_loadingView.addDescription(_activeProgress.getDescription());
-				for (var i:int = 0; i < _progressCommands.length; i++ ) {
-					_loadingView.addDescription(_progressCommands[i].getDescription());
-				}
+				//for (var i:int = 0; i < _progressCommands.length; i++ ) {
+					//_loadingView.addDescription(_progressCommands[i].getDescription());
+				//}
 			//}
 		}
 		
