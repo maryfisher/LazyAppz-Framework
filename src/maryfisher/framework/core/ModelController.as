@@ -67,6 +67,7 @@ package maryfisher.framework.core {
 					var accessors:XMLList = typeXML.accessor.(@type == modelName);
 					if (accessors) {
 						registered[accessors[0].@name] = model;
+						registered.addModel(getDefinitionByName(modelName), model);
 					}
 				}
 			}
