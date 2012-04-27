@@ -6,6 +6,8 @@ package maryfisher.framework.command {
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.view.IAssetBuilder;
+	import maryfisher.framework.view.IClonableViewComponent;
+	import maryfisher.framework.view.ISpriteSheet;
 	import maryfisher.framework.view.IViewComponent;
 	import org.osflash.signals.Signal;
 	/**
@@ -18,7 +20,7 @@ package maryfisher.framework.command {
 		private var _viewComponent:IViewComponent;
 		private var _assetBuilderId:String;
 		private var _assetBuilder:IAssetBuilder;
-		private var _bitmapData:BitmapData;
+		private var _spriteSheet:ISpriteSheet;
 		private var _addView:Boolean;
 		private var _finishedLoading:Signal;
 		private var _id:String;
@@ -60,12 +62,18 @@ package maryfisher.framework.command {
 					return;
 				}
 			}else if (obj is IViewComponent) {
-				_viewComponent = obj as IViewComponent;
+				//if (obj is IClonableViewComponent) {
+					//_viewComponent = (obj as IClonableViewComponent).clone();
+					//onViewFinished();
+				//}else{
+					_viewComponent = obj as IViewComponent;
+				//}
 				_viewComponent.addOnFinished(onViewFinished);
+				
 				return;
 				//if(_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
-			}else if (obj is BitmapData) {
-				_bitmapData = obj as BitmapData;
+			}else if (obj is ISpriteSheet) {
+				_spriteSheet = obj as ISpriteSheet;
 			}
 			setFinished();
 		}
@@ -75,6 +83,12 @@ package maryfisher.framework.command {
 		}
 		
 		private function onViewFinished():void {
+			/* TODO
+			 * das hier hat nur den Nachteil, dass das Original nie verwendet wird
+			 */
+			if (_viewComponent is IClonableViewComponent) {
+				_viewComponent = (_viewComponent as IClonableViewComponent).clone();
+			}
 			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			setFinished();
 		}
@@ -87,8 +101,8 @@ package maryfisher.framework.command {
 			return _viewComponent;
 		}
 		
-		public function get bitmapData():BitmapData {
-			return _bitmapData;
+		public function get spriteSheet():ISpriteSheet {
+			return _spriteSheet;
 		}
 		
 		public function get id():String {

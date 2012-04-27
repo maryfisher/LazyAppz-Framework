@@ -13,6 +13,8 @@ package maryfisher.framework.command.loader {
 	import flash.utils.getQualifiedClassName;
 	import maryfisher.framework.config.LoaderConfig;
 	import maryfisher.framework.data.LoaderData;
+	import maryfisher.framework.view.IClonableViewComponent;
+	import maryfisher.framework.view.IViewComponent;
 	import org.osflash.signals.Signal;
 	
 	
@@ -30,10 +32,10 @@ package maryfisher.framework.command.loader {
 		/* TODO
 		 * assetType => SWF, PNG/JPG
 		 */
-		public function AssetLoaderCommand(id:String, fileId:String, callback:Function, priority:int = LoaderConfig.WHENEVER_PRIORITY) {
+		public function AssetLoaderCommand(id:String, fileId:String, callback:Function, priority:int = LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
 			_finishedLoading = new Signal(LoaderCommand);
 			_finishedLoading.addOnce(callback);
-			super(id, fileId, priority);
+			super(id, fileId, priority, executeInstantly);
 		}
 		
 		override public function loadAsset(loaderData:LoaderData):void {
@@ -65,9 +67,18 @@ package maryfisher.framework.command.loader {
 			//_asset = (_loader.content as MovieClip).getChildAt(0) as Sprite;
 			//trace(_loader.content, (_loader.content as Sprite).numChildren);
 			_asset = _loader.content as Sprite;
-			setFinished();
 			_loader.contentLoaderInfo.removeEventListener(Event.COMPLETE, onAssetLoaded, false);
 			//_loader.unload();
+			//if (_asset is IViewComponent) {
+				//(_asset as IViewComponent).addOnFinished(onViewFinished);
+				//return;
+			//}
+			
+			setFinished();
+		}
+		
+		private function onViewFinished():void {
+			setFinished();
 		}
 		
 		public function get assetClass():Class {
@@ -82,7 +93,7 @@ package maryfisher.framework.command.loader {
 		}
 		
 		public function get content():Sprite {
-			return _asset; 
+			return _asset;
 		}
 		
 		override public function get asset():Object {
@@ -95,12 +106,10 @@ package maryfisher.framework.command.loader {
 		override public function set asset(value:Object):void {
 			if (value is Sprite) {
 				_asset = value as Sprite;
-			}
-			
-			if (value is Class) {
+			}else if (value is Class) {
 				_asset = new value();
-				setFinished();
 			}
+			setFinished();
 		}
 	}
 }
