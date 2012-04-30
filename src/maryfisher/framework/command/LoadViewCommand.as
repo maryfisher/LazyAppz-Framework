@@ -25,6 +25,7 @@ package maryfisher.framework.command {
 		private var _finishedLoading:Signal;
 		private var _id:String;
 		private var _fileId:String;
+		private var _clonableViewComponent:IClonableViewComponent;
 		
 		public function LoadViewCommand(id:String, callback:IViewLoadingCallback, fileId:String = "", addView:Boolean = false, assetBuilderId:String = null) {
 			_fileId = fileId;
@@ -87,7 +88,8 @@ package maryfisher.framework.command {
 			 * das hier hat nur den Nachteil, dass das Original nie verwendet wird
 			 */
 			if (_viewComponent is IClonableViewComponent) {
-				_viewComponent = (_viewComponent as IClonableViewComponent).clone();
+				_clonableViewComponent = (_viewComponent as IClonableViewComponent)
+				_viewComponent = _clonableViewComponent.clone();
 			}
 			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			setFinished();
@@ -99,6 +101,10 @@ package maryfisher.framework.command {
 		
 		public function get viewComponent():IViewComponent {
 			return _viewComponent;
+		}
+		
+		public function get clonableViewComponent():IClonableViewComponent {
+			return _clonableViewComponent;
 		}
 		
 		public function get spriteSheet():ISpriteSheet {
