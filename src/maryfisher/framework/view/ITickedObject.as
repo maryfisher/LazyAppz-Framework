@@ -5,7 +5,7 @@ package maryfisher.framework.view {
 	 * @author mary_fisher
 	 */
 	public interface ITickedObject {
-		function nextTick():void;
+		function nextTick(interval:int):void;
 	}
 	
 }

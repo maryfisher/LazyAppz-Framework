@@ -3,6 +3,7 @@ package maryfisher.framework.core {
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.utils.Dictionary;
+	import flash.utils.getTimer;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.view.IResizableObject;
 	import maryfisher.framework.view.ITickedObject;
@@ -24,6 +25,9 @@ package maryfisher.framework.core {
 		
 		private var _tickedObjects:Vector.<ITickedObject>;
 		private var _resiableObjects:Vector.<IResizableObject>;
+		
+		private var _oldTime:int;
+		
 		
 		public function ViewController() {
 			_tickedObjects = new Vector.<ITickedObject>;
@@ -54,14 +58,17 @@ package maryfisher.framework.core {
 				viewcontroller && viewcontroller.setUp(_stage, this);
 			}
 			
+			_oldTime = getTimer();
 			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
 			
 			
 		}
 		
 		private function handleEnterFrame(e:Event):void {
+			var interval:int = getTimer() - _oldTime;
+			_oldTime += interval;
 			for each(var obj:ITickedObject in _tickedObjects) {
-				obj.nextTick();	
+				obj.nextTick(interval);	
 			}
 		}
 		
