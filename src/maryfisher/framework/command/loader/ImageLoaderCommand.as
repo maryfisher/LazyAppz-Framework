@@ -44,6 +44,7 @@ package maryfisher.framework.command.loader {
 		
 		override public function set asset(value:Object):void {
 			_image = value as BitmapData;
+			setFinished();
 		}
 	}
 
