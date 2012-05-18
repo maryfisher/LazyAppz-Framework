@@ -77,6 +77,14 @@ package maryfisher.framework.core {
 			
 		}
 		
+		static public function get stageHeight():Number {
+			return _instance._stage.stageHeight;
+		}
+		
+		static public function get stageWidth():Number {
+			return _instance._stage.stageWidth;
+		}
+		
 		private function executeCommand(viewCommand:ViewCommand):void {
 			
 			var viewcontroller:IViewController = (_viewController[viewCommand.viewType] as IViewController);
