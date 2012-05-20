@@ -51,7 +51,7 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		public function set loaderCommand(cmd:LoaderCommand):void {
+		private function set loaderCommand(cmd:LoaderCommand):void {
 			/* TODO
 			 * _activeLoader nach Prio ordnen
 			 * nach Tick loaden
