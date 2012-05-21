@@ -15,6 +15,8 @@ package maryfisher.framework.core {
 		
 		static public const LOADING_VIEW:String = "loadingView";
 		static public const ADD_SEQUENCE:String = "addSequence";
+		static public const SHOW_LOADING:String = "showLoading";
+		static public const HIDE_LOADING:String = "hideLoading";
 		
 		static public const START_GLOBAL_SEQUENCE:String = "startGlobalSequence";
 		
@@ -27,6 +29,7 @@ package maryfisher.framework.core {
 		private var _loadingViews:Dictionary;
 		private var _container:Sprite = new Sprite();
 		private var _stage:Stage;
+		private var _keepView:Boolean = false;
 		
 		public function LoadingViewController() {
 			_progressCommands = new Vector.<AbstractProgress>();
@@ -76,12 +79,19 @@ package maryfisher.framework.core {
 		}
 		
 		public function registerCommand(viewCommand:ViewCommand):void {
-			//if (!(viewCommand is AbstractProgress)) {
+			if (!(viewCommand is AbstractProgress)) {
 				//if (viewCommand.viewCommandType == START_GLOBAL_SEQUENCE) {
 					//_globalSequenceProgress = new SequenceProgress()
 				//}
-				//return;
-			//}
+				if (viewCommand.viewCommandType == SHOW_LOADING) {
+					_keepView = true;
+					_loadingView && _loadingView.show();
+				}else if (viewCommand.viewCommandType == HIDE_LOADING) {
+					_keepView = false;
+					if(_progressCommands.length == 0) _loadingView && _loadingView.hide();
+				}
+				return;
+			}
 			
 			
 			var abstractProgress:AbstractProgress = viewCommand as AbstractProgress;
@@ -124,8 +134,9 @@ package maryfisher.framework.core {
 				}
 				//if(_globalSequenceProgress.steps){
 				//if(!_globalSequenceProgress){
+				if (!_keepView){
 					_loadingView && _loadingView.hide();
-				//}
+				}
 				
 				return;
 			}
