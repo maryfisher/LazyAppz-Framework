@@ -9,9 +9,9 @@ package maryfisher.framework.command.net {
 	 */
 	public class SendJPGRequest extends SendBinaryRequest {
 		
-		public function SendJPGRequest(id:String, data:BitmapData, callback:INetRequestCallback) {
+		public function SendJPGRequest(id:String, urlAddon:String, data:BitmapData, callback:INetRequestCallback) {
 			var bytes:ByteArray = new JPGEncoder(75).encode(data);
-			super(id, bytes, callback);
+			super(id, urlAddon, bytes, callback);
 		}
 		
 	}

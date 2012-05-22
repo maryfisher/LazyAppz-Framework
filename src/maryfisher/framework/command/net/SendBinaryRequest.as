@@ -18,8 +18,10 @@ package maryfisher.framework.command.net {
 		
 		private var _requestData:ByteArray;
 		private var _loader:URLLoader;
+		private var _urlAddon:String;
 		
-		public function SendBinaryRequest(id:String, data:ByteArray, callback:INetRequestCallback) {
+		public function SendBinaryRequest(id:String, urlAddon:String, data:ByteArray, callback:INetRequestCallback) {
+			_urlAddon = urlAddon;
 			_requestData = data;
 			super(id, callback);
 		}
@@ -36,7 +38,7 @@ package maryfisher.framework.command.net {
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			
-			request = new URLRequest(url);
+			request = new URLRequest(url + _urlAddon);
 			request.method = URLRequestMethod.POST;
 			request.data = _requestData;
 			
