@@ -30,6 +30,7 @@ package maryfisher.framework.command.loader {
 		}
 		
 		protected override function onAssetLoaded(e:Event):void {
+			trace("finished:", _loaderData.path + _fileId)
 			_image = (_loader.content as Bitmap).bitmapData;
 			setFinished();
 		}
@@ -43,8 +44,9 @@ package maryfisher.framework.command.loader {
 		}
 		
 		override public function set asset(value:Object):void {
+			trace("set asset:", _fileId)
 			_image = value as BitmapData;
-			setFinished();
+			//setFinished();
 		}
 	}
 
