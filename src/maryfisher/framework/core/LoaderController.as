@@ -59,6 +59,7 @@ package maryfisher.framework.core {
 			
 			if (_cachedAssets[cmd.fileId] != null) {
 				cmd.asset = _cachedAssets[cmd.fileId];
+				cmd.setFinished();
 				return;
 			}
 			

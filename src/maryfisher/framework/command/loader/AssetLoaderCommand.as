@@ -109,7 +109,7 @@ package maryfisher.framework.command.loader {
 			}else if (value is Class) {
 				_asset = new value();
 			}
-			setFinished();
+			//setFinished();
 		}
 	}
 }
