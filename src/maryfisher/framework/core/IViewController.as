@@ -1,4 +1,5 @@
 package maryfisher.framework.core {
+	import away3d.core.managers.Stage3DProxy;
 	import flash.display.Stage;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.ViewController;
@@ -19,6 +20,10 @@ package maryfisher.framework.core {
 		function unRegisterView(view:IViewComponent):void;
 		
 		function registerCommand(viewCommand:ViewCommand):void;
+		
+		function setUpProxy(stage3DProxy:Stage3DProxy):void;
+		
+		function render():void;
 		
 		function get controllerId():String;
 	}

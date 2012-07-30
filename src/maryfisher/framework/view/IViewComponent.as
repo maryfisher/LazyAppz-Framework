@@ -1,11 +1,12 @@
 package maryfisher.framework.view {
+	import flash.events.IEventDispatcher;
 	
 	
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
-	public interface IViewComponent {
+	public interface IViewComponent extends IEventDispatcher{
 		//function get viewComponent():*;
 		function get componentType():String;
 		function destroy():void;

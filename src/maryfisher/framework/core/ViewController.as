@@ -1,4 +1,7 @@
 package maryfisher.framework.core {
+	import away3d.core.managers.Stage3DManager;
+	import away3d.core.managers.Stage3DProxy;
+	import away3d.events.Stage3DEvent;
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
@@ -27,6 +30,8 @@ package maryfisher.framework.core {
 		private var _resiableObjects:Vector.<IResizableObject>;
 		
 		private var _oldTime:int;
+		private var _stage3DProxy:Stage3DProxy;
+		private var _viewList:Vector.<IViewController>;
 		
 		
 		public function ViewController() {
@@ -51,25 +56,54 @@ package maryfisher.framework.core {
 			
 			_stage = stage;
 			_viewController = new Dictionary();
+			_viewList = Vector.<IViewController>(comps);
 			
 			for each(var viewcontroller:IViewController in comps) {
-				
 				_viewController[viewcontroller.controllerId] = viewcontroller;
-				viewcontroller && viewcontroller.setUp(_stage, this);
+				viewcontroller.setUp(_stage, this);
+			}
+			_oldTime = getTimer();
+			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
+			// Define a new Stage3DManager for the Stage3D objects
+			//var stage3DManager:Stage3DManager = Stage3DManager.getInstance(stage);
+			//
+			// Create a new Stage3D proxy to contain the separate views
+			//_stage3DProxy = stage3DManager.getFreeStage3DProxy();
+			//_stage3DProxy.addEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
+			
+		}
+		
+		private function onContextCreated(e:Stage3DEvent):void {
+			
+			for each(var viewcontroller:IViewController in _viewList) {
+				viewcontroller.setUpProxy(_stage3DProxy);
 			}
 			
 			_oldTime = getTimer();
 			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
-			
-			
 		}
 		
 		private function handleEnterFrame(e:Event):void {
+			
+			/** TODO
+			 * 
+			 */
+			//_stage3DProxy.clear();
+			
+			
 			var interval:int = getTimer() - _oldTime;
 			_oldTime += interval;
 			for each(var obj:ITickedObject in _tickedObjects) {
 				obj.nextTick(interval);	
 			}
+			
+			var l:int = _viewList.length;
+			for (var i:int = 0; i < l; i++) {
+				_viewList[i].render();
+			}
+			
+			// Present the Context3D object to Stage3D
+			//_stage3DProxy.present();
 		}
 		
 		static public function registerCommand(viewCommand:ViewCommand):void {

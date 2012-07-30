@@ -1,4 +1,5 @@
 package maryfisher.framework.core {
+	import away3d.core.managers.Stage3DProxy;
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import flash.display.Stage;
@@ -118,6 +119,16 @@ package maryfisher.framework.core {
 			}
 			
 			abstractProgress.addFinishedListener(onProgress, onFinished);
+		}
+		
+		/* INTERFACE maryfisher.framework.core.IViewController */
+		
+		public function setUpProxy(stage3DProxy:Stage3DProxy):void {
+			
+		}
+		
+		public function render():void {
+			
 		}
 		
 		private function onFinished(cmd:AbstractProgress):void {

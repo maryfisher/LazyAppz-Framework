@@ -43,36 +43,20 @@ package maryfisher.framework.command {
 		
 		private function onAssetFinished(cmd:LoaderCommand):void {
 			
-		//}
-		
-		//override public function get asset():Object {
-			//return _assetBuilder || _viewComponent || _bitmapData;
-		//}
-		
-		//override public function set asset(value:Object):void {
-			//var obj:Object = new value();
 			var obj:Sprite = (cmd as AssetLoaderCommand).content;
-			//trace(describeType(obj));
+			
 			if (obj is maryfisher.framework.view.IAssetBuilder) {
 				_assetBuilder = obj as IAssetBuilder;
-				//trace("id", _id, "assetBuilderId", _assetBuilderId, _assetBuilderId != null)
 				if (_assetBuilderId != null) {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
-					//if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 					_viewComponent.addOnFinished(onViewFinished);
 					return;
 				}
 			}else if (obj is IViewComponent) {
-				//if (obj is IClonableViewComponent) {
-					//_viewComponent = (obj as IClonableViewComponent).clone();
-					//onViewFinished();
-				//}else{
-					_viewComponent = obj as IViewComponent;
-				//}
+				_viewComponent = obj as IViewComponent;
 				_viewComponent.addOnFinished(onViewFinished);
 				
 				return;
-				//if(_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			}else if (obj is ISpriteSheet) {
 				_spriteSheet = obj as ISpriteSheet;
 			}
