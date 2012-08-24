@@ -14,27 +14,22 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class SendJSONRequest extends NetRequest {
+	public class JSONRequest extends NetRequest {
 		
-		private var _requestData:Object;
-		private var _loader:URLLoader;
-		
-		public function SendJSONRequest(id:String, data:Object, callback:INetRequestCallback) {
-			_requestData = data;
-			super(id, callback);
+		public function JSONRequest() {
 		}
 		
-		override public function sendRequest(netData:NetData):void {
-			super.sendRequest(netData);
+		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
+			super.sendRequest(requestData, netData, requestSpecs);
 			var url:String = netData.url//"backend/";
 			
-			var json:String = com.adobe.serialization.json.JSON.encode(_requestData);
-			_loader = new URLLoader();
+			var json:String = com.adobe.serialization.json.JSON.encode(requestData);
+			 var _loader:URLLoader = new URLLoader();
 			_loader.addEventListener(Event.COMPLETE, onRequestComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			
-			var request:URLRequest = new URLRequest(url);
+			var request:URLRequest = new URLRequest(url + requestSpecs);
 			request.method = URLRequestMethod.POST;
 			var variables:URLVariables = new URLVariables();
 			variables.json = json;
@@ -56,8 +51,7 @@ package maryfisher.framework.command.net {
 			trace(loader.data);
 			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
 			if (data) {
-				_resultData = data;
-				finishRequest();
+				finishRequest(data);
 				//for (var i:String in data){
 					//trace(i, data[i]);
 					//if (data[i] is Object) {

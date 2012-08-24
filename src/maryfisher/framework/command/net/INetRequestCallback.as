@@ -5,7 +5,7 @@ package maryfisher.framework.command.net {
 	 * @author mary_fisher
 	 */
 	public interface INetRequestCallback {
-		function onRequestReceived(netRequest:NetRequest):void;
+		function onRequestReceived(netRequest:NetCommand):void;
 	}
 	
 }

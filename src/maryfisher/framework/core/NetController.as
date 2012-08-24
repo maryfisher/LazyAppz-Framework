@@ -1,5 +1,6 @@
 package maryfisher.framework.core {
 	import flash.utils.Dictionary;
+	import maryfisher.framework.command.net.NetCommand;
 	import maryfisher.framework.command.net.NetRequest;
 	import maryfisher.framework.data.NetData;
 	/**
@@ -27,11 +28,11 @@ package maryfisher.framework.core {
 			getInstance()._netDatas = netDatas;
 		}
 		
-		static public function registerCommand(cmd:NetRequest):void {
+		static public function registerCommand(cmd:NetCommand):void {
 			_instance.netrequest = cmd;
 		}
 		
-		private function set netrequest(cmd:NetRequest):void {
+		private function set netrequest(cmd:NetCommand):void {
 			var data:NetData = _netDatas[cmd.id];
 			cmd.sendRequest(data);
 		}
