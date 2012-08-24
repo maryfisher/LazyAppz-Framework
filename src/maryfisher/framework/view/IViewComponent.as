@@ -6,13 +6,17 @@ package maryfisher.framework.view {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public interface IViewComponent extends IEventDispatcher{
+	public interface IViewComponent{
 		//function get viewComponent():*;
 		function get componentType():String;
 		function destroy():void;
-		function addOnFinished(listener:Function):void;
-		//function get finishedSignal():Signal;
-		//function addComponent(comp:IViewComponent):void;
+		//function addOnFinished(listener:Function):void;
+		function addListener((type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false) : void
+		function addView():void;
+		function removeView():void;
+		function pause():void;
+		function show():void;
+		function hide():void;
 	}
 	
 }
