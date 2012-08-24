@@ -15,6 +15,7 @@ package maryfisher.framework.core {
 	public class LoadingViewController implements IViewController {
 		
 		static public const LOADING_VIEW:String = "loadingView";
+		
 		static public const ADD_SEQUENCE:String = "addSequence";
 		static public const SHOW_LOADING:String = "showLoading";
 		static public const HIDE_LOADING:String = "hideLoading";
