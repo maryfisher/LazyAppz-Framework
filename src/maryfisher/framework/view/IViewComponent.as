@@ -1,4 +1,5 @@
 package maryfisher.framework.view {
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	
@@ -11,7 +12,8 @@ package maryfisher.framework.view {
 		function get componentType():String;
 		function destroy():void;
 		//function addOnFinished(listener:Function):void;
-		function addListener((type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false) : void
+		function dispatch(e:Event):void;
+		function addListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false) : void
 		function addView():void;
 		function removeView():void;
 		function pause():void;

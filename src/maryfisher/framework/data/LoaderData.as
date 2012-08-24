@@ -5,8 +5,10 @@ package maryfisher.framework.data {
 	 */
 	public class LoaderData {
 		
-		//private var _id:String;
 		public var path:String;
+		/** TODO
+		 * definitiv brauchen wir das für FileLoader vs URLLoader
+		 */
 		//private var _type:Class; /* LoaderCommand type => xml, view, file ect */
 		public var description:String;
 		public var doCache:Boolean;
