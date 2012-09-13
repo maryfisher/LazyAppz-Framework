@@ -1,4 +1,5 @@
 package maryfisher.framework.command.sound {
+	import maryfisher.view.ui.interfaces.ISound;
 	
 	
 	/**
@@ -9,10 +10,15 @@ package maryfisher.framework.command.sound {
 		
 		public static const SOUND_OFF:String = "soundOff";
 		public static const SOUND_ON:String = "soundOn";
-		public static const PLAY_SOUND:String = "playSound";
+		static public const SET_VOLUME:String = "setVolume";
 		
-		public function SoundCommand() {
-			
+		public var soundType:String;
+		public var volume:int;
+		//public static const PLAY_SOUND:String = "playSound";
+		
+		public function SoundCommand(type:String, volume:int = 0) {
+			this.volume = volume;
+			soundType = type;
 		}
 		
 	}
