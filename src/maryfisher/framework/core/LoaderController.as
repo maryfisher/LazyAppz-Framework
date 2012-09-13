@@ -57,8 +57,8 @@ package maryfisher.framework.core {
 			 * nach Tick loaden
 			 */
 			
-			if (_cachedAssets[cmd.fileId] != null) {
-				cmd.asset = _cachedAssets[cmd.fileId];
+			if (_cachedAssets[cmd.id + cmd.fileId] != null) {
+				cmd.asset = _cachedAssets[cmd.id + cmd.fileId];
 				cmd.setFinished();
 				return;
 			}
@@ -95,7 +95,7 @@ package maryfisher.framework.core {
 			 * _activeLoader zu einem Dictionary machen, so dass schneller id gefunden wird
 			 */
 			for each(var lcmd:LoaderCommand in _activeLoader) {
-				if (lcmd.fileId == cmd.fileId) {
+				if (lcmd.id == cmd.id && lcmd.fileId == cmd.fileId) {
 					lcmd.finishedLoading.addOnce(cmd.leachLoading);
 					return true;
 				}
@@ -109,7 +109,7 @@ package maryfisher.framework.core {
 			
 			_activeLoader.splice(_activeLoader.indexOf(cmd), 1);
 			if (cmd.loaderData.doCache) {
-				_cachedAssets[cmd.fileId] = cmd.asset;
+				_cachedAssets[cmd.id + cmd.fileId] = cmd.asset;
 			}
 			
 			//if (_activeLoader.length == 0) {

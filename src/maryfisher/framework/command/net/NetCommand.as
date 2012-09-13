@@ -1,7 +1,5 @@
 package maryfisher.framework.command.net {
-	import flash.events.NetDataEvent;
 	import maryfisher.framework.command.AbstractCommand;
-	import maryfisher.framework.command.net.sql.SQLRequest;
 	import maryfisher.framework.core.NetController;
 	import maryfisher.framework.data.NetData;
 	import org.osflash.signals.Signal;
@@ -14,17 +12,18 @@ package maryfisher.framework.command.net {
 		
 		private var _id:String;
 		private var _requestSpecs:String;
+		private var _netRequest:NetRequest;
 		protected var _netData:NetData;
 		protected var _requestFinished:Signal;
 		protected var _resultData:Object;
 		protected var _requestData:Object;
 		
-		public function NetCommand(id:String, requestData:Object, callback:INetRequestCallback, requestSpecs:String = "") {
+		public function NetCommand(id:String, requestData:Object, callback:INetRequestCallback = null, requestSpecs:String = "") {
 			_requestSpecs = requestSpecs;
 			_requestData = requestData;
 			_id = id;
-			_requestFinished = new Signal(NetRequest);
-			_requestFinished.addOnce(callback.onRequestReceived);
+			_requestFinished = new Signal(NetCommand);
+			callback && _requestFinished.addOnce(callback.onRequestReceived);
 			execute();
 		}
 		
@@ -32,19 +31,25 @@ package maryfisher.framework.command.net {
 			NetController.registerCommand(this);
 		}
 		
-		public function sendRequest(netData:NetData):void {
+		public function buildRequest(netData:NetData):void {
 			_netData = netData;
 			
-			var requ:NetRequest;
+			_netRequest;
 			if (!_netData.requestClass) {
 				throw new Error("No request class specified!");
 				return;
 			}
 				
-			requ = new _netData.requestClass();
-			requ.requestFinished.addOnce(finishRequest);
-			requ.execute(_requestData, _netData, _requestSpecs);
+			_netRequest = new _netData.requestClass();
+			_netRequest.requestFinished.addOnce(finishRequest);
+			
 		}
+		
+		public function sendRequest():void {
+			_netRequest.execute(_requestData, _netData, _requestSpecs);
+		}
+		
+		
 		
 		protected function finishRequest(data:Object):void {
 			_resultData = data;
@@ -54,6 +59,14 @@ package maryfisher.framework.command.net {
 		public function get requestFinished():Signal { return _requestFinished; }
 		public function get id():String { return _id; }
 		public function get resultData():Object { return _resultData; }
+		
+		public function get netRequest():NetRequest {
+			return _netRequest;
+		}
+		
+		public function get netData():NetData {
+			return _netData;
+		}
 	}
 
 }

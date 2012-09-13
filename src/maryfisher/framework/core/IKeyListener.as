@@ -1,4 +1,5 @@
 package maryfisher.framework.core {
+	import maryfisher.framework.data.KeyComboData;
 	
 	/**
 	 * ...
@@ -8,7 +9,7 @@ package maryfisher.framework.core {
 		function handleKeyDownOnce(key:int):void;
 		function handleKeyDown(key:int):void;
 		function handleKeyUp(key:int):void;		
-		function handleKeyCombo():void;
+		function handleKeyCombo(keyComboData:KeyComboData):void;
 	}
 	
 }

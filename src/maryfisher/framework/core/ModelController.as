@@ -29,6 +29,9 @@ package maryfisher.framework.core {
 		
 		static public function init(models:Dictionary):void {
 			getInstance()._models = models;
+			for each (var item:AbstractModel in models) {
+				item.init();
+			}
 		}
 		
 		static public function registerProxy(abstractProxy:AbstractProxy):void {
@@ -54,7 +57,7 @@ package maryfisher.framework.core {
 		
 		private function register(registered:*):void {
 			var typeXML:XML = describeType(registered);
-			
+			//trace(typeXML);
 			for each(var intFace:XML in typeXML.implementsInterface) {
 				//var classDef:Class = getDefinitionByName(intFace.@type) as Class;
 				
@@ -68,7 +71,17 @@ package maryfisher.framework.core {
 					if (accessors) {
 						registered[accessors[0].@name] = model;
 						registered.addModel(getDefinitionByName(modelName), model);
+						
+						
 					}
+				}
+			}
+			
+			for each (var item:XML in typeXML.method) {
+				var listName:String = item.@name;
+				if (String(listName).indexOf("on") != -1 && String(listName).indexOf("Update")) {
+					//var t:String = item.parameter[0].@type;
+					(registered as AbstractProxy).registerForUpdate(registered[listName], listName);
 				}
 			}
 		}

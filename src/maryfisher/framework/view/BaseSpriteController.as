@@ -1,5 +1,6 @@
 package maryfisher.framework.view {
 	import away3d.core.managers.Stage3DProxy;
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.ViewController;
@@ -21,11 +22,11 @@ package maryfisher.framework.view {
 		/* INTERFACE maryfisher.framework.core.IViewController */
 		
 		public function addView(view:IViewComponent):void {
-			_scene.addChild(view);
+			_scene.addChild(view as DisplayObject);
 		}
 		
 		public function removeView(view:IViewComponent):void {
-			_scene.addChild(view);
+			_scene.removeChild(view as DisplayObject);
 		}
 		
 		public function setUp(stage:Stage, controller:ViewController):void {

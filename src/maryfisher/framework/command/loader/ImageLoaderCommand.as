@@ -25,12 +25,12 @@ package maryfisher.framework.command.loader {
 		
 		override public function loadAsset(loaderData:LoaderData):void {
 			super.loadAsset(loaderData);
-			trace("load:", _loaderData.path + _fileId)
+			//trace("load:", _loaderData.path + _fileId)
 			_loader.load(new URLRequest(_loaderData.path + _fileId));
 		}
 		
 		protected override function onAssetLoaded(e:Event):void {
-			trace("finished:", _loaderData.path + _fileId)
+			//trace("finished:", _loaderData.path + _fileId)
 			_image = (_loader.content as Bitmap).bitmapData;
 			setFinished();
 		}

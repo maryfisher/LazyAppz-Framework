@@ -6,6 +6,8 @@ package maryfisher.framework.view {
 	 */
 	public interface IClonableViewComponent {
 		function clone():IViewComponent;
+		
+		function addOnFinished(onViewFinished:Function):void;
 		//function init(clone:Boolean = false):void;
 	}
 	

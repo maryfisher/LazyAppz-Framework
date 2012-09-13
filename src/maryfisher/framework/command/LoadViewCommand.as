@@ -2,9 +2,11 @@ package maryfisher.framework.command {
 	
 	import flash.display.BitmapData;
 	import flash.display.Sprite;
+	import flash.events.VideoEvent;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
 	import maryfisher.framework.view.ISpriteSheet;
@@ -57,9 +59,19 @@ package maryfisher.framework.command {
 				_viewComponent.addOnFinished(onViewFinished);
 				
 				return;
+			}else if (obj is IClonableViewComponent) {
+				_clonableViewComponent = (obj as IClonableViewComponent);
+				_clonableViewComponent.addOnFinished(onClonableViewFinished);
+				return;
 			}else if (obj is ISpriteSheet) {
 				_spriteSheet = obj as ISpriteSheet;
 			}
+			setFinished();
+		}
+		
+		private function onClonableViewFinished(e:ViewEvent):void {
+			_viewComponent = _clonableViewComponent.clone();
+			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			setFinished();
 		}
 		
@@ -67,7 +79,7 @@ package maryfisher.framework.command {
 			_finishedLoading.dispatch(this);
 		}
 		
-		private function onViewFinished():void {
+		private function onViewFinished(e:ViewEvent):void {
 			/* TODO
 			 * das hier hat nur den Nachteil, dass das Original nie verwendet wird
 			 */

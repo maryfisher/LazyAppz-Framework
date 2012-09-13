@@ -5,8 +5,12 @@ package maryfisher.framework.data {
 	 */
 	public class KeyComboData {
 		
-		public function KeyComboData() {
-			
+		public var id:String;
+		public var keys:Vector.<int>;
+		
+		public function KeyComboData(keys:Array, id:String) {
+			this.id = id;
+			this.keys = Vector.<int>(keys);
 		}
 		
 	}

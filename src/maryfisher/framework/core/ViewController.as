@@ -5,9 +5,12 @@ package maryfisher.framework.core {
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
+	import maryfisher.framework.command.view.StageCommand;
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.view.IMouseObject;
 	import maryfisher.framework.view.IResizableObject;
 	import maryfisher.framework.view.ITickedObject;
 	import maryfisher.framework.view.IViewComponent;
@@ -27,7 +30,8 @@ package maryfisher.framework.core {
 		private var _viewController:Dictionary; /* of IViewController */
 		
 		private var _tickedObjects:Vector.<ITickedObject>;
-		private var _resiableObjects:Vector.<IResizableObject>;
+		private var _resizableObjects:Vector.<IResizableObject>;
+		private var _mouseObjects:Vector.<IMouseObject>;
 		
 		private var _oldTime:int;
 		private var _stage3DProxy:Stage3DProxy;
@@ -36,7 +40,8 @@ package maryfisher.framework.core {
 		
 		public function ViewController() {
 			_tickedObjects = new Vector.<ITickedObject>;
-			_resiableObjects = new Vector.<IResizableObject>();
+			_resizableObjects = new Vector.<IResizableObject>();
+			_mouseObjects = new Vector.<IMouseObject>();
 		}
 		
 		static public function getInstance():ViewController {
@@ -64,6 +69,7 @@ package maryfisher.framework.core {
 			}
 			_oldTime = getTimer();
 			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
+			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			// Define a new Stage3DManager for the Stage3D objects
 			//var stage3DManager:Stage3DManager = Stage3DManager.getInstance(stage);
 			//
@@ -81,6 +87,14 @@ package maryfisher.framework.core {
 			
 			_oldTime = getTimer();
 			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
+			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+		}
+		
+		private function onMouseWheel(e:MouseEvent):void {
+			var l:int = _mouseObjects.length;
+			for (var i:int = 0; i < l; i++) {
+				_mouseObjects[i].onMouseEvent(e);
+			}
 		}
 		
 		private function handleEnterFrame(e:Event):void {
@@ -109,6 +123,33 @@ package maryfisher.framework.core {
 		static public function registerCommand(viewCommand:ViewCommand):void {
 			_instance.executeCommand(viewCommand);
 			
+		}
+		
+		static public function registerStageCommand(stageCommand:StageCommand):void {
+			_instance.executeStageCommand(stageCommand);
+		}
+		
+		private function executeStageCommand(stageCommand:StageCommand):void {
+			switch (stageCommand.commandType) {
+				case StageCommand.REGISTER_TICK:
+					_tickedObjects.push(stageCommand.obj as ITickedObject);
+				break;
+				case StageCommand.UNREGISTER_TICK:
+					_tickedObjects.splice(_tickedObjects.indexOf(stageCommand.obj), 1);
+				break;
+				case StageCommand.REGISTER_RESIZE:
+					_resizableObjects.push(stageCommand.obj as IResizableObject);
+				break;
+				case StageCommand.UNREGISTER_RESIZE:
+					_resizableObjects.splice(_resizableObjects.indexOf(stageCommand.obj), 1);
+				break;
+				case StageCommand.REGISTER_MOUSE:
+					_mouseObjects.push(stageCommand.obj as IMouseObject);
+				break;
+				case StageCommand.UNREGISTER_MOUSE:
+					_mouseObjects.splice(_mouseObjects.indexOf(stageCommand.obj), 1);
+				break;
+			}
 		}
 		
 		static public function get stageHeight():Number {
@@ -159,7 +200,7 @@ package maryfisher.framework.core {
 		
 		private function checkForCallbacks(view:IViewComponent):void {
 			if (view is IResizableObject) {
-				_resiableObjects.push(view as IResizableObject);
+				_resizableObjects.push(view as IResizableObject);
 			}
 			
 			if (view is ITickedObject) {

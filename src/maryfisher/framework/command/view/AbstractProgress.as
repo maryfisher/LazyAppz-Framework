@@ -1,5 +1,4 @@
 package maryfisher.framework.command.view {
-	import maryfisher.austengames.config.ViewConstants;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.LoadingViewController;
 	import org.osflash.signals.Signal;

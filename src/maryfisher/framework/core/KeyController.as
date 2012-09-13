@@ -3,6 +3,7 @@ package maryfisher.framework.core {
 	import flash.events.KeyboardEvent;
 	import flash.ui.Keyboard;
 	import flash.utils.Dictionary;
+	import maryfisher.framework.data.KeyComboData;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -10,7 +11,7 @@ package maryfisher.framework.core {
 	public class KeyController{
 		protected var _keyUp:Dictionary;
 		protected var _keyDown:Dictionary;
-		protected var _keyCombo:Dictionary;
+		protected var _keyCombos:Dictionary;
 		protected var _keysPressed:Vector.<int>;
 		protected var _keysDeactivated:Vector.<int>;
 		
@@ -41,54 +42,24 @@ package maryfisher.framework.core {
 			return _instance;
 		}
 		
-		protected function handleKeyDown(event:KeyboardEvent):void {
-			//trace('keydown ' + event.keyCode);
-			
-			var key:int = event.keyCode;
-			if (_keysDeactivated.indexOf(key) == -1) {
-				if (_keysPressed.indexOf(key) == -1) _keysPressed.push(key); 
-				
-				var vec:Vector.<IKeyListener> = _keyDown[key];
-				if (vec != null) {
-					
-					for each(var keyListener:IKeyListener in vec) {
-						if (_keyCombo[keyListener] != null) {
-							
-							var combo:Vector.<int> = _keyCombo[keyListener];
-							if (combo.indexOf(key) > -1) {
-								var hasAll:Boolean = true;
-								for each(var key1:int in combo) {
-									if (_keysPressed.indexOf(key1) == -1) {
-										hasAll = false;
-										break;
-									}
-								}
-								if (hasAll) {
-									keyListener.handleKeyCombo();
-								}
-							}else {
-								keyListener.handleKeyDown(key);
-							}
-						}else {
-							keyListener.handleKeyDown(key);
-						}
-					}
-				}
+		static public function hasKeyDown(key:int):Boolean {
+			return getInstance()._keysPressed.indexOf(key) != -1;
+		}
+		
+		static public function triggerKey(key:int, eventType:String = KeyboardEvent.KEY_UP):void {
+			if (eventType == KeyboardEvent.KEY_UP) {
+				getInstance().dispatchKeyUp(key);
+			}else if (eventType == KeyboardEvent.KEY_DOWN) {
+				getInstance().dispatchKeyDown(key);
 			}
 		}
 		
+		protected function handleKeyDown(event:KeyboardEvent):void {
+			dispatchKeyDown(event.keyCode);
+		}
+		
 		protected function handleKeyUp(event:KeyboardEvent):void {
-			var key:int = event.keyCode;
-			if (_keysDeactivated.indexOf(key) == -1) {
-				if (_keysPressed.indexOf(key) > -1) _keysPressed.splice(_keysPressed.indexOf(key), 1);
-				
-				var vec:Vector.<IKeyListener> = _keyUp[key];
-				if(vec != null){
-					for each(var keyListener:IKeyListener in vec) {
-						keyListener.handleKeyUp(key);
-					}
-				}
-			}
+			dispatchKeyUp(event.keyCode);
 		}
 		
 		public function registerForKeyUp(keyListener:IKeyListener, keys:Vector.<int>):void {
@@ -99,6 +70,14 @@ package maryfisher.framework.core {
 				if (vec.indexOf(keyListener) == -1) {
 					vec.push(keyListener);
 				}
+			}
+		}
+		
+		public function unregisterForKeyUp(keyListener:IKeyListener, keys:Vector.<int>):void {
+			var l:int = keys.length;
+			for (var i:int = 0; i < l; i++) {
+				var vec:Vector.<IKeyListener> = _keyUp[keys[i]];
+				vec.splice(vec.indexOf(keyListener), 1);
 			}
 		}
 		
@@ -113,13 +92,26 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		public function registerForKeyCombo(keyListener:IKeyListener, keycombo:Vector.<int>):void {
+		public function unregisterForKeyDown(keyListener:IKeyListener, keys:Vector.<int>):void {
+			var l:int = keys.length;
+			for (var i:int = 0; i < l; i++) {
+				var vec:Vector.<IKeyListener> = _keyDown[keys[i]];
+				vec.splice(vec.indexOf(keyListener), 1);
+			}
+		}
+		
+		public function registerForKeyCombo(keyListener:IKeyListener, keycombo:KeyComboData):void {
+		//keycombo:Vector.<int>):void {
 			/* TODO
 			 * hier spezifische Combos als Vos, weil eventuell mit mehr als einer combo registriert wird
 			 */
-			if (_keyCombo == null) _keyCombo = new Dictionary(true);
-			if (_keyCombo[keyListener] == null) {
-				_keyCombo[keyListener] = keycombo;
+			if (_keyCombos == null) _keyCombos = new Dictionary(true);
+			//if (_keyCombo[keyListener] == null) {
+				//_keyCombo[keyListener] = keycombo;
+				//return;
+			//}
+			if (_keyCombos[keycombo] == null) {
+				_keyCombos[keycombo] = keyListener;
 				return;
 			}
 		}
@@ -141,12 +133,74 @@ package maryfisher.framework.core {
 		public function activate():void {
 			_keysPressed = new Vector.<int>();
 			_keysDeactivated = new Vector.<int>();
-			_keyCombo = new Dictionary();
+			_keyCombos = new Dictionary();
 			_keyDown = new Dictionary();
 			_keyUp = new Dictionary();
 			//var stage:Stage = StageReference.getStage();
 			_stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown, false, 0, true);
 			_stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp, false, 0, true);
+		}
+		
+		private function dispatchKeyDown(key:int):void {
+			if (_keysDeactivated.indexOf(key) == -1) {
+				if (_keysPressed.indexOf(key) == -1) _keysPressed.push(key); 
+				
+				var vec:Vector.<IKeyListener> = _keyDown[key];
+				if (vec != null) {
+					
+					for each(var keyListener:IKeyListener in vec) {
+						//if (_keyCombo[keyListener] != null) {
+							
+							//var combo:Vector.<int> = _keyCombo[keyListener];
+							//if (combo.indexOf(key) > -1) {
+								//var hasAll:Boolean = true;
+								//for each(var key1:int in combo) {
+									//if (_keysPressed.indexOf(key1) == -1) {
+										//hasAll = false;
+										//break;
+									//}
+								//}
+								//if (hasAll) {
+									//keyListener.handleKeyCombo();
+								//}
+							//}else {
+								//keyListener.handleKeyDown(key);
+							//}
+						//}else {
+							keyListener.handleKeyDown(key);
+						//}
+					}
+				}
+				
+				for (var index:Object in _keyCombos) {
+					var combo:KeyComboData = index as KeyComboData;
+					keyListener = _keyCombos[index];
+					
+					var hasAll:Boolean = true;
+					for each(var key1:int in combo.keys) {
+						if (_keysPressed.indexOf(key1) == -1) {
+							hasAll = false;
+							break;
+						}
+					}
+					if (hasAll) {
+						keyListener.handleKeyCombo(combo);
+					}
+				}
+			}
+		}
+		
+		private function dispatchKeyUp(key:int):void {
+			if (_keysDeactivated.indexOf(key) == -1) {
+				if (_keysPressed.indexOf(key) > -1) _keysPressed.splice(_keysPressed.indexOf(key), 1);
+				
+				var vec:Vector.<IKeyListener> = _keyUp[key];
+				if(vec != null){
+					for each(var keyListener:IKeyListener in vec) {
+						keyListener.handleKeyUp(key);
+					}
+				}
+			}
 		}
 		
 		//public static function keyTranslator(keycode:int):String {

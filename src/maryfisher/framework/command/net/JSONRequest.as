@@ -7,7 +7,6 @@ package maryfisher.framework.command.net {
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
-	import maryfisher.austengames.model.data.party.preparation.PartyGarmentVO;
 	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.data.NetData;
 	/**
@@ -16,26 +15,41 @@ package maryfisher.framework.command.net {
 	 */
 	public class JSONRequest extends NetRequest {
 		
+		private var _baseUrl:String;
+		
+		protected var _url:String;
+		
 		public function JSONRequest() {
 		}
 		
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
-			super.sendRequest(requestData, netData, requestSpecs);
-			var url:String = netData.url//"backend/";
+			if(requestData is IJSONData){
+				requestData = (requestData as IJSONData).jsonObject;
+			}
 			
+			super.execute(requestData, netData, requestSpecs);
+			//var url:String = netData.url//"backend/";
 			var json:String = com.adobe.serialization.json.JSON.encode(requestData);
 			 var _loader:URLLoader = new URLLoader();
 			_loader.addEventListener(Event.COMPLETE, onRequestComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-			
-			var request:URLRequest = new URLRequest(url + requestSpecs);
+			trace(_baseUrl + _url);
+			var request:URLRequest = new URLRequest(_baseUrl + _url + requestSpecs);
 			request.method = URLRequestMethod.POST;
 			var variables:URLVariables = new URLVariables();
 			variables.json = json;
 			request.data = variables;
 			
 			_loader.load(request);
+		}
+		
+		private function adjustJSONDataObject(requestData:Object):Object {
+			var data:Object = { };
+			
+			
+			
+			return data;
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
@@ -67,6 +81,22 @@ package maryfisher.framework.command.net {
 					//}
 				//}
 			}
+		}
+		
+		override public function get requestType():String {
+			return "json";
+		}
+		
+		public function set baseUrl(value:String):void {
+			_baseUrl = value;
+		}
+		
+		public function get url():String {
+			return _url;
+		}
+		
+		public function set url(value:String):void {
+			_url = value;
 		}
 	}
 

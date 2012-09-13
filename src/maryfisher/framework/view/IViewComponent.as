@@ -11,9 +11,11 @@ package maryfisher.framework.view {
 		//function get viewComponent():*;
 		function get componentType():String;
 		function destroy():void;
-		//function addOnFinished(listener:Function):void;
+		function addOnFinished(listener:Function):void;
+		//onFinishedLoading
 		function dispatch(e:Event):void;
-		function addListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false) : void
+		function addListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false) : void
+		function removeListener(type:String, listener:Function, useCapture:Boolean=false) : void
 		function addView():void;
 		function removeView():void;
 		function pause():void;

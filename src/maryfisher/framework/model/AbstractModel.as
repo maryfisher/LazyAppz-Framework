@@ -11,11 +11,15 @@ package maryfisher.framework.model {
 		
 		private var _updateSignal:Signal;
 		private var _status:String;
-		private var _signature:Class; /* eg IThisModelProxy */
+		//private var _signature:Class; /* eg IThisModelProxy */
 		
 		public function AbstractModel() {
 			_updateSignal = new Signal(BaseModelUpdate);
 			_status = DATA_WAITING;
+		}
+		
+		public function init():void {
+			
 		}
 		
 		public function registerForUpdate(abstractProxy:AbstractProxy):void {
@@ -32,15 +36,15 @@ package maryfisher.framework.model {
 		
 		public function set status(value:String):void {
 			_status = value;
-			_updateSignal.dispatch(new BaseModelUpdate(_status, _signature));
+			_updateSignal.dispatch(new BaseModelUpdate(_status));
 		}
 		
-		public function set signature(value:Class):void {
-			_signature = value;
-		}
+		//public function set signature(value:Class):void {
+			//_signature = value;
+		//}
 		
 		protected function getBaseUpdate(id:String):BaseModelUpdate {
-			return new BaseModelUpdate(id, _signature);
+			return new BaseModelUpdate(id);
 		}
 		
 		public function dispatch(update:BaseModelUpdate):void {
