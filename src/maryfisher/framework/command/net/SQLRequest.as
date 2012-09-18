@@ -95,6 +95,26 @@ package maryfisher.framework.command.net {
 			return st;
 		}
 		
+		protected function updateStatement(table:String, columns:Array, sets:Array, where:String):String {
+			var st:String = "UPDATE " + table + " SET ";
+			var l:uint = columns.length;
+			for (var i:int = 0; i < l; i++) {
+				st += columns[i] + "=";
+				if(sets[i] is String){
+					st += "'" + sets[i] + "'";
+				}else{
+					st += sets[i];
+				}
+				if (i != l - 1) {
+					st += ", ";
+				}
+			}
+			
+			st += " WHERE " + where;
+			
+			return st;
+		}
+		
 		protected function selectStatement(table:String, select:String = "*", where:String = "", order:String = ""):String {
 			var st:String = "SELECT " + select + " FROM " + table;
 			if (where != "") {
