@@ -11,13 +11,13 @@ package maryfisher.framework.model {
 	 */
 	public class AbstractProxy {
 		
-		protected var _updateSignal:Signal;
+		//protected var _updateSignal:Signal;
 		private var _models:Dictionary;
 		private var _updateListeners:Dictionary;
 		protected var _allModelsLoaded:Boolean = false;
 		
 		public function AbstractProxy() {
-			_updateSignal = new Signal();
+			//_updateSignal = new Signal();
 			_models = new Dictionary();
 			_updateListeners = new Dictionary();
 			
@@ -43,8 +43,13 @@ package maryfisher.framework.model {
 			
 			if (dataLoaded) {
 				_allModelsLoaded = true;
-				_updateSignal.dispatch();
+				onModelsLoaded();
+				//_updateSignal.dispatch();
 			}
+		}
+		
+		protected function onModelsLoaded():void {
+			
 		}
 		
 		public function registerForUpdate(callback:Function, modelClass:String):void {
@@ -60,7 +65,7 @@ package maryfisher.framework.model {
 		}
 		
 		public function destroy():void {
-			_updateSignal.removeAll();
+			//_updateSignal.removeAll();
 			for each(var model:AbstractModel in _models) {
 				model.unregisterForUpdate(this);
 			}
