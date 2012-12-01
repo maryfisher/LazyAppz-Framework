@@ -1,13 +1,12 @@
 package maryfisher.framework.net {
-	import coronado.ssc.config.JSONConstants;
+	import flash.utils.Dictionary;
 	import maryfisher.framework.command.net.JSONRequest;
 	import maryfisher.framework.command.net.NetCommand;
-	import maryfisher.framework.command.net.NetRequest;
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class JSONController implements INetController {
+	public class BaseJSONController implements INetController {
 		
 		/** TODO
 		 * bundle requests
@@ -15,9 +14,13 @@ package maryfisher.framework.net {
 		 */
 		
 		
-		private	const BASE_URL:String = "http://localhost/SSC/game/backend/";
+		//private	const BASE_URL:String = "http://localhost/SSC/game/backend/";
+		private	var _baseUrl:String = "";
+		private var _urls:Dictionary;
 		
-		public function JSONController() {
+		public function BaseJSONController(baseUrl:String, urls:Dictionary) {
+			_baseUrl = baseUrl;
+			_urls = urls;
 			
 		}
 		
@@ -25,12 +28,16 @@ package maryfisher.framework.net {
 		
 		public function registerRequest(cmd:NetCommand):void {
 			var r:JSONRequest = (cmd.netRequest as JSONRequest);
-			r.baseUrl = BASE_URL;
+			r.baseUrl = _baseUrl;
 			if (!r.url || r.url == "") {
-				r.url = JSONConstants[cmd.netData.id];
+				r.url = _urls[cmd.netData.id];
 			}
 			
 			cmd.sendRequest();
+		}
+		
+		protected function setUrl(r:JSONRequest):void {
+			//r.url = JSONConstants[cmd.netData.id];
 		}
 		
 		/* INTERFACE maryfisher.framework.net.INetController */

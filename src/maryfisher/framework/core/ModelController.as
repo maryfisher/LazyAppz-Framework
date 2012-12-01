@@ -66,9 +66,11 @@ package maryfisher.framework.core {
 				var str:String = intFace.@type;
 				var model:AbstractModel = _models[str];
 				if (model) {
-					var modelName:String = getQualifiedClassName(model);
+					var modelName:String = model.className//getQualifiedClassName(model);
 					var accessors:XMLList = typeXML.accessor.(@type == modelName);
-					if (accessors) {
+					//trace(typeXML.accessor)
+					//trace(modelName);
+					if (accessors.length() > 0) {
 						registered[accessors[0].@name] = model;
 						registered.addModel(getDefinitionByName(modelName), model);
 						
@@ -79,7 +81,7 @@ package maryfisher.framework.core {
 			
 			for each (var item:XML in typeXML.method) {
 				var listName:String = item.@name;
-				if (String(listName).indexOf("on") != -1 && String(listName).indexOf("Update")) {
+				if (String(listName).indexOf("on") != -1){// && String(listName).indexOf("Update")) {
 					//var t:String = item.parameter[0].@type;
 					(registered as AbstractProxy).registerForUpdate(registered[listName], listName);
 				}

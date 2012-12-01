@@ -8,7 +8,7 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class NetCommand {
+	public class NetCommand extends AbstractCommand{
 		
 		private var _id:String;
 		private var _requestSpecs:String;
@@ -18,16 +18,17 @@ package maryfisher.framework.command.net {
 		protected var _resultData:Object;
 		protected var _requestData:Object;
 		
-		public function NetCommand(id:String, requestData:Object, callback:INetRequestCallback = null, requestSpecs:String = "") {
+		public function NetCommand(id:String, requestData:Object, callback:INetRequestCallback = null, requestSpecs:String = "", executeInstantly:Boolean = true) {
+			super();
 			_requestSpecs = requestSpecs;
 			_requestData = requestData;
 			_id = id;
 			_requestFinished = new Signal(NetCommand);
 			callback && _requestFinished.addOnce(callback.onRequestReceived);
-			execute();
+			executeInstantly && execute();
 		}
 		
-		public function execute():void {
+		override public function execute():void {
 			NetController.registerCommand(this);
 		}
 		
@@ -54,6 +55,7 @@ package maryfisher.framework.command.net {
 		protected function finishRequest(data:Object):void {
 			_resultData = data;
 			_requestFinished.dispatch(this);
+			_finishedExecutionSignal.dispatch();
 		}
 		
 		public function get requestFinished():Signal { return _requestFinished; }

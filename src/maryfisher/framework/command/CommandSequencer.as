@@ -1,4 +1,5 @@
 package maryfisher.framework.command {
+	import maryfisher.framework.command.view.SequenceProgress;
 	import maryfisher.framework.core.LoaderController;
 	/**
 	 * ...
@@ -6,6 +7,7 @@ package maryfisher.framework.command {
 	 */
 	public class CommandSequencer extends AbstractCommand{
 		private var _commands:Vector.<AbstractCommand>;
+		private var _sequenceProgress:SequenceProgress;
 		
 		public function CommandSequencer() {
 			_commands = new Vector.<AbstractCommand>();
@@ -16,19 +18,26 @@ package maryfisher.framework.command {
 		}
 		
 		override public function execute():void {
-			
+			nextCommand();
 		}
 		
-		public function startSequence():void {
-			LoaderController.registerSequence(this);
+		private function onCommandFinished():void {
+			nextCommand();
 		}
 		
-		/* TODO
-		 * Integration with LoaderController
-		 */
-		public function getProgress():Number {
-			return 0;
+		private function nextCommand():void {
+			var s:AbstractCommand = _commands.shift();
+			if (!s) {
+				_finishedExecutionSignal.dispatch();
+				return;
+			}
+			s.finishedExecutionSignal.addOnce(onCommandFinished);
+			s.execute();
 		}
+		
+		//public function startSequence():void {
+			//LoaderController.registerSequence(this);
+		//}
 	}
 
 }

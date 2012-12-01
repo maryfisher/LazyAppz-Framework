@@ -33,6 +33,8 @@ package maryfisher.framework.command.net {
 		protected var _result:SQLResult;
 		protected var _resultData:Object;
 		protected var _statement:SQLStatement;
+		public var path:String;
+		public var dbFile:String;
 		
 		public function SQLRequest() {
 			
@@ -42,9 +44,9 @@ package maryfisher.framework.command.net {
 			super.execute(data, netData, requestSpecs);
 			_requestData = data;
 			var resources :File = File.documentsDirectory;
-			var ssc:File = new File(resources.nativePath + "/SSC");
+			var ssc:File = new File(resources.nativePath + path);
 			ssc.createDirectory();
-			var dbFile:File = ssc.resolvePath("data.db");
+			var dbFile:File = ssc.resolvePath(dbFile + ".sav");
 			
 			_connection = new SQLConnection();
 			_connection.addEventListener(SQLEvent.OPEN, onDatabaseOpen);
@@ -58,7 +60,8 @@ package maryfisher.framework.command.net {
 			
 		}
 		
-		protected function createTable(table:String, names:Array, types:Array):String {
+		//protected function createTable(table:String, names:Array, types:Array):String {
+		protected function createTable(table:String, names:Array, types:Array):void {
 			
 			var st:String = "CREATE TABLE IF NOT EXISTS " + table + " (";
 			var l:uint = names.length;
@@ -71,12 +74,15 @@ package maryfisher.framework.command.net {
 			
 			st += ")";
 			
-			return st;
+			//return st;
+			createStatement(st);
 		}
 		
-		protected function insertStatement(table:String, columns:Array, inserts:Array):String {
+		protected function insertStatement(table:String, columns:Array, inserts:Array, doReplace:Boolean = false):String {
 			
-			var st:String = "INSERT INTO " + table + " (" + columns.join(",") + ") VALUES (";
+			var st:String = "INSERT";
+			doReplace && (st += " OR REPLACE");
+			st += " INTO " + table + " (" + columns.join(",") + ") VALUES (";
 			
 			var l:uint = inserts.length;
 			for (var i:int = 0; i < l; i++) {
@@ -106,7 +112,7 @@ package maryfisher.framework.command.net {
 					st += sets[i];
 				}
 				if (i != l - 1) {
-					st += ", ";
+					st += ",";
 				}
 			}
 			
@@ -131,6 +137,7 @@ package maryfisher.framework.command.net {
 			if (onResult == null) onResult = onCreate;
 			_statement = new SQLStatement();
 			_statement.text = text;
+			trace(text);
 			_statement.sqlConnection = _connection;
 			_statement.addEventListener(SQLEvent.RESULT, onResult);
 			_statement.addEventListener(SQLErrorEvent.ERROR, onError);
@@ -139,7 +146,7 @@ package maryfisher.framework.command.net {
 		
 		protected function onCreate(e:SQLEvent):void {
 			_result = _statement.getResult();
-			//_result.data;
+			//_resultData = _result.data;
 			
 			//finishRequest(null);
 			//trace("yay, it worked");

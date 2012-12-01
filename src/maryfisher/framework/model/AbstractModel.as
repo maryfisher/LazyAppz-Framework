@@ -1,4 +1,5 @@
 package maryfisher.framework.model {
+	import avmplus.getQualifiedClassName;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...
@@ -49,6 +50,10 @@ package maryfisher.framework.model {
 		
 		public function dispatch(update:BaseModelUpdate):void {
 			_updateSignal.dispatch(update);
+		}
+		
+		public function get className():String {
+			return getQualifiedClassName(this);
 		}
 	}
 
