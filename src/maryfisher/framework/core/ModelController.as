@@ -29,7 +29,11 @@ package maryfisher.framework.core {
 		
 		static public function init(models:Dictionary):void {
 			getInstance()._models = models;
-			for each (var item:AbstractModel in models) {
+			
+		}
+		
+		static public function initModels():void {
+			for each (var item:AbstractModel in _instance._models) {
 				item.init();
 			}
 		}
