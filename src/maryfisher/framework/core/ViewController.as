@@ -1,7 +1,7 @@
 package maryfisher.framework.core {
-	import away3d.core.managers.Stage3DManager;
-	import away3d.core.managers.Stage3DProxy;
-	import away3d.events.Stage3DEvent;
+	//import away3d.core.managers.Stage3DSpiritger;
+	//import away3d.core.managers.Stage3DProxy;
+	//import away3d.events.Stage3DEvent;
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
@@ -34,7 +34,7 @@ package maryfisher.framework.core {
 		private var _mouseObjects:Vector.<IMouseObject>;
 		
 		private var _oldTime:int;
-		private var _stage3DProxy:Stage3DProxy;
+		//private var _stage3DProxy:Stage3DProxy;
 		private var _viewList:Vector.<IViewController>;
 		
 		
@@ -67,27 +67,11 @@ package maryfisher.framework.core {
 				_viewController[viewcontroller.controllerId] = viewcontroller;
 				viewcontroller.setUp(_stage, this);
 			}
-			_oldTime = getTimer();
-			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
-			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-			// Define a new Stage3DManager for the Stage3D objects
-			//var stage3DManager:Stage3DManager = Stage3DManager.getInstance(stage);
-			//
-			// Create a new Stage3D proxy to contain the separate views
-			//_stage3DProxy = stage3DManager.getFreeStage3DProxy();
-			//_stage3DProxy.addEventListener(Stage3DEvent.CONTEXT3D_CREATED, onContextCreated);
+			//_oldTime = getTimer();
+			//_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
+			//_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 			
-		}
-		
-		private function onContextCreated(e:Stage3DEvent):void {
 			
-			for each(var viewcontroller:IViewController in _viewList) {
-				viewcontroller.setUpProxy(_stage3DProxy);
-			}
-			
-			_oldTime = getTimer();
-			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
-			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		private function onMouseWheel(e:MouseEvent):void {
@@ -99,12 +83,6 @@ package maryfisher.framework.core {
 		
 		private function handleEnterFrame(e:Event):void {
 			
-			/** TODO
-			 * 
-			 */
-			//_stage3DProxy.clear();
-			
-			
 			var interval:int = getTimer() - _oldTime;
 			_oldTime += interval;
 			for each(var obj:ITickedObject in _tickedObjects) {
@@ -115,9 +93,6 @@ package maryfisher.framework.core {
 			for (var i:int = 0; i < l; i++) {
 				_viewList[i].render();
 			}
-			
-			// Present the Context3D object to Stage3D
-			//_stage3DProxy.present();
 		}
 		
 		static public function registerCommand(viewCommand:ViewCommand):void {
@@ -127,6 +102,12 @@ package maryfisher.framework.core {
 		
 		static public function registerStageCommand(stageCommand:StageCommand):void {
 			_instance.executeStageCommand(stageCommand);
+		}
+		
+		static public function start():void {
+			_oldTime = getTimer();
+			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
+			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		private function executeStageCommand(stageCommand:StageCommand):void {

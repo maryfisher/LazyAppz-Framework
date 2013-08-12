@@ -6,7 +6,7 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class NetRequest extends AbstractProxy{
+	public class NetRequest { // extends AbstractProxy{
 		
 		protected var _requestFinished:Signal;
 		

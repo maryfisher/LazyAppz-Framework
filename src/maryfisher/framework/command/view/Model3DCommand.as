@@ -1,12 +1,7 @@
 package maryfisher.framework.command.view {
-	import away3d.cameras.Camera3D;
-	import away3d.containers.Scene3D;
-	import away3d.entities.Entity;
+	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.view.model3d.BaseView3D;
 	
-	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.core.ViewController;
-	import maryfisher.framework.view.IViewComponent;
 	
 	/**
 	 *

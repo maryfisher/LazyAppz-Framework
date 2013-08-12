@@ -9,7 +9,7 @@ package maryfisher.framework.command.asset {
 		public function InitAssetCommand(id:String, callback:IAssetCallback, addView:Boolean = false) {
 			super(id, callback, addView);
 			
-			AssetController.registerCommand(this);
+			AssetController.registerLoaderCommand(this);
 		}
 		
 		public function setAsset(obj:*):void {

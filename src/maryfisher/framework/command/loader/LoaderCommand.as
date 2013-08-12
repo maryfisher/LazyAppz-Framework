@@ -1,4 +1,5 @@
 package maryfisher.framework.command.loader {
+	import maryfisher.framework.core.AssetController;
 	import maryfisher.framework.core.LoaderController;
 	import maryfisher.framework.data.LoaderData;
 	import org.osflash.signals.Signal;
@@ -26,7 +27,8 @@ package maryfisher.framework.command.loader {
 		}
 		
 		public function execute():void {
-			LoaderController.registerCommand(this);
+			//LoaderController.registerCommand(this);
+			AssetController.registerLoaderCommand(this);
 		}
 		
 		public function loadAsset(loaderData:LoaderData):void {

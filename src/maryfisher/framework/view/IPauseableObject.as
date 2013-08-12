@@ -1,4 +1,4 @@
-package maryfisher.austengames.society.view.interfaces {
+package maryfisher.framework.view {
 	
 	/**
 	 * ...

@@ -28,6 +28,10 @@ package maryfisher.framework.command.net {
 		static protected const XML_TYPE:String = "XML";
 		static protected const NONE:String = "NONE";
 		
+		static protected const LEFT_OUTER_JOIN:String = " LEFT OUTER JOIN ";
+		static protected const CROSS_JOIN:String = " CROSS JOIN ";
+		static protected const INNER_JOIN:String = " INNER JOIN ";
+		
 		private var _connection:SQLConnection;
 		protected var _requestData:Object;
 		protected var _result:SQLResult;
@@ -131,6 +135,10 @@ package maryfisher.framework.command.net {
 			}
 			
 			return st;
+		}
+		
+		protected function createJoin(table:String, joinTable:String, tableId:String, joinTableId:String, joinType:String):String {
+			return joinType + joinTable + " ON " + table + "." + tableId + "=" + joinTable + "." + joinTableId;
 		}
 		
 		protected function createStatement(text:String, onResult:Function = null ):void {

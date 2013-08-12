@@ -14,20 +14,30 @@ package maryfisher.framework.core {
 		private var _transforms:Dictionary; /* of SoundTransform; */
 		
 		public function SoundController() {
-			_transforms = new Dictionary();
+		}
+		
+		static public function init(transforms:Vector.<String>):void {
+			
+			getInstance()._transforms = new Dictionary();
+			for each (var item:String in transforms) {
+				_instance._transforms[item] = new SoundTransform();
+			}
+			//getInstance().
 		}
 		
 		static public function registerSound(sound:ISound):void {
-			
-			sound.soundTransform = getInstance()._transforms[sound.soundType];
+			var s:SoundTransform = getInstance()._transforms[sound.soundType];
+			if (!s) throw Error("No SoundTransform with that id");
+			sound.soundTransform = s;
 		}
 		
 		static public function registerSoundCommand(sound:SoundCommand):void {
 			var s:SoundTransform = _instance._transforms[sound.transformId];
-			if (!s) {
-				s = new SoundTransform();
-				_instance._transforms[sound.transformId] = s;
-			}
+			if (!s) throw Error("No SoundTransform with that id");
+			//if (!s) {
+				//s = new SoundTransform();
+				//_instance._transforms[sound.transformId] = s;
+			//}
 			s.volume = sound.volume;
 		}
 		

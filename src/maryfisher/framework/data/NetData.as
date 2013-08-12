@@ -10,8 +10,10 @@ package maryfisher.framework.data {
 		public var id:String;
 		public var requestClass:Class;
 		public var requestType:String;
+		public var controllerId:String;
 		
-		public function NetData(id:String, requestType:String, requestClass:Class = null) {
+		public function NetData(id:String, requestType:String, controllerId:String, requestClass:Class = null) {
+			this.controllerId = controllerId;
 			this.requestType = requestType;
 			this.requestClass = requestClass;
 			//this.url = url;

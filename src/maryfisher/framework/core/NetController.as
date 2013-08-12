@@ -29,7 +29,8 @@ package maryfisher.framework.core {
 		static public function init(netDatas:Dictionary, controller:Vector.<INetController>):void {
 			getInstance()._netDatas = netDatas;
 			for each (var item:INetController in controller) {
-				_instance._netController[item.requestType] = item;
+				//_instance._netController[item.requestType] = item;
+				_instance._netController[item.controllerID] = item;
 			}
 		}
 		
@@ -40,7 +41,7 @@ package maryfisher.framework.core {
 		private function set netrequest(cmd:NetCommand):void {
 			var data:NetData = _netDatas[cmd.id];
 			cmd.buildRequest(data);
-			(_netController[data.requestType] as INetController).registerRequest(cmd);
+			(_netController[data.controllerId] as INetController).registerRequest(cmd);
 		}
 		
 		/** TODO

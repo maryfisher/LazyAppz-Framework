@@ -1,5 +1,6 @@
 package maryfisher.framework.command.asset {
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.core.AssetController;
 	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
@@ -29,6 +30,12 @@ package maryfisher.framework.command.asset {
 			_addView = addView;
 			_finishedLoading = new Signal(LoadAssetCommand);
 			_finishedLoading.addOnce(callback.assetFinished);
+			
+			AssetController.registerLoaderCommand(this);
+		}
+		
+		public function execute():void {
+			
 		}
 		
 		protected function buildAsset(obj:*):void {

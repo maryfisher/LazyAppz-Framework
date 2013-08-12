@@ -10,12 +10,14 @@ package maryfisher.framework.net {
 		
 		private var _dbFileId:String;
 		private var _path:String;
+		private var _controllerID:String;
 		
 		/** TODO
 		 * database location, encryption
 		 */
 		
-		public function BaseSQLController(path:String, dbFileId:String) {
+		public function BaseSQLController(path:String, dbFileId:String, controllerID:String) {
+			_controllerID = controllerID;
 			_path = path;
 			_dbFileId = dbFileId;
 			
@@ -28,6 +30,12 @@ package maryfisher.framework.net {
 			r.path = _path;
 			r.dbFile = _dbFileId;
 			cmd.sendRequest();
+		}
+		
+		/* INTERFACE maryfisher.framework.net.INetController */
+		
+		public function get controllerID():String {
+			return _controllerID;
 		}
 		
 		public function get requestType():String {
