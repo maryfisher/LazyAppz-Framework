@@ -19,10 +19,13 @@ package config {
 		}
 		
 		public function execute(startUpData:StartUpData):void {
-			NetController.init(getNetDatas(), Vector.<INetController>([
-				new BaseSQLController("/FrameworkTest", "config", NetConstants.CONFIG_DATABASE),
-				new BaseSQLController("/FrameworkTest", "player", NetConstants.PLAYER_DATABASE)
-				]));
+			
+			CONFIG::desktop{
+				NetController.init(getNetDatas(), Vector.<INetController>([
+					new BaseSQLController("/FrameworkTest", "config", NetConstants.CONFIG_DATABASE),
+					new BaseSQLController("/FrameworkTest", "player", NetConstants.PLAYER_DATABASE)
+					]));
+			}
 		}
 		
 		private function getNetDatas():Dictionary {

@@ -1,7 +1,13 @@
 *.png
 *.bat
 *.as3proj
+*.swf
+*.js
+*.html
 examples/mobile/AIR_Android_readme.txt
 examples/mobile/AIR_iOS_readme.txt
 examples/mobile/application.xml
 examples/browser/obj/*
+examples/desktop/obj/*
+examples/desktop/AIR_readme.txt
+examples/desktop/application.xml

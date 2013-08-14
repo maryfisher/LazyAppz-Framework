@@ -6,6 +6,7 @@ package {
 	import data.StartUpData;
 	import flash.display.Stage;
 	import game.GameController;
+	import maryfisher.framework.core.ViewController;
 	
 	/**
 	 * ...
@@ -21,11 +22,16 @@ package {
 		
 		public function init(stage:Stage, startUp:StartUpData):void {
 			
+			
 			new ConfigureLoaderCommand(startUp).execute();
 			new ConfigureViewCommand().execute(stage, startUp);
 			new ConfigureNetCommand().execute(startUp);
 			new ConfigureModelCommand().execute();
 			
+			ViewController.onFinished(onFinished);
+		}
+		
+		private function onFinished():void {			
 			_gameController = new GameController();
 		}
 	}

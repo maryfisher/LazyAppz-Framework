@@ -1,7 +1,12 @@
 package view.browser {
 	import config.ViewConstants;
 	import data.GameData;
+	import flash.display.Bitmap;
+	import flash.display.BitmapData;
+	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.view.core.BaseStarlingView;
+	import starling.display.Image;
+	import starling.textures.Texture;
 	import view.interfaces.IGameView;
 	/**
 	 * ...
@@ -11,6 +16,13 @@ package view.browser {
 		
 		public function StarlingBrowserView() {
 			
+		}
+		
+		override public function init():void {
+			var image:Image = new Image(Texture.fromBitmapData(new BitmapData(200, ViewController.stageHeight, false, 0xff)));
+			addChild(image);
+			
+			flatten();
 		}
 		
 		public function set gameData(data:GameData):void {

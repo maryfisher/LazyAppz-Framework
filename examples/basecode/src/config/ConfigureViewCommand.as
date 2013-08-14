@@ -29,12 +29,16 @@ package config {
 			
 			if (startUpData.useStarling) {
 				spriteController = new StarlingProxyController(ViewConstants.GAME_VIEW);
+				//spriteController = new BaseStarlingController(ViewConstants.GAME_VIEW);
 				awayController = new Away3DProxyController(Vector.<IProxyController>([spriteController]), ViewConstants.GAME_VIEW_3D);
 			}else {
 				spriteController = new BaseSpriteController(ViewConstants.GAME_VIEW);
 				awayController = new BaseAway3DController(ViewConstants.GAME_VIEW_3D)
 			}
 			ViewController.init(stage, [awayController, spriteController]);
+			//ViewController.init(stage, [spriteController, awayController]);
+			//ViewController.init(stage, [spriteController]);
+			
 			if(!startUpData.useStarling) ViewController.start();
 		}
 		

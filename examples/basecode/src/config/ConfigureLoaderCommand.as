@@ -1,9 +1,9 @@
 package config {
-	import corset.gifts.config.LoaderConstants;
 	import data.StartUpData;
 	import flash.utils.Dictionary;
 	import maryfisher.framework.config.AbstractConfigureLoaderCommand;
 	import maryfisher.framework.data.AssetData;
+	import maryfisher.framework.data.LoaderData;
 	import view.browser.Away3DBrowserView;
 	import view.browser.SpriteBrowserView;
 	import view.browser.StarlingBrowserView;
@@ -17,8 +17,6 @@ package config {
 	public class ConfigureLoaderCommand extends AbstractConfigureLoaderCommand {
 		
 		public static const VIEW_PATH:String = "assets/";
-		public static const UI_PATH:String = "assets/ui/";
-		public static const XML_PATH:String = "xml/";
 		
 		private var _startUpData:StartUpData;
 		
@@ -29,36 +27,42 @@ package config {
 		}
 		
 		override protected function getMapping():Dictionary {
+			/************ 
+			 * NOTE
+			 * 
+			 * instead of using CONFIG definitions you can extend the class and overriding this method 
+			 * in the respective projects
+			 */
 			
-			if (_startUpData.isMobile) {
-				mobileMapping
-			}else if (_startUpData.useStarling) {
-				starlingMapping();
-			}else {
-				browserMapping();
+			CONFIG::mobile {
+				map(LoaderConstants.GAME_VIEW, Away3DMobileView);
+				map(LoaderConstants.GAME_VIEW_3D, StarlingMobileView);
+			} 
+			//CONFIG::desktop {
+				//map(LoaderConstants.GAME_VIEW_3D, Away3DBrowserView);
+				//map(LoaderConstants.GAME_VIEW, StarlingBrowserView);
+			//}
+			CONFIG::browser {
+				map(LoaderConstants.GAME_VIEW_3D, Away3DBrowserView);
+				map(LoaderConstants.GAME_VIEW, StarlingBrowserView);
 			}
 			
 			return _mapping;
 		}
 		
-		private function mobileMapping():void {
+		override protected function getLoaderPaths():Dictionary {
 			
-			map(LoaderConstants.GAME_VIEW, Away3DMobileView);
-			map(LoaderConstants.GAME_VIEW_3D, StarlingMobileView);
-		}
-		
-		private function starlingMapping():void {
-			map(LoaderConstants.GAME_VIEW_3D, Away3DBrowserView);
-			map(LoaderConstants.GAME_VIEW, StarlingBrowserView);
-		}
-		
-		private function browserMapping():void {
-			map(LoaderConstants.GAME_VIEW_3D, Away3DBrowserView);
-			map(LoaderConstants.GAME_VIEW, SpriteBrowserView);
-		}
-		
-		private function map(id:String, cl:Class, cache:Boolean = false):void {
-			_mapping[id] = new AssetData(cl, cache);
+			_loaderPaths = new Dictionary();
+			_paths = new Dictionary();
+			
+			CONFIG::desktop {
+				_loaderPaths[LoaderConstants.GAME_VIEW] = VIEW_PATH + "GameView";
+				_loaderPaths[LoaderConstants.GAME_VIEW_3D] = VIEW_PATH + "GameView3D";
+				
+				addLoaderData(LoaderConstants.GAME_VIEW, "", true);
+				addLoaderData(LoaderConstants.GAME_VIEW_3D, "");
+			}
+			return _paths;
 		}
 	}
 

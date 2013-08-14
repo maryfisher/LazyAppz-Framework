@@ -10,7 +10,7 @@ package data {
 		private var _gameData:GameData;
 		
 		public function GameModel() {
-			
+			status = DATA_LOADED;
 		}
 		
 		public function get gameData():GameData {

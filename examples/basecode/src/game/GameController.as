@@ -19,7 +19,7 @@ package game {
 		private var _gameModel:GameModel;
 		
 		public function GameController() {
-			
+			super();
 		}
 		
 		override protected function onModelsLoaded():void {

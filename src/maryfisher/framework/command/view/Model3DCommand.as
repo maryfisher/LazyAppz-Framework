@@ -1,6 +1,6 @@
 package maryfisher.framework.command.view {
 	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.view.model3d.BaseView3D;
+	import maryfisher.framework.view.BaseView3D;
 	
 	
 	/**

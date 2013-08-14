@@ -1,6 +1,4 @@
 package config {
-	import corset.gifts.view.battle.BattleView;
-	import corset.gifts.view.ui.menu.MainMenu;
 	/**
 	 * ...
 	 * @author mary_fisher
