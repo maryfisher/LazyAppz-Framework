@@ -9,10 +9,10 @@ package maryfisher.framework.view.core {
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.IViewController;
 	import maryfisher.framework.core.ViewController;
+	import maryfisher.framework.view.ICameraController;
 	import maryfisher.framework.view.ICameraObject;
 	import maryfisher.framework.view.IViewComponent;
-	import maryfisher.view.model3d.BaseView3D;
-	import maryfisher.view.model3d.camera.ICameraController;
+	import maryfisher.framework.view.BaseView3D;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -21,8 +21,8 @@ package maryfisher.framework.view.core {
 		
 		private var _stage:Stage;
 		
-		private var _view3d:BaseView3D;
-		private var _scene:Scene3D;
+		protected var _view3d:BaseView3D;
+		protected var _scene:Scene3D;
 		
 		private var _cameraController:ICameraController;
 		
@@ -49,6 +49,7 @@ package maryfisher.framework.view.core {
 		
 		public function removeView(view:IViewComponent):void {
 			_scene.removeChild(view as ObjectContainer3D);
+			unRegisterView(view);
 		}
 		
 		public function pauseView():void {
@@ -75,10 +76,7 @@ package maryfisher.framework.view.core {
 			
 			switch (viewCommand.viewCommandType) {
 				case Model3DCommand.REGISTER_VIEW3D:
-					//_view.camera = (viewCommand as Model3DCommand).camera;
 					_view3d = (viewCommand as Model3DCommand).view3D;
-					//_view3d.stage3DProxy = _stage3DProxy;
-					//_view3d.shareContext = true;
 					_scene = _view3d.scene;
 					_cameraController = _view3d.cameraController;
 					_cameraController && _cameraController.start(_stage);

@@ -5,8 +5,7 @@ package maryfisher.framework.data {
 	 */
 	public class NetData {
 		
-		//public var url:String;
-		//public var format:String; // JSON oder file system => Wrapper notwendig
+		//use for url purposes
 		public var id:String;
 		public var requestClass:Class;
 		public var requestType:String;
@@ -16,11 +15,9 @@ package maryfisher.framework.data {
 			this.controllerId = controllerId;
 			this.requestType = requestType;
 			this.requestClass = requestClass;
-			//this.url = url;
-			this.id = id; //für url Zwecke
+			this.id = id; 
 			
 		}
 		
 	}
-
 }

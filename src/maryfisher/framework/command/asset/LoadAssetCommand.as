@@ -8,7 +8,6 @@ package maryfisher.framework.command.asset {
 	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
-	import maryfisher.framework.view.ISpriteSheet;
 	import maryfisher.framework.view.IViewComponent;
 	import org.osflash.signals.Signal;
 	/**
@@ -21,7 +20,10 @@ package maryfisher.framework.command.asset {
 		protected var _viewComponent:IViewComponent;
 		protected var _assetBuilderId:String;
 		protected var _assetBuilder:IAssetBuilder;
-		protected var _spriteSheet:ISpriteSheet;
+		/** TODO
+		 * 
+		 */
+		//protected var _spriteSheet:ISpriteSheet;
 		protected var _addView:Boolean;
 		protected var _finishedLoading:Signal;
 		protected var _id:String;
@@ -74,8 +76,11 @@ package maryfisher.framework.command.asset {
 				_clonableViewComponent = (obj as IClonableViewComponent);
 				_clonableViewComponent.addOnFinished(onClonableViewFinished);
 				return;
-			}else if (obj is ISpriteSheet) {
-				_spriteSheet = obj as ISpriteSheet;
+			/** TODO
+			 * 
+			 */
+			//}else if (obj is ISpriteSheet) {
+				//_spriteSheet = obj as ISpriteSheet;
 			}
 			setFinished();
 		}
@@ -92,7 +97,7 @@ package maryfisher.framework.command.asset {
 		
 		protected function onViewFinished(e:ViewEvent):void {
 			/* TODO
-			 * das hier hat nur den Nachteil, dass das Original nie verwendet wird
+			 * original is never used
 			 */
 			if (_viewComponent is IClonableViewComponent) {
 				_clonableViewComponent = (_viewComponent as IClonableViewComponent)
@@ -114,9 +119,12 @@ package maryfisher.framework.command.asset {
 			return _clonableViewComponent;
 		}
 		
-		public function get spriteSheet():ISpriteSheet {
-			return _spriteSheet;
-		}
+		/** TODO
+		 * 
+		 */
+		//public function get spriteSheet():ISpriteSheet {
+			//return _spriteSheet;
+		//}
 		
 		public function get id():String {
 			return _id;

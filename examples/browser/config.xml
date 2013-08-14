@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<flex-config>
+   <compiler locale="en_US" swf-version="15">
+		<define>
+			<name>CONFIG::desktop</name>
+			<value>false</value>
+		</define>
+		<define>
+			<name>CONFIG::browser</name>
+			<value>true</value>
+		</define>
+		<define>
+			<name>CONFIG::mobile</name>
+			<value>false</value>
+		</define>
+		<define>
+			<name>CONFIG::mouse</name>
+			<value>true</value>
+		</define>
+		<define>
+			<name>CONFIG::touch</name>
+			<value>false</value>
+		</define>
+	</compiler>
+</flex-config>
