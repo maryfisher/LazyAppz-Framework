@@ -22,7 +22,9 @@ package {
 		
 		public function init(stage:Stage):void {
 			
-			
+			/**
+			 * to experiment with configurations please read README.txt first
+			 */
 			new ConfigureLoaderCommand().execute();
 			new ConfigureViewCommand().execute(stage);
 			new ConfigureNetCommand().execute();

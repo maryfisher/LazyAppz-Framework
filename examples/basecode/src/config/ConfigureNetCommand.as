@@ -18,19 +18,26 @@ package config {
 			
 		}
 		
+		/**
+		 * <p>this will create a directory FrameworkTest and two database in your users documents directory. For more 
+		 * details see http://help.adobe.com/en_US/FlashPlatform/reference/actionscript/3/flash/filesystem/File.html#documentsDirectory </p>
+		 */
 		public function execute():void {
+			
+			var sqllitePath:String = "/FrameworkTest";
+			var configDB:String = "config";
+			var playerDB:String = "player";
 			
 			CONFIG::desktop{
 				NetController.init(getNetDatas(), Vector.<INetController>([
-					new BaseSQLController("/FrameworkTest", "config", NetConstants.CONFIG_DATABASE),
-					new BaseSQLController("/FrameworkTest", "player", NetConstants.PLAYER_DATABASE)
+					new BaseSQLController(sqllitePath, configDB, NetConstants.CONFIG_DATABASE),
+					new BaseSQLController(sqllitePath, playerDB, NetConstants.PLAYER_DATABASE)
 					]));
 			}
 		}
 		
 		private function getNetDatas():Dictionary {
 			_datas = new Dictionary();
-			
 			
 			//addData(NetCommandConstants.SET_UP_CONFIGS, "sql", NetConstants.CONFIG_DATABASE, SetUpConfigDatabase);
 			

@@ -31,8 +31,8 @@ package config {
 			 */
 			
 			CONFIG::mobile {
-				map(LoaderConstants.GAME_VIEW, Away3DMobileView);
-				map(LoaderConstants.GAME_VIEW_3D, StarlingMobileView);
+				map(LoaderConstants.GAME_VIEW_3D, Away3DMobileView);
+				map(LoaderConstants.GAME_VIEW, StarlingMobileView);
 			} 
 			//CONFIG::desktop {
 				//map(LoaderConstants.GAME_VIEW_3D, Away3DBrowserView);

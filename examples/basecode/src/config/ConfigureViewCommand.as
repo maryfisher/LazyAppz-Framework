@@ -27,7 +27,7 @@ package config {
 			var awayController:IViewController;
 			var spriteController:IViewController;
 			
-			if(CONFIG::desktop == true) {
+			if(CONFIG::desktop != true) {
 				spriteController = new StarlingProxyController(ViewConstants.GAME_VIEW);
 				awayController = new Away3DProxyController(Vector.<IProxyController>([spriteController]), ViewConstants.GAME_VIEW_3D);
 			}else {
