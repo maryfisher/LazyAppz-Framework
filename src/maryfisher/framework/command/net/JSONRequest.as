@@ -7,7 +7,6 @@ package maryfisher.framework.command.net {
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
-	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.data.NetData;
 	/**
 	 * ...
@@ -28,13 +27,13 @@ package maryfisher.framework.command.net {
 			}
 			
 			super.execute(requestData, netData, requestSpecs);
-			//var url:String = netData.url//"backend/";
+			
 			var json:String = com.adobe.serialization.json.JSON.encode(requestData);
 			 var _loader:URLLoader = new URLLoader();
 			_loader.addEventListener(Event.COMPLETE, onRequestComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
-			trace(_baseUrl + _url);
+			
 			var request:URLRequest = new URLRequest(_baseUrl + _url + requestSpecs);
 			request.method = URLRequestMethod.POST;
 			var variables:URLVariables = new URLVariables();
@@ -53,7 +52,7 @@ package maryfisher.framework.command.net {
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
-			
+			trace(e.text);
 		}
 		
 		private function onRequestError(e:IOErrorEvent):void {
@@ -62,29 +61,14 @@ package maryfisher.framework.command.net {
 		
 		private function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
-			trace(loader.data);
 			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
 			if (data) {
 				finishRequest(data);
-				//for (var i:String in data){
-					//trace(i, data[i]);
-					//if (data[i] is Object) {
-						//var vo:PartyGarmentVO = new PartyGarmentVO();
-						//vo.id = data[i]["garmentId"];
-						//vo.selectedType = data[i]["selectedType"];
-						//vo.color = parseInt(data[i]["color"]);
-						//trace(vo);
-						//for (var j:String in data[i]) {
-							//
-							//trace("second layer", j, data[i][j]);
-						//}
-					//}
-				//}
 			}
 		}
 		
 		override public function get requestType():String {
-			return "json";
+			return TYPE_JSON;
 		}
 		
 		public function set baseUrl(value:String):void {

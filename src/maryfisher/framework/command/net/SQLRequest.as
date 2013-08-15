@@ -64,7 +64,6 @@ package maryfisher.framework.command.net {
 			
 		}
 		
-		//protected function createTable(table:String, names:Array, types:Array):String {
 		protected function createTable(table:String, names:Array, types:Array):void {
 			
 			var st:String = "CREATE TABLE IF NOT EXISTS " + table + " (";
@@ -78,7 +77,6 @@ package maryfisher.framework.command.net {
 			
 			st += ")";
 			
-			//return st;
 			createStatement(st);
 		}
 		
@@ -155,9 +153,6 @@ package maryfisher.framework.command.net {
 		protected function onCreate(e:SQLEvent):void {
 			_result = _statement.getResult();
 			//_resultData = _result.data;
-			
-			//finishRequest(null);
-			//trace("yay, it worked");
 		}
 		
 		private function onError(e:SQLErrorEvent):void {
@@ -169,7 +164,7 @@ package maryfisher.framework.command.net {
 		}
 		
 		override public function get requestType():String {
-			return "sql";
+			return TYPE_SQLLITE;
 		}
 	}
 

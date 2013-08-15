@@ -1,6 +1,7 @@
 *.png
 *.bat
 *.as3proj
+examplessave/*
 examples/mobile/AIR_Android_readme.txt
 examples/mobile/AIR_iOS_readme.txt
 examples/mobile/application.xml

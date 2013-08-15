@@ -1,4 +1,5 @@
 package maryfisher.framework.command.net {
+	import com.adobe.serialization.json.JSON;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
@@ -6,10 +7,7 @@ package maryfisher.framework.command.net {
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
-	import flash.utils.ByteArray;
-	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.data.NetData;
-	import com.adobe.serialization.json.JSON;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -22,7 +20,7 @@ package maryfisher.framework.command.net {
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
 			super.execute(requestData, netData, requestSpecs);
 			
-			var url:String = _netData.url//"backend/";
+			var url:String = _netData.url;
 			var request:URLRequest;
 			
 			var _loader:URLLoader = new URLLoader();
@@ -39,7 +37,7 @@ package maryfisher.framework.command.net {
 		}
 		
 		private function onSecurityError(e:SecurityErrorEvent):void {
-			
+			trace(e.text);
 		}
 		
 		private function onRequestError(e:IOErrorEvent):void {
@@ -48,7 +46,6 @@ package maryfisher.framework.command.net {
 		
 		private function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
-			trace(loader.data);
 			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
 			finishRequest(data);
 		}

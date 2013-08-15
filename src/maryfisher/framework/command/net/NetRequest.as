@@ -6,7 +6,11 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class NetRequest { // extends AbstractProxy{
+	public class NetRequest { 
+		
+		static public const TYPE_SQLLITE:String = "sql";
+		static public const TYPE_JSON:String = "json";
+		static public const TYPE_AMF:String = "amf";
 		
 		protected var _requestFinished:Signal;
 		
