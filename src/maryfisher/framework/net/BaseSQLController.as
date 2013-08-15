@@ -39,7 +39,7 @@ package maryfisher.framework.net {
 		}
 		
 		public function get requestType():String {
-			return "sql";
+			return NetRequest.TYPE_SQLLITE;
 		}
 		
 	}
