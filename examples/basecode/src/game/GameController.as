@@ -34,7 +34,7 @@ package game {
 				_gameView.gameData = _gameModel.gameData;
 				_gameView.addView();
 				
-				new LoadAssetCommand(LoaderConstants.GAME_VIEW_3D, this);
+				new LoadAssetCommand(LoaderConstants.GAME_VIEW_3D, this, "", false, "");
 				
 			}else if (cmd.id == LoaderConstants.GAME_VIEW_3D) {
 				_gameView3D = cmd.viewComponent as IGameView3D;

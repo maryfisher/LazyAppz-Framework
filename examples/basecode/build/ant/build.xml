@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project name="Lazy Appz Examples" basedir=".">
+	<taskdef resource="net/sf/antcontrib/antcontrib.properties"/>
+	<property file="user.properties" />
+	<property file="build.properties" />
+	
+	<target name="compile-asset">
+		<java jar="${FLEX_HOME}/lib/mxmlc.jar" fork="true" failonerror="true" maxmemory="512m">
+			<jvmarg value="-XX:-UseGCOverheadLimit" />
+			<arg value="-debug=${debug}" />
+			<arg value="+flexlib=${FLEX_HOME}/frameworks" />
+			<arg value="-swf-version=19" />
+			<arg value="-target-player=11.6" />
+			<arg value="-file-specs=${assets.file.src.loc}/${src.file}.as" />
+			<arg value="-source-path+=${framework.src.loc}" />
+			<arg value="-source-path+=${base.src.loc}" />
+			<arg value="-source-path+=${signals.src.loc}" />
+			<arg value="-source-path+=${away.src.loc}" />
+			<arg value="-source-path+=${starling.src.loc}" />
+			<arg value="-output=${assets.bin.loc}/${dist.file}.swf" />
+			<arg value="-static-link-runtime-shared-libraries=true" />
+			<arg value="-incremental=false" />
+			<arg value="-verbose-stacktraces=true" />
+			<arg value="-define=CONFIG::debug,${debug}" />
+			<arg value="-define=CONFIG::touch,${config-touch}" />
+			<arg value="-define=CONFIG::mouse,${config-mouse}" />
+		</java>
+		<echo>[compile] Release SWF ${dist.file} created successfully. debug: ${debug}</echo>
+	</target>
+	
+	<target name="sprite_desktop">
+		<echo>[compile] Compiling SpriteDesktopView</echo>
+		<var name="src.file" value="desktop/SpriteDesktopView"/>
+		<var name="dist.file" value="desktop/GameView"/>
+		<antcall target="compile-asset"></antcall>
+	</target>
+	
+	<target name="away3d_desktop">
+		<echo>[compile] Compiling Away3DDesktopBuilder</echo>
+		<var name="src.file" value="desktop/Away3DDesktopBuilder"/>
+		<var name="dist.file" value="desktop/GameView3D"/>
+		<antcall target="compile-asset"></antcall>
+	</target>
+	
+	<target name="asdoc">
+		<echo>[asdoc] Generating ASDOC documentation</echo>
+		<tstamp>
+			<format property="docgen.time" pattern="MM/dd/yyyy hh:mm aa" unit="hour" />
+		</tstamp>
+		<java jar="${FLEX_HOME}/lib/asdoc.jar" dir="${FLEX_HOME}/frameworks" fork="true" failonerror="true">
+			<arg line="-doc-sources '${framework.src.loc}'"/>
+			<arg line="-source-path '${framework.src.loc}'"/>
+			<arg line="-source-path+=${signals.src.loc}" />
+			<arg line="-source-path+=${away.src.loc}" />
+			<arg line="-source-path+=${starling.src.loc}" />
+			<arg line="-window-title 'LazyAppz Documentation '"/>
+			<arg line="-main-title 'LazyAppz Documentation '" />
+			<arg line="-footer 'LazyAppz Documentation'" />
+			<arg line="-output '${framework.loc}/src'"/>
+			<arg line="-define=CONFIG::debug,false" />
+		</java>
+		<echo>[asdoc] ASDOC documentation generated successfully</echo>
+	</target>
+	
+</project>
+
+

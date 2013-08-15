@@ -5,7 +5,6 @@ package config {
 	import maryfisher.framework.data.AssetData;
 	import maryfisher.framework.data.LoaderData;
 	import view.browser.Away3DBrowserView;
-	import view.browser.SpriteBrowserView;
 	import view.browser.StarlingBrowserView;
 	import view.mobile.Away3DMobileView;
 	import view.mobile.StarlingMobileView;
@@ -17,6 +16,7 @@ package config {
 	public class ConfigureLoaderCommand extends AbstractConfigureLoaderCommand {
 		
 		public static const VIEW_PATH:String = "assets/";
+		public static const DESKTOP_PATH:String = VIEW_PATH + "desktop/";
 		
 		public function ConfigureLoaderCommand() {
 			super();
@@ -52,8 +52,8 @@ package config {
 			_paths = new Dictionary();
 			
 			CONFIG::desktop {
-				_loaderPaths[LoaderConstants.GAME_VIEW] = VIEW_PATH + "GameView";
-				_loaderPaths[LoaderConstants.GAME_VIEW_3D] = VIEW_PATH + "GameView3D";
+				_loaderPaths[LoaderConstants.GAME_VIEW] = DESKTOP_PATH + "GameView";
+				_loaderPaths[LoaderConstants.GAME_VIEW_3D] = DESKTOP_PATH + "GameView3D";
 				
 				addLoaderData(LoaderConstants.GAME_VIEW, "", true);
 				addLoaderData(LoaderConstants.GAME_VIEW_3D, "");
