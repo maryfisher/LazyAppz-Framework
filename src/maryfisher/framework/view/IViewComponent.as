@@ -19,6 +19,7 @@ package maryfisher.framework.view {
 		function addView():void;
 		function removeView():void;
 		function pause():void;
+		function unpause():void;
 		function show():void;
 		function hide():void;
 		function addViewComponent(comp:IViewComponent):void;

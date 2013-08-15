@@ -2,15 +2,17 @@ package maryfisher.framework.view.core {
 	import flash.events.Event;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.event.ViewEvent;
+	import maryfisher.framework.view.IStarlingView;
 	import maryfisher.framework.view.IViewComponent;
 	import starling.display.DisplayObject;
 	import starling.display.Sprite;
+	import flash.display.Sprite;
 	
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class BaseStarlingView extends Sprite implements IViewComponent {
+	public class BaseStarlingView extends starling.display.Sprite implements IViewComponent, IStarlingView {
 		
 		private var _dispatcher:flash.display.Sprite;
 		
@@ -58,13 +60,9 @@ package maryfisher.framework.view.core {
 			_dispatcher.dispatchEvent(e);
 		}
 		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
-		
 		public function removeListener(type:String, listener:Function, useCapture:Boolean = false):void {
 			_dispatcher.removeEventListener(type, listener, useCapture);
 		}
-		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
 		
 		public function addViewComponent(comp:IViewComponent):void {
 			addChild(comp as DisplayObject);
@@ -72,6 +70,16 @@ package maryfisher.framework.view.core {
 		
 		public function removeViewComponent(comp:IViewComponent):void {
 			removeChild(comp as DisplayObject);
+		}
+		
+		public function unpause():void {
+			
+		}
+		
+		/* INTERFACE maryfisher.framework.view.IStarlingView */
+		
+		public function init():void {
+			
 		}
 		
 		public function get componentType():String {

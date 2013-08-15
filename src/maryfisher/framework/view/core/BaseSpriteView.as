@@ -22,12 +22,12 @@ package maryfisher.framework.view.core {
 			dispatchEvent(new ViewEvent(ViewEvent.ON_FINISHED));
 		}
 		
+		/* INTERFACE maryfisher.framework.view.IViewComponent */
+		
 		public function addOnFinished(listener:Function):void {
 			listener(null);
 			//addEventListener(ViewEvent.ON_FINISHED, listener);
 		}
-		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
 		
 		public function destroy():void {
 			
@@ -49,6 +49,10 @@ package maryfisher.framework.view.core {
 			
 		}
 		
+		public function unpause():void {
+			
+		}
+		
 		public function show():void {
 			visible = true;
 		}
@@ -61,13 +65,9 @@ package maryfisher.framework.view.core {
 			dispatchEvent(e);
 		}
 		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
-		
 		public function removeListener(type:String, listener:Function, useCapture:Boolean = false):void {
 			removeEventListener(type, listener, useCapture);
 		}
-		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
 		
 		public function addViewComponent(comp:IViewComponent):void {
 			addChild(comp as DisplayObject);

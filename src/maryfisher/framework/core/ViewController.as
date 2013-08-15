@@ -1,7 +1,5 @@
 package maryfisher.framework.core {
-	//import away3d.core.managers.Stage3DSpiritger;
-	//import away3d.core.managers.Stage3DProxy;
-	//import away3d.events.Stage3DEvent;
+	
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
@@ -14,17 +12,16 @@ package maryfisher.framework.core {
 	import maryfisher.framework.view.IResizableObject;
 	import maryfisher.framework.view.ITickedObject;
 	import maryfisher.framework.view.IViewComponent;
+	import org.osflash.signals.Signal;
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
 	public class ViewController {
 		
-		//public static const SPRITE:String = "sprite";
-		//public static const STARLING:String = "starling";
-		//public static const MODEL3D:String = "model3d";
-		
 		static private var _instance:ViewController;
+		static private var _isFinished:Boolean;
+		static private var _onFinished:Signal = new Signal();
 		
 		private var _stage:Stage;
 		private var _viewController:Dictionary; /* of IViewController */
@@ -34,7 +31,6 @@ package maryfisher.framework.core {
 		private var _mouseObjects:Vector.<IMouseObject>;
 		
 		private var _oldTime:int;
-		//private var _stage3DProxy:Stage3DProxy;
 		private var _viewList:Vector.<IViewController>;
 		
 		
@@ -51,7 +47,6 @@ package maryfisher.framework.core {
 			return _instance;
 		}
 		
-		//static public function init(stage:Stage, comps:Array, rootClass:Class = null):void {
 		static public function init(stage:Stage, comps:Array):void {
 			
 			getInstance().prepareStage(stage, comps);
@@ -67,10 +62,6 @@ package maryfisher.framework.core {
 				_viewController[viewcontroller.controllerId] = viewcontroller;
 				viewcontroller.setUp(_stage, this);
 			}
-			//_oldTime = getTimer();
-			//_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
-			//_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
-			
 			
 		}
 		
@@ -105,9 +96,23 @@ package maryfisher.framework.core {
 		}
 		
 		static public function start():void {
+			_instance.startListener();
+		}
+		
+		static public function onFinished(onFinished:Function):void {
+			if (_isFinished) onFinished();
+			else _onFinished.addOnce(onFinished);
+		}
+		
+		private function startListener():void {
 			_oldTime = getTimer();
 			_stage.addEventListener(Event.ENTER_FRAME, handleEnterFrame);
-			_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
+			_onFinished.dispatch();
+			_isFinished = true;
+			/** TODO
+			 * 
+			 */
+			//_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		private function executeStageCommand(stageCommand:StageCommand):void {
@@ -145,9 +150,10 @@ package maryfisher.framework.core {
 			
 			var viewcontroller:IViewController = (_viewController[viewCommand.viewType] as IViewController);
 			
-			//if (!viewcontroller) {
-				//return;
-			//}
+			if (!viewcontroller) {
+				throw new Error("What's up with that view id? - " + viewCommand.viewType);
+				return;
+			}
 			
 			switch (viewCommand.viewCommandType) {
 				case ViewCommand.ADD_VIEW:
@@ -191,7 +197,7 @@ package maryfisher.framework.core {
 		
 		private function removeCallbacks(view:IViewComponent):void {
 			if (view is IResizableObject) {
-				//_resiableObjects.push(viewCommand.view as IResizableObject);
+				_resizableObjects.push(_resizableObjects.indexOf(view as IResizableObject));
 			}
 			
 			if (view is ITickedObject) {
@@ -210,6 +216,10 @@ package maryfisher.framework.core {
 					//_instance._stage.fullScreenSourceRect = new Rectangle (0,20,640,480); 
 					_stage.displayState = StageDisplayState.FULL_SCREEN;
 					break;
+			}
+			
+			for each (var item:IResizableObject in _resizableObjects) {
+				item.resize();
 			}
 		}
 	}
