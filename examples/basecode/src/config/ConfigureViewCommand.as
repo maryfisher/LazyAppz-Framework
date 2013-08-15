@@ -22,24 +22,23 @@ package config {
 			super();
 		}
 		
-		public function execute(stage:Stage, startUpData:StartUpData):void {
+		public function execute(stage:Stage):void {
 			KeyController.init(stage);
 			var awayController:IViewController;
 			var spriteController:IViewController;
 			
-			if (startUpData.useStarling) {
+			if(CONFIG::desktop == true) {
 				spriteController = new StarlingProxyController(ViewConstants.GAME_VIEW);
-				//spriteController = new BaseStarlingController(ViewConstants.GAME_VIEW);
 				awayController = new Away3DProxyController(Vector.<IProxyController>([spriteController]), ViewConstants.GAME_VIEW_3D);
 			}else {
 				spriteController = new BaseSpriteController(ViewConstants.GAME_VIEW);
 				awayController = new BaseAway3DController(ViewConstants.GAME_VIEW_3D)
 			}
 			ViewController.init(stage, [awayController, spriteController]);
-			//ViewController.init(stage, [spriteController, awayController]);
-			//ViewController.init(stage, [spriteController]);
 			
-			if(!startUpData.useStarling) ViewController.start();
+			CONFIG::desktop {
+				ViewController.start();
+			}
 		}
 		
 	}

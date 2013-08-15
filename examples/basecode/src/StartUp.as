@@ -20,12 +20,12 @@ package {
 		
 		}
 		
-		public function init(stage:Stage, startUp:StartUpData):void {
+		public function init(stage:Stage):void {
 			
 			
-			new ConfigureLoaderCommand(startUp).execute();
-			new ConfigureViewCommand().execute(stage, startUp);
-			new ConfigureNetCommand().execute(startUp);
+			new ConfigureLoaderCommand().execute();
+			new ConfigureViewCommand().execute(stage);
+			new ConfigureNetCommand().execute();
 			new ConfigureModelCommand().execute();
 			
 			ViewController.onFinished(onFinished);

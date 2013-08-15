@@ -18,7 +18,7 @@ package config {
 			
 		}
 		
-		public function execute(startUpData:StartUpData):void {
+		public function execute():void {
 			
 			CONFIG::desktop{
 				NetController.init(getNetDatas(), Vector.<INetController>([

@@ -18,12 +18,8 @@ package config {
 		
 		public static const VIEW_PATH:String = "assets/";
 		
-		private var _startUpData:StartUpData;
-		
-		public function ConfigureLoaderCommand(startUpData:StartUpData) {
+		public function ConfigureLoaderCommand() {
 			super();
-			_startUpData = startUpData;
-			
 		}
 		
 		override protected function getMapping():Dictionary {

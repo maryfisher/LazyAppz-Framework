@@ -3,18 +3,23 @@
    <compiler locale="en_US" swf-version="15">
 		<define>
 			<name>CONFIG::desktop</name>
-			<value>true</value>
+			<value>false</value>
 		</define>
 		<define>
 			<name>CONFIG::browser</name>
 			<value>false</value>
 		</define>
+		<define>
+			<name>CONFIG::mobile</name>
+			<value>true</value>
+		</define>
+		<define>
+			<name>CONFIG::mouse</name>
+			<value>true</value>
+		</define>
+		<define>
+			<name>CONFIG::touch</name>
+			<value>false</value>
+		</define>
 	</compiler>
-	<!--<metadata>
-		<title>Yogurt3D</title>
-		<description>http://www.yogurt3d.com</description>
-		<publisher>Yogurt3D Engine Corp.</publisher>
-		<creator>Yogurt3D Engine Corp.</creator>
-		<language>EN</language>
-   </metadata>-->
 </flex-config>

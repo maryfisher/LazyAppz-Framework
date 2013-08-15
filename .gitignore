@@ -4,10 +4,14 @@
 *.swf
 *.js
 *.html
+*.apk
 examplessave/*
 examples/mobile/AIR_Android_readme.txt
 examples/mobile/AIR_iOS_readme.txt
 examples/mobile/application.xml
+examples/mobile/cert/*
+examples/mobile/dist/*
+examples/mobile/obj/*
 examples/browser/obj/*
 examples/desktop/obj/*
 examples/desktop/AIR_readme.txt
