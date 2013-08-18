@@ -33,6 +33,8 @@ package maryfisher.framework.core {
 			_cachedAssets = new Dictionary();
 			_cachedLoadedAssets = new Dictionary();
 			_activeLoader = new Vector.<LoaderCommand>();
+			_queuedLoader = new Vector.<LoaderCommand>();
+			_prioritizedLoader = new Vector.<LoaderCommand>();
 		}
 		
 		static public function getInstance():AssetController {

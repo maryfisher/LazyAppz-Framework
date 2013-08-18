@@ -22,9 +22,8 @@ package maryfisher.framework.core {
 		
 		public function KeyController() {
 			if (!_allowInstantiation) {
-				
+				throw new Error("Nope, this is a Singleton!");
 			}
-			//_stage = StageReference.getStage();
 		}
 		
 		public static function init(stage:Stage):void {
@@ -33,7 +32,7 @@ package maryfisher.framework.core {
 		}
 		
 		public static function getInstance():KeyController {
-			if (_instance == null) {
+			if (!_instance) {
 				_allowInstantiation = true;
 				_instance = new KeyController();
 				_allowInstantiation = false;
@@ -63,9 +62,9 @@ package maryfisher.framework.core {
 		}
 		
 		public function registerForKeyUp(keyListener:IKeyListener, keys:Vector.<int>):void {
-			if (_keyUp == null) _keyUp = new Dictionary(true);
+			if (!_keyUp) _keyUp = new Dictionary(true);
 			for each(var key:int in keys) {
-				if (_keyUp[key] == null) _keyUp[key] = new Vector.<IKeyListener>;
+				if (!_keyUp[key]) _keyUp[key] = new Vector.<IKeyListener>;
 				var vec:Vector.<IKeyListener> = _keyUp[key];
 				if (vec.indexOf(keyListener) == -1) {
 					vec.push(keyListener);
@@ -82,9 +81,9 @@ package maryfisher.framework.core {
 		}
 		
 		public function registerForKeyDown(keyListener:IKeyListener, keys:Vector.<int>):void {
-			if (_keyDown == null) _keyDown = new Dictionary(true);
+			if (!_keyDown) _keyDown = new Dictionary(true);
 			for each(var key:int in keys) {
-				if (_keyDown[key] == null) _keyDown[key] = new Vector.<IKeyListener>;
+				if (!_keyDown[key]) _keyDown[key] = new Vector.<IKeyListener>;
 				var vec:Vector.<IKeyListener> = _keyDown[key];
 				if (vec.indexOf(keyListener) == -1) {
 					vec.push(keyListener);
@@ -100,20 +99,17 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		public function registerForKeyCombo(keyListener:IKeyListener, keycombo:KeyComboData):void {
-		//keycombo:Vector.<int>):void {
-			/* TODO
-			 * hier spezifische Combos als Vos, weil eventuell mit mehr als einer combo registriert wird
-			 */
-			if (_keyCombos == null) _keyCombos = new Dictionary(true);
-			//if (_keyCombo[keyListener] == null) {
-				//_keyCombo[keyListener] = keycombo;
-				//return;
-			//}
-			if (_keyCombos[keycombo] == null) {
-				_keyCombos[keycombo] = keyListener;
+		public function registerForKeyCombo(keycombo:KeyComboData):void {
+			
+			if (!_keyCombos) _keyCombos = new Dictionary(true);
+			
+			for each (var key:int in keycombo.keys) {
+				if (!_keyCombos[key]) _keyCombos[key] = new Vector.<KeyComboData>;
+				_keyCombos[key].push(keycombo);
 				return;
 			}
+			
+			
 		}
 		
 		public function partialDeactivate(keysDeactivated:Vector.<int>):void {
@@ -136,7 +132,7 @@ package maryfisher.framework.core {
 			_keyCombos = new Dictionary();
 			_keyDown = new Dictionary();
 			_keyUp = new Dictionary();
-			//var stage:Stage = StageReference.getStage();
+			
 			_stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown, false, 0, true);
 			_stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp, false, 0, true);
 		}
@@ -149,42 +145,23 @@ package maryfisher.framework.core {
 				if (vec != null) {
 					
 					for each(var keyListener:IKeyListener in vec) {
-						//if (_keyCombo[keyListener] != null) {
-							
-							//var combo:Vector.<int> = _keyCombo[keyListener];
-							//if (combo.indexOf(key) > -1) {
-								//var hasAll:Boolean = true;
-								//for each(var key1:int in combo) {
-									//if (_keysPressed.indexOf(key1) == -1) {
-										//hasAll = false;
-										//break;
-									//}
-								//}
-								//if (hasAll) {
-									//keyListener.handleKeyCombo();
-								//}
-							//}else {
-								//keyListener.handleKeyDown(key);
-							//}
-						//}else {
-							keyListener.handleKeyDown(key);
-						//}
+						keyListener.handleKeyDown(key);
 					}
 				}
 				
-				for (var index:Object in _keyCombos) {
-					var combo:KeyComboData = index as KeyComboData;
-					keyListener = _keyCombos[index];
-					
+				var vecC:Vector.<KeyComboData> = _keyDown[key];
+				if (vecC != null) {
 					var hasAll:Boolean = true;
-					for each(var key1:int in combo.keys) {
-						if (_keysPressed.indexOf(key1) == -1) {
-							hasAll = false;
-							break;
+					for each(var combo:KeyComboData in vecC) {
+						for each(var key1:int in combo.keys) {
+							if (_keysPressed.indexOf(key1) == -1) {
+								hasAll = false;
+								break;
+							}
 						}
-					}
-					if (hasAll) {
-						keyListener.handleKeyCombo(combo);
+						if (hasAll) {
+							combo.listener.handleKeyCombo(combo);
+						}
 					}
 				}
 			}
@@ -202,37 +179,6 @@ package maryfisher.framework.core {
 				}
 			}
 		}
-		
-		//public static function keyTranslator(keycode:int):String {
-			//var key:String;
-			//
-			//switch(keycode) {
-				//case Keyboard.DOWN: key = "Backward";
-					//break;
-				//case Keyboard.UP: key = "Forward";
-					//break;
-				//case Keyboard.LEFT: key = "Left";
-					//break;
-				//case Keyboard.RIGHT: key = "Right";
-					//break;
-				//case Keyboard.PAGE_UP: key = "Up";
-					//break;
-				//case Keyboard.PAGE_DOWN: key = "Down";
-					//break;
-				//case Keyboard.NUMPAD_ADD: 
-				//case 187:
-					//key = "Plus";
-					//break;
-				//case Keyboard.NUMPAD_SUBTRACT:
-				//case 189:
-					//key = "Minus";
-					//break;
-				//default:
-					//key = keycode.toString();
-			//}
-			//
-			//return key;
-		//}
 	}
 
 }

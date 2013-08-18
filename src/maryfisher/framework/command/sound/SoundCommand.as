@@ -1,5 +1,4 @@
 package maryfisher.framework.command.sound {
-	import maryfisher.view.ui.interfaces.ISound;
 	
 	
 	/**

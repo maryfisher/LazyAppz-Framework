@@ -2,8 +2,7 @@ package maryfisher.framework.core {
 	import flash.media.SoundTransform;
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.sound.SoundCommand;
-	import maryfisher.view.ui.interfaces.ISound;
-	import maryfisher.view.ui.sound.BaseSound;
+	import maryfisher.framework.sound.ISound;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -22,7 +21,6 @@ package maryfisher.framework.core {
 			for each (var item:String in transforms) {
 				_instance._transforms[item] = new SoundTransform();
 			}
-			//getInstance().
 		}
 		
 		static public function registerSound(sound:ISound):void {

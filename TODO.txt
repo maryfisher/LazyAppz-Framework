@@ -1,0 +1,2 @@
+- set the max amount of simultanous loading requests
+- json timed/joined requests

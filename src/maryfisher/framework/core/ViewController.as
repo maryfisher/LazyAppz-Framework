@@ -3,7 +3,6 @@ package maryfisher.framework.core {
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
-	import flash.events.MouseEvent;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	import maryfisher.framework.command.view.StageCommand;
@@ -28,7 +27,10 @@ package maryfisher.framework.core {
 		
 		private var _tickedObjects:Vector.<ITickedObject>;
 		private var _resizableObjects:Vector.<IResizableObject>;
-		private var _mouseObjects:Vector.<IMouseObject>;
+		/** TODO
+		 * addable behavior instead
+		 */
+		//private var _mouseObjects:Vector.<IMouseObject>;
 		
 		private var _oldTime:int;
 		private var _viewList:Vector.<IViewController>;
@@ -65,12 +67,12 @@ package maryfisher.framework.core {
 			
 		}
 		
-		private function onMouseWheel(e:MouseEvent):void {
-			var l:int = _mouseObjects.length;
-			for (var i:int = 0; i < l; i++) {
-				_mouseObjects[i].onMouseEvent(e);
-			}
-		}
+		//private function onMouseWheel(e:MouseEvent):void {
+			//var l:int = _mouseObjects.length;
+			//for (var i:int = 0; i < l; i++) {
+				//_mouseObjects[i].onMouseEvent(e);
+			//}
+		//}
 		
 		private function handleEnterFrame(e:Event):void {
 			
@@ -110,9 +112,8 @@ package maryfisher.framework.core {
 			_onFinished.dispatch();
 			_isFinished = true;
 			/** TODO
-			 * 
+			 * what to do with the mouse events?
 			 */
-			//_stage.addEventListener(MouseEvent.MOUSE_WHEEL, onMouseWheel);
 		}
 		
 		private function executeStageCommand(stageCommand:StageCommand):void {
