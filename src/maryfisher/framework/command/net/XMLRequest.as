@@ -1,9 +1,9 @@
 package maryfisher.framework.command.net {
-	import com.adobe.serialization.json.JSON;
 	import flash.events.Event;
 	import flash.events.IOErrorEvent;
 	import flash.events.SecurityErrorEvent;
 	import flash.net.URLLoader;
+	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
 	import flash.net.URLRequestMethod;
 	import flash.net.URLVariables;
@@ -12,56 +12,38 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class JSONRequest extends BaseURLRequest {
+	public class XMLRequest extends NetRequest {
 		
-		public function JSONRequest() {
+		public function XMLRequest() {
+			
 		}
 		
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
-			if(requestData is IJSONData){
-				requestData = (requestData as IJSONData).jsonObject;
-			}
-			
 			super.execute(requestData, netData, requestSpecs);
 			
-			var json:String = com.adobe.serialization.json.JSON.encode(requestData);
-			 var _loader:URLLoader = new URLLoader();
+			var _loader:URLLoader = new URLLoader();
+			_loader.dataFormat = URLLoaderDataFormat.TEXT;
 			_loader.addEventListener(Event.COMPLETE, onRequestComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			
 			var request:URLRequest = new URLRequest(_baseUrl + _url + requestSpecs);
 			request.method = URLRequestMethod.POST;
-			var variables:URLVariables = new URLVariables();
-			variables.json = json;
-			request.data = variables;
 			
 			_loader.load(request);
 		}
 		
-		private function adjustJSONDataObject(requestData:Object):Object {
-			var data:Object = { };
-			
-			
-			
-			return data;
-		}
-		
 		override protected function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
-			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
+			var data:XML = XML(loader.data);
 			if (data) {
 				finishRequest(data);
 			}
 		}
 		
 		override public function get requestType():String {
-			return TYPE_JSON;
+			return TYPE_XML;
 		}
-		
-		//public function get url():String {
-			//return _url;
-		//}
 	}
 
 }

@@ -11,6 +11,8 @@ package maryfisher.framework.command.net {
 		static public const TYPE_SQLLITE:String = "sql";
 		static public const TYPE_JSON:String = "json";
 		static public const TYPE_AMF:String = "amf";
+		static public const TYPE_NONE:String = "none";
+		static public const TYPE_XML:String = "xml";
 		
 		protected var _requestFinished:Signal;
 		

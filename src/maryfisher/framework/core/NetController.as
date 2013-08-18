@@ -1,16 +1,23 @@
 package maryfisher.framework.core {
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.net.NetCommand;
-	import maryfisher.framework.command.net.NetRequest;
 	import maryfisher.framework.data.NetData;
 	import maryfisher.framework.net.INetController;
+	
 	/**
-	 * ...
+	 * Core class for all things backend related. 
+	 * It functions as a gateway for diverse INetController so that NetCommands can be send platform independent 
+	 * from anywhere inside the application.
 	 * @author mary_fisher
+	 */
+	
+	/** TODO
+	 * split results if something was sent that was not requested
 	 */
 	public class NetController {
 		
 		static private var _instance:NetController;
+		
 		private var _netDatas:Dictionary;
 		private var _netController:Dictionary;
 		
@@ -29,7 +36,6 @@ package maryfisher.framework.core {
 		static public function init(netDatas:Dictionary, controller:Vector.<INetController>):void {
 			getInstance()._netDatas = netDatas;
 			for each (var item:INetController in controller) {
-				//_instance._netController[item.requestType] = item;
 				_instance._netController[item.controllerID] = item;
 			}
 		}
@@ -41,12 +47,13 @@ package maryfisher.framework.core {
 		private function set netrequest(cmd:NetCommand):void {
 			var data:NetData = _netDatas[cmd.id];
 			cmd.buildRequest(data);
+			if (!data) {
+				return;
+			}
 			(_netController[data.controllerId] as INetController).registerRequest(cmd);
 		}
 		
-		/** TODO
-		 * results annehmen, aufsplitten (falls etwas mitgeschickt wurde, das nicht requested wurde
-		 */
+		
 	}
 
 }
