@@ -2,12 +2,14 @@ package maryfisher.framework.config {
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.core.AssetController;
-	import maryfisher.framework.core.LoaderController;
 	import maryfisher.framework.data.AssetData;
 	import maryfisher.framework.data.LoaderData;
 	
 	/**
-	 * ...
+	 * Helper class to set up assets and loading paths.
+	 * 
+	 * Extend this class to configure your own set up.
+	 * 
 	 * @author mary_fisher
 	 */
 	public class AbstractConfigureLoaderCommand extends AbstractCommand {
@@ -26,36 +28,64 @@ package maryfisher.framework.config {
 			_paths = new Dictionary();
 			_mapping = new Dictionary();
 			
-			AssetController.init(getLoaderPaths(), getMapping());
-		}
-		
-		protected function getLoaderPaths():Dictionary {
-			return _paths;
-		}
-		
-		protected function getMapping():Dictionary {
-			return _mapping;
+			getLoaderPaths();
+			getAssetMapping();
+			AssetController.init(_paths, _mapping);
 		}
 		
 		/**
+		 * override this methode to set your loader and view ids 
 		 * 
-		 * @param	id
-		 * @param	cl
-		 * @param	cache
+		 * (don't forget to map your loader paths first)
+		 * NOTE: the seperation is to facilitate easier use of different loading paths (for different platforms eg)
+		 *  
+		 * Example: 
+		 * 		mapLoaderPaths(LoaderConstants.EXAMPLE_VIEW, VIEW_PATH + "ExampleView");
+		 * 		mapLoaderData(LoaderConstants.EXAMPLE_VIEW, "Loading Example ...");
 		 */
-		protected function map(id:String, cl:Class, cache:Boolean = false):void {
+		protected function getLoaderPaths():void {	}
+		
+		/**
+		 * override this method to set your asset classes
+		 * 
+		 * Example: mapAssetData(LoaderConstants.EXAMPLE_VIEW, ExampleView);
+		 */
+		protected function getAssetMapping():void {	}
+		
+		/**
+		 * map loader id to view class
+		 * 
+		 * this method is for instantiated - not loaded! - assets that are compiled with the main application
+		 * @param	id
+		 * @param	viewClass
+		 * @param	doCache
+		 */
+		final protected function mapAssetData(id:String, viewClass:Class, doCache:Boolean = false):void {
 			_mapping[id] = new AssetData(cl, cache);
 		}
 		
 		/**
+		 * map loader id to view id
 		 * 
+		 * this method is for loaded assets 
+		 * (classes are not compiled with the main application but are loaded at runtime)
 		 * @param	id
 		 * @param	description
 		 * @param	doCache
 		 * @param	reuse
 		 */
-		protected function addLoaderData(id:String, description:String=null, doCache:Boolean = false, reuse:Boolean = false):void {
+		final protected function mapLoaderData(id:String, description:String=null, doCache:Boolean = false, reuse:Boolean = false):void {
 			_paths[id] = new LoaderData(_loaderPaths[id], doCache, reuse, description);
+		}
+		
+		/**
+		 * map your loader id to your loader path
+		 * 
+		 * @param	id
+		 * @param	path
+		 */
+		final protected function mapLoaderPaths(id:String, path:String):void {
+			_loaderPaths[id] = path;
 		}
 	}
 
