@@ -35,7 +35,7 @@ package maryfisher.framework.command.net {
 		private var _connection:SQLConnection;
 		protected var _requestData:Object;
 		protected var _result:SQLResult;
-		protected var _resultData:Object;
+		protected var _resultData:Array;
 		protected var _statement:SQLStatement;
 		public var path:String;
 		public var dbFile:String;
@@ -50,7 +50,8 @@ package maryfisher.framework.command.net {
 			var resources :File = File.documentsDirectory;
 			var ssc:File = new File(resources.nativePath + path);
 			ssc.createDirectory();
-			var dbFile:File = ssc.resolvePath(dbFile + ".sav");
+			//var dbFile:File = ssc.resolvePath(dbFile + ".sav");
+			var dbFile:File = ssc.resolvePath(dbFile);
 			
 			_connection = new SQLConnection();
 			_connection.addEventListener(SQLEvent.OPEN, onDatabaseOpen);
@@ -143,7 +144,7 @@ package maryfisher.framework.command.net {
 			if (onResult == null) onResult = onCreate;
 			_statement = new SQLStatement();
 			_statement.text = text;
-			trace(text);
+			trace("[SQLRequest] [createStatement]", text);
 			_statement.sqlConnection = _connection;
 			_statement.addEventListener(SQLEvent.RESULT, onResult);
 			_statement.addEventListener(SQLErrorEvent.ERROR, onError);
@@ -152,7 +153,7 @@ package maryfisher.framework.command.net {
 		
 		protected function onCreate(e:SQLEvent):void {
 			_result = _statement.getResult();
-			//_resultData = _result.data;
+			_resultData = _result.data;
 		}
 		
 		private function onError(e:SQLErrorEvent):void {

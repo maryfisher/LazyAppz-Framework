@@ -39,7 +39,7 @@ package maryfisher.framework.core {
 		public function ViewController() {
 			_tickedObjects = new Vector.<ITickedObject>;
 			_resizableObjects = new Vector.<IResizableObject>();
-			_mouseObjects = new Vector.<IMouseObject>();
+			//_mouseObjects = new Vector.<IMouseObject>();
 		}
 		
 		static public function getInstance():ViewController {
@@ -131,10 +131,10 @@ package maryfisher.framework.core {
 					_resizableObjects.splice(_resizableObjects.indexOf(stageCommand.obj), 1);
 				break;
 				case StageCommand.REGISTER_MOUSE:
-					_mouseObjects.push(stageCommand.obj as IMouseObject);
+					//_mouseObjects.push(stageCommand.obj as IMouseObject);
 				break;
 				case StageCommand.UNREGISTER_MOUSE:
-					_mouseObjects.splice(_mouseObjects.indexOf(stageCommand.obj), 1);
+					//_mouseObjects.splice(_mouseObjects.indexOf(stageCommand.obj), 1);
 				break;
 			}
 		}

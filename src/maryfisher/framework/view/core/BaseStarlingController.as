@@ -1,30 +1,35 @@
 package maryfisher.framework.view.core {
-	import away3d.core.managers.Stage3DProxy;
-	import flash.display.Sprite;
-	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.core.ViewController;
+	//import flash.display.Sprite;
 	import flash.display.Stage;
+	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.IViewController;
+	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.view.IStarlingView;
 	import maryfisher.framework.view.IViewComponent;
+	import org.osflash.signals.Signal;
 	import starling.core.Starling;
 	import starling.display.DisplayObject;
+	import starling.display.Sprite;
 	import starling.events.Event;
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
 	public class BaseStarlingController implements IViewController {
+		public var onFinished:Signal;
 		
 		private var _id:String;
 		protected var _paused:Boolean;
 		protected var _stage:Stage;
 		private var _controller:ViewController;
 		protected var _starling:Starling;
-		private var _hasContext:Boolean;
+		protected var _hasContext:Boolean;
+		protected var _container:starling.display.Sprite;
 		
 		public function BaseStarlingController(id:String) {
 			_id = id;
+			onFinished = new Signal(Starling);
+			_container = new Sprite();
 		}
 		
 		/* INTERFACE maryfisher.framework.core.IViewController */
@@ -34,12 +39,12 @@ package maryfisher.framework.view.core {
 		}
 		
 		public function addView(view:IViewComponent):void {
-			_starling.stage.addChild(view as DisplayObject);
+			_container.addChild(view as DisplayObject);
 			if (_hasContext) (view as IStarlingView).init();
 		}
 		
 		public function removeView(view:IViewComponent):void {
-			_starling.stage.removeChild(view as DisplayObject);
+			_container.removeChild(view as DisplayObject);
 		}
 		
 		public function setUp(stage:Stage, controller:ViewController):void {
@@ -55,12 +60,11 @@ package maryfisher.framework.view.core {
 		}
 		
 		protected function onContextCreated(e:Event):void {
-			for (var i:int = 0; i < _starling.stage.numChildren; i++) {
-				var sv:IStarlingView = (_starling.stage.getChildAt(i) as IStarlingView);
-				if (!sv) continue;
-				sv.init();
-			}
-			_hasContext = true;
+			_starling.stage.addChild(_container);
+			onFinished.dispatch(_starling);
+			initComps();
+			
+			
 		}
 		
 		public function pauseView():void {
@@ -85,6 +89,15 @@ package maryfisher.framework.view.core {
 		
 		public function render():void {
 			_starling.render();
+		}
+		
+		protected function initComps():void {
+			for (var i:int = 0; i < _container.numChildren; i++) {
+				var sv:IStarlingView = (_container.getChildAt(i) as IStarlingView);
+				if (!sv) continue;
+				sv.init();
+			}
+			_hasContext = true;
 		}
 		
 	}

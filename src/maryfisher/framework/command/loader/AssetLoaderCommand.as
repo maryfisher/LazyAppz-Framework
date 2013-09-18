@@ -92,9 +92,9 @@ package maryfisher.framework.command.loader {
 			return null;
 		}
 		
-		public function get content():Sprite {
-			return _asset;
-		}
+		//public function get content():Sprite {
+			//return _asset;
+		//}
 		
 		override public function get asset():Object {
 			if (_loaderData.reuse) {

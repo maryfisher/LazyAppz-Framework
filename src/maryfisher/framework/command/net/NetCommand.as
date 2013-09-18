@@ -37,6 +37,7 @@ package maryfisher.framework.command.net {
 			if (!_netData) {
 				trace("[NetCommand] no NetData was specified for id " + _id + ", no request will be send - is this correct?");
 				finishRequest(null);
+				return;
 			}
 			
 			

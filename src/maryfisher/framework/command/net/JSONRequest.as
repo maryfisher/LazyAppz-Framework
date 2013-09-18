@@ -39,19 +39,15 @@ package maryfisher.framework.command.net {
 			_loader.load(request);
 		}
 		
-		private function adjustJSONDataObject(requestData:Object):Object {
-			var data:Object = { };
-			
-			
-			
-			return data;
+		protected function adjustJSONDataObject(requestData:Object):Object {
+			return requestData;
 		}
 		
 		override protected function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
 			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
 			if (data) {
-				finishRequest(data);
+				finishRequest(adjustJSONDataObject(data));
 			}
 		}
 		

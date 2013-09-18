@@ -36,39 +36,42 @@ package maryfisher.framework.config {
 		/**
 		 * override this methode to set your loader and view ids 
 		 * 
-		 * (don't forget to map your loader paths first)
-		 * NOTE: the seperation is to facilitate easier use of different loading paths (for different platforms eg)
+		 * (don't forget to map your loader paths first @see mapLoaderPaths, then map the LoaderData @see mapLoaderData )
+		 * NOTE: the seperation is to facilitate easier use of different loading paths (for different platforms for example)
 		 *  
 		 * Example: 
-		 * 		mapLoaderPaths(LoaderConstants.EXAMPLE_VIEW, VIEW_PATH + "ExampleView");
-		 * 		mapLoaderData(LoaderConstants.EXAMPLE_VIEW, "Loading Example ...");
+		 * 		mapLoaderPaths(AssetConstants.EXAMPLE_VIEW, VIEW_PATH + "ExampleView");
+		 * 		mapLoaderData(AssetConstants.EXAMPLE_VIEW, "Loading Example ...");
 		 */
 		protected function getLoaderPaths():void {	}
 		
 		/**
 		 * override this method to set your asset classes
 		 * 
-		 * Example: mapAssetData(LoaderConstants.EXAMPLE_VIEW, ExampleView);
+		 * Example: mapAssetData(AssetConstants.EXAMPLE_VIEW, ExampleView);
 		 */
 		protected function getAssetMapping():void {	}
 		
 		/**
-		 * map loader id to view class
+		 * map loader id to asset class
 		 * 
-		 * this method is for instantiated - not loaded! - assets that are compiled with the main application
+		 * this method is for instantiated assets that are compiled with the main application
+		 * as well as assets that need to be loaded with specific LoaderCommands (eg sounds => SoundLoaderCommand)
 		 * @param	id
-		 * @param	viewClass
+		 * @param	assetClass either the class that is to be instantiated or the LoaderCommand class
+		 * @param	load specifies if the assetClass is to be instantiated as the asset or if it classifies a LoaderCommand class
 		 * @param	doCache
 		 */
-		final protected function mapAssetData(id:String, viewClass:Class, doCache:Boolean = false):void {
-			_mapping[id] = new AssetData(cl, cache);
+		final protected function mapAssetData(id:String, assetClass:Class, load:Boolean = false, doCache:Boolean = false):void {
+			_mapping[id] = new AssetData(assetClass, doCache, load);
 		}
 		
 		/**
-		 * map loader id to view id
+		 * map loader id to asset id
 		 * 
-		 * this method is for loaded assets 
+		 * this method is for to-be-loaded assets 
 		 * (classes are not compiled with the main application but are loaded at runtime)
+		 * 
 		 * @param	id
 		 * @param	description
 		 * @param	doCache

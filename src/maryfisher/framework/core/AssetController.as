@@ -53,8 +53,8 @@ package maryfisher.framework.core {
 			var obj:*;
 			if (_cachedAssets[cmd.id + cmd.fileId] == null) {
 				var asData:AssetData = _mapping[cmd.id];
-				if (!asData) {
-					cmd.loadAsset();
+				if (!asData || asData.load) {
+					cmd.loadAsset(asData);
 					return;
 				}else {
 					obj = new asData.assetClass();

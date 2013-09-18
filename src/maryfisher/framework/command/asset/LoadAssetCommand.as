@@ -3,9 +3,13 @@ package maryfisher.framework.command.asset {
 	import flash.display.Sprite;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.LoaderCommand;
+	import maryfisher.framework.command.loader.SoundLoaderCommand;
+	import maryfisher.framework.command.sound.SoundCommand;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.AssetController;
+	import maryfisher.framework.data.AssetData;
 	import maryfisher.framework.event.ViewEvent;
+	import maryfisher.framework.sound.ISoundComponent;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
 	import maryfisher.framework.view.IViewComponent;
@@ -17,6 +21,7 @@ package maryfisher.framework.command.asset {
 	public class LoadAssetCommand {
 		
 		//private var _callback:IAssetCallback;
+		protected var _soundComponent:ISoundComponent;
 		protected var _viewComponent:IViewComponent;
 		protected var _assetBuilderId:String;
 		protected var _assetBuilder:IAssetBuilder;
@@ -40,22 +45,27 @@ package maryfisher.framework.command.asset {
 			_finishedLoading.addOnce(callback.assetFinished);
 			
 			execute();
-			
-			//new AssetLoaderCommand(id, fileId, onAssetFinished);
 		}
 		
 		public function execute():void {
 			AssetController.registerAssetCommand(this);
 		}
 		
-		public function loadAsset():void {
-			new AssetLoaderCommand(id, fileId, onAssetFinished);
+		public function loadAsset(asData:AssetData):void {
+			/** TODO
+			 * 
+			 */
+			if(!asData || asData.assetClass == AssetLoaderCommand){
+				new AssetLoaderCommand(id, fileId, onAssetFinished);
+			}else if (asData.assetClass == SoundLoaderCommand) {
+				
+			}
 		}
 		
 		private function onAssetFinished(cmd:LoaderCommand):void {
 			
-			var obj:Sprite = (cmd as AssetLoaderCommand).content;
-			buildAsset(obj);
+			//var obj:Sprite = (cmd as AssetLoaderCommand).asset;
+			buildAsset(cmd.asset);
 			
 		}
 		
@@ -81,6 +91,11 @@ package maryfisher.framework.command.asset {
 			 */
 			//}else if (obj is ISpriteSheet) {
 				//_spriteSheet = obj as ISpriteSheet;
+			}else if (obj is ISoundComponent) {
+				/** TODO
+				 * 
+				 */
+				_soundComponent = (obj as ISoundComponent);
 			}
 			setFinished();
 		}
@@ -117,6 +132,10 @@ package maryfisher.framework.command.asset {
 		
 		public function get clonableViewComponent():IClonableViewComponent {
 			return _clonableViewComponent;
+		}
+		
+		public function get soundComponent():ISoundComponent {
+			return _soundComponent;
 		}
 		
 		/** TODO

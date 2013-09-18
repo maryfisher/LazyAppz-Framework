@@ -1,12 +1,11 @@
 LazyAppz
---------
+========
 
 A lightweight framework to quickly produce and structure platform independent games.
 
 
 *************
 * Note
-*
 *************
 
 This Frameworks requires

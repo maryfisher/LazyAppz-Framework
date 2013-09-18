@@ -21,10 +21,15 @@ package maryfisher.framework.data {
 			context = data.context;
 			
 			for (var key:String in data) {
-				if (key != "id" || key != "context") {
+				if (key != "id" && key != "context") {
+					//trace("localetexts", key, data[key]);
 					_texts[key] = new LocaleText(data[key]);
 				}
 			}
+		}
+		
+		public function getTextByLang(lang:String):LocaleText {
+			return _texts[lang] || new LocaleText("");
 		}
 		
 		public function getText():LocaleText {

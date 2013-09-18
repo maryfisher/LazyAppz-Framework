@@ -5,7 +5,7 @@ package maryfisher.framework.model {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class AbstractModel{
+	public class AbstractModel {
 		//static public const DATA_READY:String = "modelDataReady";
 		public static const DATA_LOADED:String = 'modelDataLoaded';
 		public static const DATA_WAITING:String = 'modelDataWaiting';
