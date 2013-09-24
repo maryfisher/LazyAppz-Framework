@@ -77,6 +77,10 @@ package maryfisher.framework.view.core {
 			removeChild(comp as DisplayObject);
 		}
 		
+		public function hasListener(type:String):Boolean {
+			return hasEventListener(type);
+		}
+		
 		public function get componentType():String {
 			throw new Error("Override this method to set the correct componentType");
 			return "";

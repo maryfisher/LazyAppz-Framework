@@ -19,7 +19,9 @@ package maryfisher.framework.data {
 		}
 		
 		public function getText(id:String):LocaleText {
-			return (_localeDatas[id] as LocaleData).getTextByLang(language);
+			var textByLang:LocaleText = (_localeDatas[id] as LocaleData).getTextByLang(language);
+			if (!textByLang) textByLang = new LocaleText("");
+			return textByLang;
 		}
 		
 	}

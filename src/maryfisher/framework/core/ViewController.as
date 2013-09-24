@@ -139,12 +139,26 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		static public function get stageHeight():Number {
+		static public function get stageHeight():int {
+			if (_instance._stage.displayState == StageDisplayState.FULL_SCREEN) {
+				return _instance._stage.fullScreenHeight;
+			}
 			return _instance._stage.stageHeight;
 		}
 		
-		static public function get stageWidth():Number {
+		static public function get stageWidth():int {
+			if (_instance._stage.displayState == StageDisplayState.FULL_SCREEN) {
+				return _instance._stage.fullScreenWidth;
+			}
 			return _instance._stage.stageWidth;
+		}
+		
+		static public function get fullScreenHeight():uint {
+			return _instance._stage.fullScreenHeight;
+		}
+		
+		static public function get fullScreenWidth():uint {
+			return _instance._stage.fullScreenWidth;
 		}
 		
 		private function executeCommand(viewCommand:ViewCommand):void {
@@ -152,7 +166,13 @@ package maryfisher.framework.core {
 			var viewcontroller:IViewController = (_viewController[viewCommand.viewType] as IViewController);
 			
 			if (!viewcontroller) {
-				throw new Error("What's up with that view id? - " + viewCommand.viewType);
+				switch (viewCommand.viewCommandType) {
+					case ViewCommand.TOGGLE_FULL_SCREEN:
+						toggleFullScreen();
+					break;
+					default:
+					throw new Error("What's up with that view id? - " + viewCommand.viewType);
+				}
 				return;
 			}
 			
@@ -162,9 +182,6 @@ package maryfisher.framework.core {
 					break;
 				case ViewCommand.REMOVE_VIEW:
 					viewcontroller.removeView(viewCommand.view);
-					break;
-				case ViewCommand.TOGGLE_FULL_SCREEN:
-					toggleFullScreen();
 					break;
 				case ViewCommand.PAUSE:
 					viewcontroller.pauseView();

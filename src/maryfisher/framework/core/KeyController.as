@@ -8,23 +8,32 @@ package maryfisher.framework.core {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class KeyController{
-		protected var _keyUp:Dictionary;
-		protected var _keyDown:Dictionary;
-		protected var _keyCombos:Dictionary;
-		protected var _keysPressed:Vector.<int>;
-		protected var _keysDeactivated:Vector.<int>;
+	public class KeyController {
 		
-		protected var _stage:Stage;
+		private var _keyUp:Dictionary;
+		private var _keyDown:Dictionary;
+		private var _keyCombos:Dictionary;
+		private var _keysPressed:Vector.<int>;
+		private var _keysDeactivated:Vector.<int>;
+		//private var _preventDefault:Vector.<int>;
 		
-		protected static var _allowInstantiation:Boolean = false;
-		protected static var _instance:KeyController;
+		private var _stage:Stage;
+		
+		private static var _allowInstantiation:Boolean = false;
+		private static var _instance:KeyController;
 		
 		public function KeyController() {
 			if (!_allowInstantiation) {
 				throw new Error("Nope, this is a Singleton!");
+				return;
 			}
+			
+			//_preventDefault = new Vector.<int>();
 		}
+		
+		//public function preventKeys(key:int):void {
+			//
+		//}
 		
 		public static function init(stage:Stage):void {
 			getInstance()._stage = stage;
@@ -54,10 +63,12 @@ package maryfisher.framework.core {
 		}
 		
 		protected function handleKeyDown(event:KeyboardEvent):void {
+			//event.preventDefault();
 			dispatchKeyDown(event.keyCode);
 		}
 		
 		protected function handleKeyUp(event:KeyboardEvent):void {
+			//event.preventDefault();
 			dispatchKeyUp(event.keyCode);
 		}
 		
@@ -122,8 +133,8 @@ package maryfisher.framework.core {
 		}
 		
 		public function deactivate():void {
-			_stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown, true);
-			_stage.removeEventListener(KeyboardEvent.KEY_UP, handleKeyUp, true);
+			_stage.removeEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+			_stage.removeEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
 		}
 		
 		public function activate():void {
@@ -133,8 +144,8 @@ package maryfisher.framework.core {
 			_keyDown = new Dictionary();
 			_keyUp = new Dictionary();
 			
-			_stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown, false, 0, true);
-			_stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp, false, 0, true);
+			_stage.addEventListener(KeyboardEvent.KEY_DOWN, handleKeyDown);
+			_stage.addEventListener(KeyboardEvent.KEY_UP, handleKeyUp);
 		}
 		
 		private function dispatchKeyDown(key:int):void {

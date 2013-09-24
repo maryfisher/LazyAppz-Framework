@@ -1,6 +1,7 @@
 package maryfisher.framework.command.asset {
 	
 	import flash.display.Sprite;
+	import flash.media.Sound;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.loader.SoundLoaderCommand;
@@ -21,7 +22,7 @@ package maryfisher.framework.command.asset {
 	public class LoadAssetCommand {
 		
 		//private var _callback:IAssetCallback;
-		protected var _soundComponent:ISoundComponent;
+		protected var _soundComponent:Sound;
 		protected var _viewComponent:IViewComponent;
 		protected var _assetBuilderId:String;
 		protected var _assetBuilder:IAssetBuilder;
@@ -91,11 +92,11 @@ package maryfisher.framework.command.asset {
 			 */
 			//}else if (obj is ISpriteSheet) {
 				//_spriteSheet = obj as ISpriteSheet;
-			}else if (obj is ISoundComponent) {
+			}else if (obj is Sound) {
 				/** TODO
 				 * 
 				 */
-				_soundComponent = (obj as ISoundComponent);
+				_soundComponent = (obj as Sound);
 			}
 			setFinished();
 		}
@@ -134,7 +135,7 @@ package maryfisher.framework.command.asset {
 			return _clonableViewComponent;
 		}
 		
-		public function get soundComponent():ISoundComponent {
+		public function get soundComponent():Sound {
 			return _soundComponent;
 		}
 		

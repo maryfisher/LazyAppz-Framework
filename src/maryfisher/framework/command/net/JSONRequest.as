@@ -45,6 +45,7 @@ package maryfisher.framework.command.net {
 		
 		override protected function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
+			//trace(loader.data);
 			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
 			if (data) {
 				finishRequest(adjustJSONDataObject(data));
