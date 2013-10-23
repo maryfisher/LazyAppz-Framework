@@ -24,6 +24,7 @@ package maryfisher.framework.model {
 		public function addText(localeData:LocaleData):void {
 			_texts || (_texts = new Dictionary());
 			_texts[localeData.context + "_" + localeData.id] = localeData;
+			
 		}
 		
 		public function setTexts(texts:Vector.<LocaleData>):void {
@@ -34,15 +35,12 @@ package maryfisher.framework.model {
 		}
 		
 		public function getText(context:String, id:String):LocaleData {
-		//public function getText(contextData:LocaleContextData):LocaleData {
-			//var ld:LocaleData = _texts[contextData.contextId];
 			var ld:LocaleData = _texts[context + "_" + id];
 			if (!ld) ld = new LocaleData("");
 			ld.language = _language;
 			return ld;
 		}
 		
-		//public function get language():String {	return _language; }
 		public function set language(value:String):void {
 			if (_language == value) return;
 			_language = value;

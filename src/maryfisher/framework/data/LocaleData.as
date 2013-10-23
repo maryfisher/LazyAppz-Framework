@@ -32,6 +32,10 @@ package maryfisher.framework.data {
 			return _texts[lang] || new LocaleText("");
 		}
 		
+		public function addText(lang:String, text:String):void {
+			_texts[lang] = new LocaleText(text);
+		}
+		
 		public function getText():LocaleText {
 			return _texts[language] || new LocaleText("");
 		}

@@ -81,6 +81,10 @@ package maryfisher.framework.command.net {
 			createStatement(st);
 		}
 		
+		protected function deleteStatement(table:String, where:String):String {
+			return "DELETE FROM " + table + " WHERE ";
+		}
+		
 		protected function insertStatement(table:String, columns:Array, inserts:Array, doReplace:Boolean = false):String {
 			
 			var st:String = "INSERT";
