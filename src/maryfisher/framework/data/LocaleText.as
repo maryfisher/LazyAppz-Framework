@@ -16,6 +16,10 @@ package maryfisher.framework.data {
 		public function getParameters():void {
 			
 		}
+		
+		public function clone():LocaleText {
+			return new LocaleText(text);
+		}
 	}
 
 }

@@ -2,6 +2,7 @@ package maryfisher.framework.command.net {
 	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.core.NetController;
 	import maryfisher.framework.data.NetData;
+	import maryfisher.framework.util.ErrorUtil;
 	import org.osflash.signals.Signal;
 	
 	/**
@@ -35,14 +36,15 @@ package maryfisher.framework.command.net {
 		public function buildRequest(netData:NetData):void {
 			_netData = netData;
 			if (!_netData) {
-				trace("[NetCommand] no NetData was specified for id " + _id + ", no request will be send - is this correct?");
+				ErrorUtil.somethingWrong("no NetData was specified for id " + _id + ". No request will be send - is this correct?", "NetCommand");
+				//trace("[NetCommand] no NetData was specified for id " + _id + ", no request will be send - is this correct?");
 				finishRequest(null);
 				return;
 			}
 			
 			
 			if (!_netData.requestClass) {
-				throw new Error("[NetCommand] No request class specified!");
+				ErrorUtil.error("No request class specified!", "NetCommand", "buildRequest");
 				return;
 			}
 				
