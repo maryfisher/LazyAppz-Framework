@@ -15,7 +15,7 @@ package maryfisher.framework.command.loader {
 		
 		protected var _loader:Loader;
 		
-		public function BaseLoaderCommand(id:String, fileId:String = null, priority:int=LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
+		public function BaseLoaderCommand(id:String, fileId:String = null, priority:int=0, executeInstantly:Boolean = true) {
 			super(id, fileId, priority, executeInstantly);
 			
 		}

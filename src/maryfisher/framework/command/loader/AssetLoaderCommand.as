@@ -81,6 +81,11 @@ package maryfisher.framework.command.loader {
 			setFinished();
 		}
 		
+		override public function leachLoading(cmd:LoaderCommand):void {
+			_loader = (cmd as AssetLoaderCommand).loader;
+			super.leachLoading(cmd);
+		}
+		
 		public function get assetClass():Class {
 			if (_asset) {
 				
@@ -97,6 +102,19 @@ package maryfisher.framework.command.loader {
 		//}
 		
 		override public function get asset():Object {
+			/** TODO
+			 * this a good idea?? messing with the LoadAssetCommand buildAsset method
+			 */
+			//if (_loaderData.reuse) {
+				return _asset;
+			//}
+			//return assetClass;
+		}
+		
+		override public function get cacheAsset():Object {
+			/** TODO
+			 * this a good idea?? messing with the LoadAssetCommand buildAsset method
+			 */
 			if (_loaderData.reuse) {
 				return _asset;
 			}
@@ -110,6 +128,10 @@ package maryfisher.framework.command.loader {
 				_asset = new value();
 			}
 			//setFinished();
+		}
+		
+		public function get loader():Loader {
+			return _loader;
 		}
 	}
 }

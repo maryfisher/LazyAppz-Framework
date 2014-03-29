@@ -13,13 +13,15 @@ package maryfisher.framework.command.loader {
 	public class ImageLoaderCommand extends BaseLoaderCommand {
 		
 		private var _image:BitmapData;
-		private var _callback:IImageLoadingCallback;
+		//private var _callback:IImageLoadingCallback;
 		
-		public function ImageLoaderCommand(callback:IImageLoadingCallback, id:String, fileId:String, priority:int=LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
+		//public function ImageLoaderCommand(callback:IImageLoadingCallback, id:String, fileId:String, priority:int=LoaderConfig.WHENEVER_PRIORITY, executeInstantly:Boolean = true) {
+		public function ImageLoaderCommand(id:String, fileId:String, callback:Function, priority:int=0, executeInstantly:Boolean = true) {
 			
-			_callback = callback;
+			//_callback = callback;
 			_finishedLoading = new Signal(ImageLoaderCommand);
-			_finishedLoading.add(_callback.imageLoadingFinished);
+			//_finishedLoading.add(_callback.imageLoadingFinished);
+			_finishedLoading.add(callback);
 			super(id, fileId, priority, executeInstantly);
 		}
 		
@@ -44,7 +46,7 @@ package maryfisher.framework.command.loader {
 		}
 		
 		override public function set asset(value:Object):void {
-			trace("set asset:", _fileId)
+			//trace("set asset:", _fileId)
 			_image = value as BitmapData;
 			//setFinished();
 		}

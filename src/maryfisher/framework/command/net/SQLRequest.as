@@ -82,7 +82,7 @@ package maryfisher.framework.command.net {
 		}
 		
 		protected function deleteStatement(table:String, where:String):String {
-			return "DELETE FROM " + table + " WHERE ";
+			return "DELETE FROM " + table + " WHERE " + where;
 		}
 		
 		protected function insertStatement(table:String, columns:Array, inserts:Array, doReplace:Boolean = false):String {

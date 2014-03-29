@@ -1,8 +1,12 @@
 package maryfisher.framework.command.asset {
 	
+	import flash.display.BitmapData;
 	import flash.display.Sprite;
 	import flash.media.Sound;
+	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
+	import maryfisher.framework.command.loader.IImageLoadingCallback;
+	import maryfisher.framework.command.loader.ImageLoaderCommand;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.loader.SoundLoaderCommand;
 	import maryfisher.framework.command.sound.SoundCommand;
@@ -19,9 +23,10 @@ package maryfisher.framework.command.asset {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class LoadAssetCommand {
+	public class LoadAssetCommand extends AbstractCommand {
 		
 		//private var _callback:IAssetCallback;
+		private var _image:BitmapData;
 		protected var _soundComponent:Sound;
 		protected var _viewComponent:IViewComponent;
 		protected var _assetBuilderId:String;
@@ -36,7 +41,7 @@ package maryfisher.framework.command.asset {
 		protected var _fileId:String;
 		protected var _clonableViewComponent:IClonableViewComponent;
 		
-		public function LoadAssetCommand(id:String, callback:IAssetCallback, fileId:String = "", addView:Boolean = false, assetBuilderId:String = null) {
+		public function LoadAssetCommand(id:String, callback:IAssetCallback, fileId:String = "", addView:Boolean = false, assetBuilderId:String = null, executeImmediatly:Boolean = true) {
 			_fileId = fileId;
 			_assetBuilderId = assetBuilderId;
 			_id = id;
@@ -45,10 +50,12 @@ package maryfisher.framework.command.asset {
 			_finishedLoading = new Signal(LoadAssetCommand);
 			_finishedLoading.addOnce(callback.assetFinished);
 			
-			execute();
+			super(executeImmediatly);
+			//if(executeImediatly)
+				//execute();
 		}
 		
-		public function execute():void {
+		override public function execute():void {
 			AssetController.registerAssetCommand(this);
 		}
 		
@@ -59,7 +66,9 @@ package maryfisher.framework.command.asset {
 			if(!asData || asData.assetClass == AssetLoaderCommand){
 				new AssetLoaderCommand(id, fileId, onAssetFinished);
 			}else if (asData.assetClass == SoundLoaderCommand) {
-				
+				new SoundLoaderCommand(id, fileId, onAssetFinished);
+			}else if (asData.assetClass == ImageLoaderCommand) {
+				new ImageLoaderCommand(id, fileId, onAssetFinished);
 			}
 		}
 		
@@ -75,50 +84,60 @@ package maryfisher.framework.command.asset {
 				_assetBuilder = obj as IAssetBuilder;
 				if (_assetBuilderId != null) {
 					_viewComponent = _assetBuilder.getViewComponent(_assetBuilderId);
-					_viewComponent.addOnFinished(onViewFinished);
+					_viewComponent.addListener(ViewEvent.ON_FINISHED, onViewFinished);
+					_viewComponent.checkFinished();
 					return;
 				}
-			}else if (obj is IViewComponent) {
-				_viewComponent = obj as IViewComponent;
-				_viewComponent.addOnFinished(onViewFinished);
-				
-				return;
 			}else if (obj is IClonableViewComponent) {
 				_clonableViewComponent = (obj as IClonableViewComponent);
-				_clonableViewComponent.addOnFinished(onClonableViewFinished);
+				//_clonableViewComponent.addOnFinished(onClonableViewFinished);
+				_clonableViewComponent.addListener(ViewEvent.ON_FINISHED, onClonableViewFinished);
+				_clonableViewComponent.checkFinished();
 				return;
 			/** TODO
 			 * 
 			 */
 			//}else if (obj is ISpriteSheet) {
 				//_spriteSheet = obj as ISpriteSheet;
+			}else if (obj is IViewComponent) {
+				_viewComponent = obj as IViewComponent;
+				//_viewComponent.addOnFinished(onViewFinished);
+				_viewComponent.addListener(ViewEvent.ON_FINISHED, onViewFinished);
+				_viewComponent.checkFinished();
+				
+				return;
 			}else if (obj is Sound) {
 				/** TODO
 				 * 
 				 */
 				_soundComponent = (obj as Sound);
+			}else if (obj is BitmapData) {
+				_image = obj as BitmapData;
 			}
 			setFinished();
 		}
 		
 		protected function onClonableViewFinished(e:ViewEvent):void {
 			_viewComponent = _clonableViewComponent.clone();
-			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
-			setFinished();
+			//if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
+			_viewComponent.addListener(ViewEvent.ON_FINISHED, onViewFinished);
+			_viewComponent.checkFinished();
+			//setFinished();
 		}
 		
 		public function setFinished():void {
 			_finishedLoading.dispatch(this);
+			_finishedExecutionSignal.dispatch();
 		}
 		
 		protected function onViewFinished(e:ViewEvent):void {
 			/* TODO
 			 * original is never used
 			 */
-			if (_viewComponent is IClonableViewComponent) {
-				_clonableViewComponent = (_viewComponent as IClonableViewComponent)
-				_viewComponent = _clonableViewComponent.clone();
-			}
+			//if (_viewComponent is IClonableViewComponent) {
+				//_clonableViewComponent = (_viewComponent as IClonableViewComponent)
+				//_viewComponent = _clonableViewComponent.clone();
+			//}
 			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			setFinished();
 		}
@@ -137,6 +156,10 @@ package maryfisher.framework.command.asset {
 		
 		public function get soundComponent():Sound {
 			return _soundComponent;
+		}
+		
+		public function get image():BitmapData {
+			return _image;
 		}
 		
 		/** TODO

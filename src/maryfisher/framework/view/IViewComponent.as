@@ -7,16 +7,13 @@ package maryfisher.framework.view {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public interface IViewComponent{
+	public interface IViewComponent extends IEventListener{
 		//function get viewComponent():*;
 		function get componentType():String;
 		function destroy():void;
-		function addOnFinished(listener:Function):void;
+		//function addOnFinished(listener:Function):void;
 		//onFinishedLoading
 		function dispatch(e:Event):void;
-		function hasListener(type:String):Boolean
-		function addListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false) : void
-		function removeListener(type:String, listener:Function, useCapture:Boolean=false) : void
 		function addView():void;
 		function removeView():void;
 		function pause():void;
@@ -25,6 +22,8 @@ package maryfisher.framework.view {
 		function hide():void;
 		function addViewComponent(comp:IViewComponent):void;
 		function removeViewComponent(comp:IViewComponent):void;
+		
+		function checkFinished():void;
 	}
 	
 }

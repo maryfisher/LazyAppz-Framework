@@ -8,8 +8,10 @@ package maryfisher.framework.command {
 		
 		protected var _finishedExecutionSignal:Signal;
 		
-		public function AbstractCommand() {
+		public function AbstractCommand(executeImediatly:Boolean = false) {
 			_finishedExecutionSignal = new Signal();
+			if (executeImediatly)
+				execute();
 		}
 		
 		public function execute():void {

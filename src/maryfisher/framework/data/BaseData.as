@@ -1,4 +1,5 @@
 package maryfisher.framework.data {
+	import flash.geom.Point;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -26,6 +27,22 @@ package maryfisher.framework.data {
 			}
 		}
 		
+		protected function getPoint(str:String, del:String = ","):Point {
+			if (validateString(str)) {
+				var s:Array = str.split(del);
+				return new Point(s[0], s[1]);
+			}else {
+				return new Point();
+			}
+		}
+		
+		protected function validateString(str:String):Boolean {			
+			if (str == null || str == "" || str == " ") {
+				return false;
+			}
+			
+			return true;
+		}
 	}
 
 }

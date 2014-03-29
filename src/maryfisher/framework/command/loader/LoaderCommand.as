@@ -52,12 +52,17 @@ package maryfisher.framework.command.loader {
 			return null;
 		}
 		
+		public function get cacheAsset():Object {
+			return null;
+		}
+		
 		public function set asset(tasset:Object):void {
 			
 		}
 		
 		public function leachLoading(cmd:LoaderCommand):void {
 			asset = cmd.asset;
+			_loaderData = cmd.loaderData;
 			setFinished();
 		}
 		

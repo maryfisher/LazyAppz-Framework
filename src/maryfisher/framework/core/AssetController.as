@@ -121,12 +121,16 @@ package maryfisher.framework.core {
 			
 			_activeLoader.splice(_activeLoader.indexOf(cmd), 1);
 			if (cmd.loaderData.doCache) {
-				_cachedLoadedAssets[cmd.id + cmd.fileId] = cmd.asset;
+				_cachedLoadedAssets[cmd.id + cmd.fileId] = cmd.cacheAsset;
 			}
 		}
 		
 		static public function registerLoaderCommand(cmd:LoaderCommand):void {
 			_instance.executeLoaderCommand(cmd);
+		}
+		
+		static public function getLoaderData(id:String):LoaderData {
+			return _instance._paths[id];
 		}
 		
 	}

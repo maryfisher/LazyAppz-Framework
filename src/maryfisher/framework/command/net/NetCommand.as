@@ -9,7 +9,8 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class NetCommand extends AbstractCommand{
+	public class NetCommand extends AbstractCommand {
+		
 		
 		private var _id:String;
 		private var _requestSpecs:String;

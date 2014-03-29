@@ -9,10 +9,11 @@ package maryfisher.framework.sound {
 		function play():void;
 		function stop():void;
 		function set soundTransform(value:SoundTransform):void;
-		function fadeIn():void;
-		function fadeOut():void;
+		function set channelTransform(value:SoundTransform):void;
+		function set fadeIn(value:Boolean):void;
+		function set fadeOut(value:Boolean):void;
 		
-		function get soundType():String;
+		//function get soundType():String;
 	}
 	
 }

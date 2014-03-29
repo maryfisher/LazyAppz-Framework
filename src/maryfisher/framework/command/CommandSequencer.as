@@ -1,6 +1,5 @@
 package maryfisher.framework.command {
 	import maryfisher.framework.command.view.SequenceProgress;
-	import maryfisher.framework.core.LoaderController;
 	/**
 	 * ...
 	 * @author mary_fisher

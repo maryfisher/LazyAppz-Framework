@@ -171,7 +171,7 @@ package maryfisher.framework.core {
 						toggleFullScreen();
 					break;
 					default:
-					throw new Error("What's up with that view id? - " + viewCommand.viewType);
+						throw new Error("What's up with that view id? - " + viewCommand.viewType);
 				}
 				return;
 			}
@@ -191,11 +191,11 @@ package maryfisher.framework.core {
 					break;
 				case ViewCommand.REGISTER_VIEW:
 					viewcontroller.registerView(viewCommand.view);
-					checkForCallbacks(viewCommand.view);
+					//checkForCallbacks(viewCommand.view);
 					break;
 				case ViewCommand.UNREGISTER_VIEW:
 					viewcontroller.unRegisterView(viewCommand.view);
-					removeCallbacks(viewCommand.view);
+					//removeCallbacks(viewCommand.view);
 					break;
 				default:
 					viewcontroller.registerCommand(viewCommand);
@@ -203,25 +203,25 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		private function checkForCallbacks(view:IViewComponent):void {
-			if (view is IResizableObject) {
-				_resizableObjects.push(view as IResizableObject);
-			}
-			
-			if (view is ITickedObject) {
-				_tickedObjects.push(view as ITickedObject);
-			}
-		}
-		
-		private function removeCallbacks(view:IViewComponent):void {
-			if (view is IResizableObject) {
-				_resizableObjects.push(_resizableObjects.indexOf(view as IResizableObject));
-			}
-			
-			if (view is ITickedObject) {
-				_tickedObjects.splice(_tickedObjects.indexOf(view as ITickedObject), 1);
-			}
-		}
+		//private function checkForCallbacks(view:IViewComponent):void {
+			//if (view is IResizableObject) {
+				//_resizableObjects.push(view as IResizableObject);
+			//}
+			//
+			//if (view is ITickedObject) {
+				//_tickedObjects.push(view as ITickedObject);
+			//}
+		//}
+		//
+		//private function removeCallbacks(view:IViewComponent):void {
+			//if (view is IResizableObject) {
+				//_resizableObjects.push(_resizableObjects.indexOf(view as IResizableObject));
+			//}
+			//
+			//if (view is ITickedObject) {
+				//_tickedObjects.splice(_tickedObjects.indexOf(view as ITickedObject), 1);
+			//}
+		//}
 		
 		private function toggleFullScreen():void {
 			switch (_stage.displayState) {

@@ -5,7 +5,8 @@ package maryfisher.framework.command.view {
 	 */
 	public class SequenceProgress extends AbstractProgress{
 		
-		protected var _currentStep:int = -1;
+		//protected var _currentStep:int = -1;
+		protected var _currentStep:int = 0;
 		protected var _steps:int;
 		protected var _stepDescriptions:Vector.<String>;
 		
@@ -13,7 +14,7 @@ package maryfisher.framework.command.view {
 			_stepDescriptions = stepDescriptions;
 			_steps = steps;
 			super();
-			next();
+			//next();
 		}
 		
 		public function next():void {
@@ -46,6 +47,7 @@ package maryfisher.framework.command.view {
 		
 		protected function setProgress():void {
 			_progress = Math.min((_currentStep + 0.5) / _steps, 1);
+			//_progress = Math.min((_currentStep) / _steps, 1);
 		}
 		
 		public function get currentStep():int {
