@@ -1,4 +1,4 @@
-package maryfisher.framework.core {
+package maryfisher.framework.view.core {
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
@@ -6,6 +6,8 @@ package maryfisher.framework.core {
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.view.AbstractProgress;
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.core.IViewController;
+	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.view.ILoaderView;
 	import maryfisher.framework.view.IViewComponent;
 	/**
@@ -27,10 +29,8 @@ package maryfisher.framework.core {
 		private var _activeProgress:AbstractProgress;
 		//private var _globalSequenceProgress:GlobalSequenceProgress;
 		
-		private var _loadingView:ILoaderView;
+		protected var _loadingView:ILoaderView;
 		private var _loadingViews:Dictionary;
-		private var _container:Sprite = new Sprite();
-		private var _stage:Stage;
 		private var _keepView:Boolean = false;
 		
 		public function LoadingViewController() {
@@ -44,24 +44,15 @@ package maryfisher.framework.core {
 		}
 		
 		public function addView(view:IViewComponent):void {
-			if (_loadingView) {
-				_container.removeChild(_loadingView as DisplayObject);
-			}
-			_loadingView = view as ILoaderView;
-			_loadingView.hide();
-			_container.addChild(_loadingView as DisplayObject);
+			
 		}
 		
 		public function removeView(view:IViewComponent):void {
-			if (_loadingView) {
-				_container.removeChild(_loadingView as DisplayObject);
-				_loadingView = null;
-			}
+			
 		}
 		
 		public function setUp(stage:Stage, controller:ViewController):void {
-			_stage = stage;
-			_stage.addChild(_container);
+			
 		}
 		
 		public function pauseView():void {

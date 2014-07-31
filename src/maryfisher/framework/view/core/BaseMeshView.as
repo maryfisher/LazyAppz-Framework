@@ -5,6 +5,7 @@ package maryfisher.framework.view.core {
 	import away3d.materials.MaterialBase;
 	import flash.events.Event;
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.view.IViewComponent;
 	
 	/**
@@ -72,6 +73,24 @@ package maryfisher.framework.view.core {
 		
 		public function removeViewComponent(comp:IViewComponent):void {
 			removeChild(comp as Entity);
+		}
+		
+		/* INTERFACE maryfisher.framework.view.IViewComponent */
+		
+		public function get zIndex():int {
+			return ViewController.Z_NORMAL;
+		}
+		
+		public function unpause():void {
+			
+		}
+		
+		public function checkFinished():void {
+			
+		}
+		
+		public function hasListener(type:String):Boolean {
+			return hasEventListener(type);
 		}
 		
 	}

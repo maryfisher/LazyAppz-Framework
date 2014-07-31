@@ -10,21 +10,21 @@ package maryfisher.framework.data {
 		/**
 		 * caches the class
 		 */
-		public var doCache:Boolean;
+		public var cacheClass:Boolean;
 		/**
-		 * caches the actual object
+		 * caches an instance of the class to be reused
 		 */
 		public var reuse:Boolean;
 		
-		public function LoaderData(path:String, doCache:Boolean = false, reuse:Boolean = false, description:String = "") {
+		public function LoaderData(path:String, cacheClass:Boolean = false, reuse:Boolean = false, description:String = "") {
 			this.description = description;
 			this.path = path;
-			this.doCache = doCache;
+			this.cacheClass = cacheClass;
 			this.reuse = reuse;
 		}
 		
 		public function toString():String {
-			return "[LoaderData path=" + path + " description=" + description + " doCache=" + doCache + " reuse=" + reuse +
+			return "[LoaderData path=" + path + " description=" + description + " doCache=" + cacheClass + " reuse=" + reuse +
 						"]";
 		}
 	}

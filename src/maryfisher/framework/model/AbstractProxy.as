@@ -60,7 +60,9 @@ package maryfisher.framework.model {
 			if (update.updateId == AbstractModel.DATA_LOADED) {
 				dataFinishedLoading();
 			}else {
-				_updateListeners[update.updateId](update);
+				var func:Function = _updateListeners[update.updateId];
+				if (func == null) return;
+				func(update);
 			}
 		}
 		

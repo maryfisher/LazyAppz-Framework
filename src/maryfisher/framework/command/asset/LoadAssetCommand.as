@@ -17,7 +17,9 @@ package maryfisher.framework.command.asset {
 	import maryfisher.framework.sound.ISoundComponent;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
+	import maryfisher.framework.view.IImageBuilder;
 	import maryfisher.framework.view.IViewComponent;
+	import maryfisher.view.ui.interfaces.IMovieClip;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...
@@ -27,7 +29,10 @@ package maryfisher.framework.command.asset {
 		
 		//private var _callback:IAssetCallback;
 		private var _image:BitmapData;
+		private var _obj:Object;
+		private var _imageBuilder:IImageBuilder;
 		protected var _soundComponent:Sound;
+		protected var _movieComponent:IMovieClip;
 		protected var _viewComponent:IViewComponent;
 		protected var _assetBuilderId:String;
 		protected var _assetBuilder:IAssetBuilder;
@@ -69,17 +74,21 @@ package maryfisher.framework.command.asset {
 				new SoundLoaderCommand(id, fileId, onAssetFinished);
 			}else if (asData.assetClass == ImageLoaderCommand) {
 				new ImageLoaderCommand(id, fileId, onAssetFinished);
+			}else {
+				new asData.assetClass(id, fileId, onAssetFinished);
 			}
 		}
 		
 		private function onAssetFinished(cmd:LoaderCommand):void {
 			
 			//var obj:Sprite = (cmd as AssetLoaderCommand).asset;
+			
 			buildAsset(cmd.asset);
 			
 		}
 		
 		public function buildAsset(obj:*):void {
+			
 			if (obj is maryfisher.framework.view.IAssetBuilder) {
 				_assetBuilder = obj as IAssetBuilder;
 				if (_assetBuilderId != null) {
@@ -113,6 +122,14 @@ package maryfisher.framework.command.asset {
 				_soundComponent = (obj as Sound);
 			}else if (obj is BitmapData) {
 				_image = obj as BitmapData;
+			}else if (obj is IMovieClip) {
+				_movieComponent = obj as IMovieClip;
+			}else if (obj is IImageBuilder) {
+				_imageBuilder = obj as IImageBuilder;
+			}else {
+				//_loader = 
+				_obj = obj;
+				trace("[LoadAssetCommand] buildAsset: Problem with the asset type!", obj);
 			}
 			setFinished();
 		}
@@ -150,6 +167,10 @@ package maryfisher.framework.command.asset {
 			return _viewComponent;
 		}
 		
+		public function get movieComponent():IMovieClip {
+			return _movieComponent;
+		}
+		
 		public function get clonableViewComponent():IClonableViewComponent {
 			return _clonableViewComponent;
 		}
@@ -160,6 +181,14 @@ package maryfisher.framework.command.asset {
 		
 		public function get image():BitmapData {
 			return _image;
+		}
+		
+		public function get obj():Object {
+			return _obj;
+		}
+		
+		public function get imageBuilder():IImageBuilder {
+			return _imageBuilder;
 		}
 		
 		/** TODO

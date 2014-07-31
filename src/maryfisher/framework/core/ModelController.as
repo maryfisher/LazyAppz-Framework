@@ -61,19 +61,12 @@ package maryfisher.framework.core {
 		
 		private function register(registered:*):void {
 			var typeXML:XML = describeType(registered);
-			//trace(typeXML);
 			for each(var intFace:XML in typeXML.implementsInterface) {
-				//var classDef:Class = getDefinitionByName(intFace.@type) as Class;
-				
-				//var model:AbstractModel = _instance._models[classDef];
-				
 				var str:String = intFace.@type;
 				var model:AbstractModel = _models[str];
 				if (model) {
-					var modelName:String = model.className//getQualifiedClassName(model);
+					var modelName:String = model.className;
 					var accessors:XMLList = typeXML.accessor.(@type == modelName);
-					//trace(typeXML.accessor)
-					//trace(modelName);
 					if (accessors.length() > 0) {
 						registered[accessors[0].@name] = model;
 						registered.addModel(getDefinitionByName(modelName), model);

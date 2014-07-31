@@ -10,6 +10,8 @@ package maryfisher.framework.command.view {
 		public static const REGISTER_VIEW:String = 'registerView';
 		static public const UNREGISTER_VIEW:String = 'unregisterView';
 		
+		static public const SWITCH_MOUSE:String = "registerMouse";
+		
 		public static const TOGGLE_FULL_SCREEN:String = 'toggleFullScreen';
 		public static const PAUSE:String = 'pause';
 		public static const CONTINUE:String = 'continue';

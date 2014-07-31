@@ -120,7 +120,7 @@ package maryfisher.framework.core {
 		private function finishedLoading(cmd:LoaderCommand):void {
 			
 			_activeLoader.splice(_activeLoader.indexOf(cmd), 1);
-			if (cmd.loaderData.doCache) {
+			if (cmd.loaderData.cacheClass) {
 				_cachedLoadedAssets[cmd.id + cmd.fileId] = cmd.cacheAsset;
 			}
 		}

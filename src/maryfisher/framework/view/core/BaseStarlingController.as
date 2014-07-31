@@ -15,8 +15,8 @@ package maryfisher.framework.view.core {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class BaseStarlingController implements IViewController {
-		public var onFinished:Signal;
+	public class BaseStarlingController implements IViewController, IStarlingController {
+		private var _onFinished:Signal;
 		
 		private var _id:String;
 		protected var _paused:Boolean;
@@ -28,7 +28,7 @@ package maryfisher.framework.view.core {
 		
 		public function BaseStarlingController(id:String) {
 			_id = id;
-			onFinished = new Signal(Starling);
+			_onFinished = new Signal(Starling);
 			_container = new Sprite();
 		}
 		
@@ -36,6 +36,10 @@ package maryfisher.framework.view.core {
 		
 		public function get controllerId():String {
 			return _id;
+		}
+		
+		public function get onFinished():Signal {
+			return _onFinished;
 		}
 		
 		public function addView(view:IViewComponent):void {
@@ -61,7 +65,7 @@ package maryfisher.framework.view.core {
 		
 		protected function onContextCreated(e:Event):void {
 			_starling.stage.addChild(_container);
-			onFinished.dispatch(_starling);
+			_onFinished.dispatch(_starling);
 			initComps();
 			
 			

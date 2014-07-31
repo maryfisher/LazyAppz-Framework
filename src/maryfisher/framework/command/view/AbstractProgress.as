@@ -1,6 +1,6 @@
 package maryfisher.framework.command.view {
 	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.core.LoadingViewController;
+	import maryfisher.framework.view.core.LoadingViewController;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...

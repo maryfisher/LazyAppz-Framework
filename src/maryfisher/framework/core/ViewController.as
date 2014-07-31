@@ -3,6 +3,8 @@ package maryfisher.framework.core {
 	import flash.display.Stage;
 	import flash.display.StageDisplayState;
 	import flash.events.Event;
+	import flash.ui.Mouse;
+	import flash.ui.MouseCursorData;
 	import flash.utils.Dictionary;
 	import flash.utils.getTimer;
 	import maryfisher.framework.command.view.StageCommand;
@@ -17,6 +19,9 @@ package maryfisher.framework.core {
 	 * @author mary_fisher
 	 */
 	public class ViewController {
+		
+		static public const Z_NORMAL:int = 0;
+		static public const Z_BOTTOM:int = -1;
 		
 		static private var _instance:ViewController;
 		static private var _isFinished:Boolean;
@@ -196,6 +201,9 @@ package maryfisher.framework.core {
 				case ViewCommand.UNREGISTER_VIEW:
 					viewcontroller.unRegisterView(viewCommand.view);
 					//removeCallbacks(viewCommand.view);
+					break;
+				case ViewCommand.SWITCH_MOUSE:
+					Mouse.cursor = viewCommand.viewType
 					break;
 				default:
 					viewcontroller.registerCommand(viewCommand);

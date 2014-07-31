@@ -3,6 +3,8 @@ package maryfisher.framework.view.core {
 	import flash.events.Event;
 	import flash.geom.Vector3D;
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.core.ViewController;
+	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IViewComponent;
 	
 	/**
@@ -11,8 +13,20 @@ package maryfisher.framework.view.core {
 	 */
 	public class BaseContainer3DView extends ObjectContainer3D implements IViewComponent{
 		
-		public function BaseContainer3DView(){
-			
+		protected var _dispatchFinish:Boolean;
+		
+		public function BaseContainer3DView(dispatchFinish:Boolean = true) {
+			super();
+			_dispatchFinish = dispatchFinish;
+		}
+		
+		protected function dispatchFinishedLoading():void {
+			_dispatchFinish = true;
+			dispatchEvent(new ViewEvent(ViewEvent.ON_FINISHED));
+		}
+		
+		public function checkFinished():void {
+			if(_dispatchFinish) dispatchFinishedLoading();
 		}
 		
 		public function setPosition(scenePosition:Vector3D):void {
@@ -76,6 +90,16 @@ package maryfisher.framework.view.core {
 		
 		public function removeViewComponent(comp:IViewComponent):void {
 			removeChild(comp as ObjectContainer3D);
+		}
+		
+		/* INTERFACE maryfisher.framework.view.IViewComponent */
+		
+		public function get zIndex():int {
+			return ViewController.Z_NORMAL;
+		}
+		
+		public function hasListener(type:String):Boolean {
+			return hasEventListener(type);
 		}
 		
 	}

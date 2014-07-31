@@ -1,6 +1,7 @@
 package maryfisher.framework.view.core {
 	import flash.events.Event;
 	import maryfisher.framework.command.view.ViewCommand;
+	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IStarlingView;
 	import maryfisher.framework.view.IViewComponent;
@@ -14,14 +15,21 @@ package maryfisher.framework.view.core {
 	 */
 	public class BaseStarlingView extends starling.display.Sprite implements IViewComponent, IStarlingView {
 		
+		protected var _dispatchFinish:Boolean;
 		private var _dispatcher:flash.display.Sprite;
 		
-		public function BaseStarlingView() {
-			
+		public function BaseStarlingView(dispatchFinish:Boolean = true) {
+			_dispatchFinish = dispatchFinish;
+			_dispatcher = new flash.display.Sprite();
 		}
 		
 		protected function dispatchFinishedLoading():void {
+			_dispatchFinish = true;
 			_dispatcher.dispatchEvent(new ViewEvent(ViewEvent.ON_FINISHED));
+		}
+		
+		public function checkFinished():void {
+			if(_dispatchFinish) dispatchFinishedLoading();
 		}
 		
 		public function addOnFinished(listener:Function):void {
@@ -34,6 +42,11 @@ package maryfisher.framework.view.core {
 		
 		public function addListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void {
 			_dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
+		}
+		
+		public function hasListener(type:String):Boolean {
+			return _dispatcher.hasEventListener(type);
+			//return false;
 		}
 		
 		public function addView():void {
@@ -85,6 +98,10 @@ package maryfisher.framework.view.core {
 		public function get componentType():String {
 			throw new Error("Override this method to set the correct componentType");
 			return "";
+		}
+		
+		public function get zIndex():int {
+			return ViewController.Z_NORMAL;
 		}
 		
 	}

@@ -15,9 +15,9 @@ package maryfisher.framework.view.core {
 	 */
 	public class SecondStarlingController extends BaseStarlingController {
 		
-		private var _baseController:BaseStarlingController;
+		private var _baseController:IStarlingController;
 		
-		public function SecondStarlingController(controllerId:String, baseController:BaseStarlingController) {
+		public function SecondStarlingController(controllerId:String, baseController:IStarlingController) {
 			super(controllerId);
 			_baseController = baseController;
 			_baseController.onFinished.addOnce(onContectCreated);

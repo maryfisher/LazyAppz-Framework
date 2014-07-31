@@ -17,6 +17,7 @@ package maryfisher.framework.config {
 		protected var _mapping:Dictionary;
 		protected var _loaderPaths:Dictionary;
 		protected var _paths:Dictionary;
+		protected var _basePath:String = "";
 		
 		public function AbstractConfigureLoaderCommand() {
 			super();
@@ -40,27 +41,33 @@ package maryfisher.framework.config {
 		 * NOTE: the seperation is to facilitate easier use of different loading paths (for different platforms for example)
 		 *  
 		 * Example: 
-		 * 		mapLoaderPaths(AssetConstants.EXAMPLE_VIEW, VIEW_PATH + "ExampleView");
-		 * 		mapLoaderData(AssetConstants.EXAMPLE_VIEW, "Loading Example ...");
+		 * 		override protected function getLoaderPaths():void {
+		 *			mapLoaderPaths(AssetConstants.EXAMPLE_VIEW, VIEW_PATH + "ExampleView");
+		 *			mapLoaderData(AssetConstants.EXAMPLE_VIEW, "Loading Example ...");
+		 * 		} 
 		 */
 		protected function getLoaderPaths():void {	}
 		
 		/**
 		 * override this method to set your asset classes
 		 * 
-		 * Example: mapAssetData(AssetConstants.EXAMPLE_VIEW, ExampleView);
+		 * Example: 
+		 * 		override protected function getAssetMapping():void {
+		 * 			mapAssetData(AssetConstants.EXAMPLE_VIEW, ExampleView);
+		 * 		}
 		 */
 		protected function getAssetMapping():void {	}
 		
 		/**
 		 * map loader id to asset class
 		 * 
-		 * this method is for instantiated assets that are compiled with the main application
-		 * as well as assets that need to be loaded with specific LoaderCommands (eg sounds => SoundLoaderCommand)
+		 * this method is 
+		 * A) for instantiated assets that are compiled with the main application
+		 * B) for assets that need to be loaded with specific LoaderCommands (eg sounds => SoundLoaderCommand)
 		 * @param	id
-		 * @param	assetClass either the class that is to be instantiated or the LoaderCommand class
+		 * @param	assetClass speficies either the class that is to be instantiated or the LoaderCommand class
 		 * @param	load specifies if the assetClass is to be instantiated as the asset or if it classifies a LoaderCommand class
-		 * @param	doCache
+		 * @param	doCache specifies if an instance of the class is to be cached for later reuse
 		 */
 		final protected function mapAssetData(id:String, assetClass:Class, load:Boolean = false, doCache:Boolean = false):void {
 			_mapping[id] = new AssetData(assetClass, doCache, load);
@@ -74,11 +81,11 @@ package maryfisher.framework.config {
 		 * 
 		 * @param	id
 		 * @param	description
-		 * @param	doCache
-		 * @param	reuse
+		 * @param	cacheClass specifies if the loaded class is to be cached
+		 * @param	reuse specifies if an instance of the loaded is to be cached for later reuse
 		 */
-		final protected function mapLoaderData(id:String, description:String=null, doCache:Boolean = false, reuse:Boolean = false):void {
-			_paths[id] = new LoaderData(_loaderPaths[id], doCache, reuse, description);
+		final protected function mapLoaderData(id:String, description:String=null, cacheClass:Boolean = false, reuse:Boolean = false):void {
+			_paths[id] = new LoaderData(_loaderPaths[id], cacheClass, reuse, description);
 		}
 		
 		/**
@@ -88,7 +95,7 @@ package maryfisher.framework.config {
 		 * @param	path
 		 */
 		final protected function mapLoaderPaths(id:String, path:String):void {
-			_loaderPaths[id] = path;
+			_loaderPaths[id] = _basePath + path;
 		}
 	}
 

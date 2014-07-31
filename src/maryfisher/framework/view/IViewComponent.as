@@ -13,7 +13,7 @@ package maryfisher.framework.view {
 		function destroy():void;
 		//function addOnFinished(listener:Function):void;
 		//onFinishedLoading
-		function dispatch(e:Event):void;
+		//function dispatch(e:Event):void;
 		function addView():void;
 		function removeView():void;
 		function pause():void;
@@ -22,8 +22,9 @@ package maryfisher.framework.view {
 		function hide():void;
 		function addViewComponent(comp:IViewComponent):void;
 		function removeViewComponent(comp:IViewComponent):void;
-		
+		function get zIndex():int;
 		function checkFinished():void;
+		function get visible():Boolean;
 	}
 	
 }

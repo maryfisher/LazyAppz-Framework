@@ -4,6 +4,7 @@ package maryfisher.framework.view.core {
 	import flash.events.Event;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.IKeyListener;
+	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IViewComponent;
 	import maryfisher.view.ui.component.BaseSprite;
@@ -70,9 +71,9 @@ package maryfisher.framework.view.core {
 			visible = false;
 		}
 		
-		public function dispatch(e:Event):void {
-			dispatchEvent(e);
-		}
+		//public function dispatch(e:Event):void {
+			//dispatchEvent(e);
+		//}
 		
 		//public function removeListener(type:String, listener:Function, useCapture:Boolean = false):void {
 			//removeEventListener(type, listener, useCapture);
@@ -84,6 +85,12 @@ package maryfisher.framework.view.core {
 		
 		public function removeViewComponent(comp:IViewComponent):void {
 			removeChild(comp as DisplayObject);
+		}
+		
+		/* INTERFACE maryfisher.framework.view.IViewComponent */
+		
+		public function get zIndex():int {
+			return ViewController.Z_NORMAL;
 		}
 		
 		//public function hasListener(type:String):Boolean {

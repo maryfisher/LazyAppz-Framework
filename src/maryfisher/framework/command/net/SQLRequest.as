@@ -108,6 +108,47 @@ package maryfisher.framework.command.net {
 			return st;
 		}
 		
+		protected function insertRowStatement(table:String, columns:Array, inserts:Array, doReplace:Boolean = false):String {
+			
+			var st:String = "INSERT";
+			doReplace && (st += " OR REPLACE");
+			st += " INTO " + table + " SELECT ";
+			
+			var c:int = columns.length;
+			for (var j:int = 0; j < c; j++) {
+				if(inserts[0][j] is String){
+					st += "'" + inserts[0][j] + "'";
+				}else{
+					st += inserts[0][j];
+				}
+				st += " AS " + columns[j];
+				if (j < c - 1) {
+					st += ", ";
+				}else {
+					st += " ";
+				}
+			}
+			
+			var l:uint = inserts.length;
+			for (var i:int = 1; i < l; i++) {
+				st += "UNION SELECT ";
+				for (j = 0; j < c; j++) {
+					if(inserts[i][j] is String){
+						st += "'" + inserts[i][j] + "'";
+					}else{
+						st += inserts[i][j];
+					}
+					if (i != l - 1) {
+						st += ", ";
+					}else {
+						st += " ";
+					}
+				}
+			}
+			
+			return st;
+		}
+		
 		protected function updateStatement(table:String, columns:Array, sets:Array, where:String):String {
 			var st:String = "UPDATE " + table + " SET ";
 			var l:uint = columns.length;

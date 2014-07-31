@@ -160,7 +160,7 @@ package maryfisher.framework.core {
 					}
 				}
 				
-				var vecC:Vector.<KeyComboData> = _keyDown[key];
+				var vecC:Vector.<KeyComboData> = _keyCombos[key];//_keyDown[key];
 				if (vecC != null) {
 					var hasAll:Boolean = true;
 					for each(var combo:KeyComboData in vecC) {

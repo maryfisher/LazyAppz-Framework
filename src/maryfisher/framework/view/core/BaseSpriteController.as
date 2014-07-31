@@ -25,7 +25,11 @@ package maryfisher.framework.view.core {
 		/* INTERFACE maryfisher.framework.core.IViewController */
 		
 		public function addView(view:IViewComponent):void {
-			_scene.addChild(view as DisplayObject);
+			if(view.zIndex == ViewController.Z_NORMAL){
+				_scene.addChild(view as DisplayObject);
+			}else if (view.zIndex == ViewController.Z_BOTTOM) {
+				_scene.addChildAt(view as DisplayObject, 0);
+			}
 		}
 		
 		public function removeView(view:IViewComponent):void {
