@@ -18,8 +18,8 @@ package maryfisher.framework.command.asset {
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
 	import maryfisher.framework.view.IImageBuilder;
+	import maryfisher.framework.view.IMovieClip;
 	import maryfisher.framework.view.IViewComponent;
-	import maryfisher.view.ui.interfaces.IMovieClip;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...
