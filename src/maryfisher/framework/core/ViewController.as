@@ -1,19 +1,16 @@
 package maryfisher.framework.core {
 	
-	import flash.display.Stage;
-	import flash.display.StageDisplayState;
-	import flash.events.Event;
-	import flash.ui.Mouse;
-	import flash.ui.MouseCursorData;
-	import flash.utils.Dictionary;
-	import flash.utils.getTimer;
-	import maryfisher.framework.command.view.StageCommand;
-	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.view.IMouseObject;
-	import maryfisher.framework.view.IResizableObject;
-	import maryfisher.framework.view.ITickedObject;
-	import maryfisher.framework.view.IViewComponent;
-	import org.osflash.signals.Signal;
+    import flash.display.Stage;
+    import flash.display.StageDisplayState;
+    import flash.events.Event;
+    import flash.ui.Mouse;
+    import flash.utils.Dictionary;
+    import flash.utils.getTimer;
+    import maryfisher.framework.command.view.StageCommand;
+    import maryfisher.framework.command.view.ViewCommand;
+    import maryfisher.framework.view.IResizableObject;
+    import maryfisher.framework.view.ITickedObject;
+    import org.osflash.signals.Signal;
 	/**
 	 * ...
 	 * @author mary_fisher

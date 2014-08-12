@@ -14,8 +14,10 @@ package maryfisher.framework.core {
 		
 		protected var _models:Dictionary;
 		static private var _instance:ModelController;
+        private var _modelUpdates:Dictionary;
 		
 		public function ModelController() {
+			_modelUpdates = new Dictionary();
 			
 		}
 		
@@ -33,8 +35,16 @@ package maryfisher.framework.core {
 		}
 		
 		static public function initModels():void {
-			for each (var item:AbstractModel in _instance._models) {
-				item.init();
+			for each (var model:AbstractModel in _instance._models) {
+				model.init();
+                var modelClass:Class = getDefinitionByName(model.className) as Class;
+                var typeXML:XML = describeType(modelClass);
+                var constants:Array = [];
+                for each(var constant:XML in typeXML.constant) 
+                {
+                    constants.push(modelClass[constant.@name]);
+                }
+                _instance._modelUpdates[model.className] = constants;
 			}
 		}
 		
@@ -43,27 +53,13 @@ package maryfisher.framework.core {
 				return;
 			}
 			_instance.register(abstractProxy);
-			//var typeXML:XML = describeType(abstractProxy);
-			//for each(var intFace:XML in typeXML.implementsInterface) {
-				//var classDef:Class = getDefinitionByName(intFace.@type) as Class;
-				//
-				//var model:AbstractModel = _instance._models[classDef];
-				//var model:AbstractModel = _instance._models[intFace.@type];
-				//if (model != null) {
-					//var modelName:String = getQualifiedClassName(model);
-					//var accessors:XMLList = typeXML.accessor.(@type == modelName);
-					//if (accessors) {
-						//abstractProxy[accessors[0].@name] = model;
-					//}
-				//}
-			//}
 		}
 		
 		private function register(registered:*):void {
 			var typeXML:XML = describeType(registered);
 			for each(var intFace:XML in typeXML.implementsInterface) {
-				var str:String = intFace.@type;
-				var model:AbstractModel = _models[str];
+				var interfaceType:String = intFace.@type;
+				var model:AbstractModel = _models[interfaceType];
 				if (model) {
 					var modelName:String = model.className;
 					var accessors:XMLList = typeXML.accessor.(@type == modelName);
@@ -73,14 +69,16 @@ package maryfisher.framework.core {
 						
 						
 					}
-				}
-			}
-			
-			for each (var item:XML in typeXML.method) {
-				var listName:String = item.@name;
-				if (String(listName).indexOf("on") != -1){// && String(listName).indexOf("Update")) {
-					//var t:String = item.parameter[0].@type;
-					(registered as AbstractProxy).registerForUpdate(registered[listName], listName);
+                    var constants:Array = _modelUpdates[modelName];
+                    for each (var constantName:String in constants) 
+                    {
+                        var methods:XMLList = typeXML.method.(@name == constantName);
+                        if (methods.length() > 0)
+                        {
+                            var methodName:String = methods[0].@name;
+                            (registered as AbstractProxy).registerForUpdate(registered[methodName], methodName);
+                        }
+                    }
 				}
 			}
 		}
