@@ -6,16 +6,36 @@ package maryfisher.framework.data {
 	 */
 	public class LocaleText {
 		
-		public var text:String;
+		private var _text:String;
 		public var paramText:String;
 		public var formattedText:String;
 		private var _parameters:Dictionary; //elmId => XML
 		
 		public function LocaleText(text:String) {
 			this.text = text || "";
-			this.text = this.text.split("\\\"").join("'");
-			this.text = this.text.split("\\\'").join('"');
-			this.text = this.text.replace(/\\n/g, '\n');
+			
+		}
+		
+		public function getParams(param:String):Vector.<LocaleTextParameter> {
+			return _parameters[param];
+		}
+		
+		public function get escapedText():String {
+			var escaped:String = text;
+			escaped = escaped.split("'").join("\\\"");
+			return escaped;
+		}
+		
+		public function get text():String {
+			return _text;
+		}
+		
+		public function set text(value:String):void {
+			_text = value;
+			
+			_text = _text.split("\\\"").join("'");
+			_text = _text.split("\\\'").join('"');
+			_text = _text.replace(/\\n/g, '\n');
 			formattedText = text;
 			
 			_parameters = new Dictionary();
@@ -60,16 +80,6 @@ package maryfisher.framework.data {
 				//formattedText = formattedText.replace(/<option id=\"\"\>/g, "");
 				//trace(formattedText);
 			//}
-		}
-		
-		public function getParams(param:String):Vector.<LocaleTextParameter> {
-			return _parameters[param];
-		}
-		
-		public function get escapedText():String {
-			var escaped:String = text;
-			escaped = escaped.split("'").join("\\\"");
-			return escaped;
 		}
 		
 		public function getShortened(length:int = 20):String {
