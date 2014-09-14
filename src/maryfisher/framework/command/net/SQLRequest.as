@@ -38,7 +38,7 @@ package maryfisher.framework.command.net {
 		protected var _resultData:Array;
 		protected var _statement:SQLStatement;
 		public var path:String;
-		public var dbFile:String;
+		public var dbFile:File;
 		
 		public function SQLRequest() {
 			
@@ -47,11 +47,6 @@ package maryfisher.framework.command.net {
 		override public function execute(data:Object, netData:NetData, requestSpecs:String):void {
 			super.execute(data, netData, requestSpecs);
 			_requestData = data;
-			var resources :File = File.documentsDirectory;
-			var ssc:File = new File(resources.nativePath + path);
-			ssc.createDirectory();
-			//var dbFile:File = ssc.resolvePath(dbFile + ".sav");
-			var dbFile:File = ssc.resolvePath(dbFile);
 			
 			_connection = new SQLConnection();
 			_connection.addEventListener(SQLEvent.OPEN, onDatabaseOpen);

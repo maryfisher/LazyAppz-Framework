@@ -1,4 +1,5 @@
 package maryfisher.framework.net {
+	import flash.filesystem.File;
 	import maryfisher.framework.command.net.NetCommand;
 	import maryfisher.framework.command.net.NetRequest;
 	import maryfisher.framework.command.net.SQLRequest;
@@ -8,8 +9,9 @@ package maryfisher.framework.net {
 	 */
 	public class BaseSQLController implements INetController {
 		
-		private var _dbFileId:String;
-		private var _path:String;
+		protected var _dbFileId:String;
+		protected var _dbFile:File;
+		protected var _path:String;
 		private var _controllerID:String;
 		
 		/** TODO
@@ -21,6 +23,7 @@ package maryfisher.framework.net {
 			_path = path;
 			_dbFileId = dbFileId;
 			
+			createDBFile();
 		}
 		
 		/* INTERFACE maryfisher.framework.net.INetController */
@@ -28,8 +31,12 @@ package maryfisher.framework.net {
 		public function registerRequest(cmd:NetCommand):void {
 			var r:SQLRequest = (cmd.netRequest as SQLRequest);
 			r.path = _path;
-			r.dbFile = _dbFileId;
+			r.dbFile = _dbFile;
 			cmd.sendRequest();
+		}
+		
+		protected function createDBFile():void {
+			throw new Error("[BaseSQLController] createDBFile: Please overwrite this method!")
 		}
 		
 		/* INTERFACE maryfisher.framework.net.INetController */

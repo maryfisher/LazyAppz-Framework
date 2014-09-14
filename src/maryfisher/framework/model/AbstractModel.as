@@ -29,7 +29,6 @@ package maryfisher.framework.model {
 			
 			_sequenceListener = new Dictionary();
 			_sequencer = new CommandSequencer();
-			_sequencer.finishedExecutionSignal.addOnce(onFinished);
 		}
 		
 		protected function addNetCommand(id:String, onComplete:Function, requestData:Object = null):void {
@@ -38,11 +37,17 @@ package maryfisher.framework.model {
 		}
 		
 		protected function startSequencer():void {
+			_status = DATA_WAITING;
+			_sequencer.finishedExecutionSignal.addOnce(onFinished);
 			_sequencer.execute();
 		}
 		
 		private function onFinished():void {
 			status = DATA_LOADED;
+		}
+		
+		public function resetData():void {
+			_status = DATA_WAITING;
 		}
 		
 		/* INTERFACE maryfisher.framework.command.net.INetRequestCallback */
