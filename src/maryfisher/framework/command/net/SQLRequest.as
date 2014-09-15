@@ -27,6 +27,7 @@ package maryfisher.framework.command.net {
 		static protected const DATE:String = "DATE";
 		static protected const XML_TYPE:String = "XML";
 		static protected const NONE:String = "NONE";
+        static protected const INT_PRIM_AUT:String = INTEGER + PRIMARY_KEY + AUTOINCREMENT;
 		
 		static protected const LEFT_OUTER_JOIN:String = " LEFT OUTER JOIN ";
 		static protected const CROSS_JOIN:String = " CROSS JOIN ";
