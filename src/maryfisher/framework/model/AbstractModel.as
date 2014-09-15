@@ -18,6 +18,7 @@ package maryfisher.framework.model {
 		private var _status:String;
 		private var _sequencer:CommandSequencer;
 		private var _sequenceListener:Dictionary;
+		protected var _dataType:String;
 		//private var _signature:Class; /* eg IThisModelProxy */
 		
 		public function AbstractModel() {
@@ -68,9 +69,9 @@ package maryfisher.framework.model {
 			return _status;
 		}
 		
-		public function set status(value:String):void {
-			_status = value;
-			_updateSignal.dispatch(new BaseModelUpdate(_status));
+		public function set status(status:String):void {
+			_status = status;
+			_updateSignal.dispatch(new ModelStatusUpdate(_status, _dataType));
 		}
 		
 		//public function set signature(value:Class):void {

@@ -12,7 +12,7 @@ package maryfisher.framework.model {
 	public class AbstractProxy {
 		
 		//protected var _updateSignal:Signal;
-		private var _models:Dictionary;
+		protected var _models:Dictionary;
 		private var _updateListeners:Dictionary;
 		protected var _allModelsLoaded:Boolean = false;
 		
@@ -23,7 +23,7 @@ package maryfisher.framework.model {
 			
 			ModelController.registerProxy(this);
 			
-			dataFinishedLoading();
+			dataFinishedLoading("");
 		}
 		
 		public function addModel(modelType:Class, model:AbstractModel):void {
@@ -31,11 +31,12 @@ package maryfisher.framework.model {
 			model.registerForUpdate(this);
 		}
 		
-		public function dataFinishedLoading():void {
+		public function dataFinishedLoading(dataType:String):void {
 			var dataLoaded:Boolean = true;
 			
 			for each(var model:AbstractModel in _models) {
 				if (model.status == AbstractModel.DATA_WAITING) {
+					trace(this, "model not loaded", model);
 					dataLoaded = false;
 					break;
 				}
@@ -43,12 +44,12 @@ package maryfisher.framework.model {
 			
 			if (dataLoaded) {
 				_allModelsLoaded = true;
-				onModelsLoaded();
+				onModelsLoaded(dataType);
 				//_updateSignal.dispatch();
 			}
 		}
 		
-		protected function onModelsLoaded():void {
+		protected function onModelsLoaded(dataType:String):void {
 			
 		}
 		
@@ -58,7 +59,7 @@ package maryfisher.framework.model {
 		
 		public function updateFromModel(update:BaseModelUpdate):void {
 			if (update.updateId == AbstractModel.DATA_LOADED) {
-				dataFinishedLoading();
+				dataFinishedLoading((update as ModelStatusUpdate).dataType);
 			}else {
 				var func:Function = _updateListeners[update.updateId];
 				if (func == null) return;

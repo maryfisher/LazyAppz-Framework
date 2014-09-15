@@ -49,7 +49,7 @@ package maryfisher.framework.core {
 		}
 		
 		static public function registerProxy(abstractProxy:AbstractProxy):void {
-			if (!_instance._models) {
+			if (!_instance || !_instance._models) {
 				return;
 			}
 			_instance.register(abstractProxy);

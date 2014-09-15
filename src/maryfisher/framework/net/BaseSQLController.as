@@ -3,6 +3,7 @@ package maryfisher.framework.net {
 	import maryfisher.framework.command.net.NetCommand;
 	import maryfisher.framework.command.net.NetRequest;
 	import maryfisher.framework.command.net.SQLRequest;
+	
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -30,6 +31,8 @@ package maryfisher.framework.net {
 		
 		public function registerRequest(cmd:NetCommand):void {
 			var r:SQLRequest = (cmd.netRequest as SQLRequest);
+			if (!r)
+				return;
 			r.path = _path;
 			r.dbFile = _dbFile;
 			cmd.sendRequest();
@@ -48,7 +51,7 @@ package maryfisher.framework.net {
 		public function get requestType():String {
 			return NetRequest.TYPE_SQLLITE;
 		}
-		
+	
 	}
 
 }

@@ -45,7 +45,7 @@ package maryfisher.framework.command.net {
 			
 			
 			if (!_netData.requestClass) {
-				ErrorUtil.error("No request class specified!", "NetCommand", "buildRequest");
+				//ErrorUtil.error("No request class specified!", "NetCommand", "buildRequest");
 				return;
 			}
 				
