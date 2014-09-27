@@ -1,8 +1,6 @@
 package maryfisher.framework.command.sound {
-	import flash.media.SoundChannel;
 	import maryfisher.framework.core.SoundController;
 	import maryfisher.framework.sound.ISound;
-	
 	
 	/**
 	 * ...
@@ -23,6 +21,7 @@ package maryfisher.framework.command.sound {
 		//public var channel:SoundChannel;
 		public var volume:Number;
 		public var sound:ISound;
+		
 		//public static const PLAY_SOUND:String = "playSound";
 		
 		//public function SoundCommand(type:String, transformId:String = "", volume:Number = 0, channel:SoundChannel = null, sound:ISound = null) {

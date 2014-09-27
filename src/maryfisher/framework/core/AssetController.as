@@ -6,6 +6,7 @@ package maryfisher.framework.core {
 	import maryfisher.framework.command.view.LoadingProgress;
 	import maryfisher.framework.data.AssetData;
 	import maryfisher.framework.data.LoaderData;
+	import maryfisher.framework.util.ErrorUtil;
 	
 	/**
 	 * ...
@@ -91,11 +92,17 @@ package maryfisher.framework.core {
 			
 			_activeLoader.push(cmd);
 			
-			if ((_paths[cmd.id] as LoaderData).description) {
-				new LoadingProgress(cmd, _paths[cmd.id]);
+			var ld:LoaderData = (_paths[cmd.id] as LoaderData);
+			if (!ld) {
+				ErrorUtil.somethingWrong("No LoaderData found for assetId " + cmd.id, "AssetController", "executeLoaderCommand");
+				return;
+			}
+			
+			if (ld.description) {
+				new LoadingProgress(cmd, ld);
 			}
 			cmd.finishedLoading.addOnce(finishedLoading);
-			cmd.loadAsset(_paths[cmd.id]);
+			cmd.loadAsset(ld);
 		}
 		
 		public function unloadAsset(id:String):void {

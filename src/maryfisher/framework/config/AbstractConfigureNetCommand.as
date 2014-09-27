@@ -51,8 +51,8 @@ package maryfisher.framework.config {
 		 * @param	controllerId
 		 * @param	netClass
 		 */
-		final protected function addNetData(id:String, format:String, controllerId:String, netClass:Class):void {
-			_datas[id] = new NetData(id, format, controllerId, netClass);
+		final protected function addNetData(id:String, controllerId:String, netClass:Class):void {
+			_datas[id] = new NetData(id, controllerId, netClass);
 		}
 	}
 

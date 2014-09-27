@@ -30,9 +30,8 @@ package maryfisher.framework.net {
 		override public function registerRequest(cmd:NetCommand):void {
 			_savegame = int(cmd.requestSpecs);
 			createDBFile();
-			//if (!_dbFile) {
-			//return;
-			//}
+			if (!_dbFile)
+				return;
 			
 			super.registerRequest(cmd);
 		}

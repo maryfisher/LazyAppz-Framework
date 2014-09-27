@@ -34,12 +34,10 @@ package maryfisher.framework.command.net {
 		static protected const INNER_JOIN:String = " INNER JOIN ";
 		
 		private var _connection:SQLConnection;
+		private var _statement:SQLStatement;
 		protected var _requestData:Object;
 		protected var _result:SQLResult;
 		protected var _resultData:Array;
-		protected var _statement:SQLStatement;
-		public var path:String;
-		public var dbFile:File;
 		
 		public function SQLRequest() {
 			
@@ -49,15 +47,10 @@ package maryfisher.framework.command.net {
 			super.execute(data, netData, requestSpecs);
 			_requestData = data;
 			
-			_connection = new SQLConnection();
-			_connection.addEventListener(SQLEvent.OPEN, onDatabaseOpen);
-			_connection.addEventListener(SQLErrorEvent.ERROR, onOpenError);
-			_connection.open(dbFile, "create", false, 512);
-			
-			
+			sendRequest();
 		}
 		
-		protected function onDatabaseOpen(e:SQLEvent):void {
+		protected function sendRequest():void {
 			
 		}
 		
@@ -201,12 +194,8 @@ package maryfisher.framework.command.net {
 			trace(e.error);
 		}
 		
-		private function onOpenError(e:SQLErrorEvent):void {
-			trace(e.error);
-		}
-		
-		override public function get requestType():String {
-			return TYPE_SQLLITE;
+		public function set connection(value:SQLConnection):void {
+			_connection = value;
 		}
 	}
 

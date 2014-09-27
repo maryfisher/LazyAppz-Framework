@@ -14,14 +14,14 @@ package maryfisher.framework.command.net {
 			
 		}
 		
-		override protected function onDatabaseOpen(e:SQLEvent):void {
+		override protected function sendRequest():void {
 			_requests = new Vector.<SQLRequestData>();
 			
 			
 		}
 		
-		protected function addRequest(id:String, table:String, select:String = "*", where:String = "", order:String = ""):void {
-			_requests.push(new SQLRequestData(id, selectStatement(table, select, where, order)));
+		protected function addRequest(table:String, select:String = "*", where:String = "", order:String = ""):void {
+			_requests.push(new SQLRequestData(table, selectStatement(table, select, where, order)));
 		}
 		
 		protected function nextRequest():void {

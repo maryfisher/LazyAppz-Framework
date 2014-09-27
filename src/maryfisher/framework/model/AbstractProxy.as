@@ -1,9 +1,7 @@
 package maryfisher.framework.model {
 	
-	import flash.utils.describeType;
 	import flash.utils.Dictionary;
 	import maryfisher.framework.core.ModelController;
-	import org.osflash.signals.Signal;
 	
 	/**
 	 * ...
@@ -11,13 +9,11 @@ package maryfisher.framework.model {
 	 */
 	public class AbstractProxy {
 		
-		//protected var _updateSignal:Signal;
 		protected var _models:Dictionary;
-		private var _updateListeners:Dictionary;
 		protected var _allModelsLoaded:Boolean = false;
+		private var _updateListeners:Dictionary;
 		
 		public function AbstractProxy() {
-			//_updateSignal = new Signal();
 			_models = new Dictionary();
 			_updateListeners = new Dictionary();
 			
@@ -34,9 +30,9 @@ package maryfisher.framework.model {
 		public function dataFinishedLoading(dataType:String):void {
 			var dataLoaded:Boolean = true;
 			
-			for each(var model:AbstractModel in _models) {
+			for each (var model:AbstractModel in _models) {
 				if (model.status == AbstractModel.DATA_WAITING) {
-					trace(this, "model not loaded", model);
+					//trace("[AbstractProxy] dataFinishedLoading", this, "model not loaded", model);
 					dataLoaded = false;
 					break;
 				}
@@ -45,12 +41,11 @@ package maryfisher.framework.model {
 			if (dataLoaded) {
 				_allModelsLoaded = true;
 				onModelsLoaded(dataType);
-				//_updateSignal.dispatch();
 			}
 		}
 		
 		protected function onModelsLoaded(dataType:String):void {
-			
+		
 		}
 		
 		public function registerForUpdate(callback:Function, modelClass:String):void {
@@ -60,16 +55,17 @@ package maryfisher.framework.model {
 		public function updateFromModel(update:BaseModelUpdate):void {
 			if (update.updateId == AbstractModel.DATA_LOADED) {
 				dataFinishedLoading((update as ModelStatusUpdate).dataType);
-			}else {
+			} else {
 				var func:Function = _updateListeners[update.updateId];
-				if (func == null) return;
+				if (func == null)
+					return;
 				func(update);
 			}
 		}
 		
 		public function destroy():void {
-			//_updateSignal.removeAll();
-			for each(var model:AbstractModel in _models) {
+			_updateListeners = null;
+			for each (var model:AbstractModel in _models) {
 				model.unregisterForUpdate(this);
 			}
 		}

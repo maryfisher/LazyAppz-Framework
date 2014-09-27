@@ -83,6 +83,7 @@ package maryfisher.framework.model {
 		}
 		
 		public function dispatch(update:BaseModelUpdate):void {
+			if (_status == DATA_WAITING) return;
 			_updateSignal.dispatch(update);
 		}
 		
