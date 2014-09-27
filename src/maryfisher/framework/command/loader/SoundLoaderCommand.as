@@ -5,7 +5,6 @@ package maryfisher.framework.command.loader {
 	import flash.media.Sound;
 	import flash.net.URLRequest;
 	import maryfisher.framework.data.LoaderData;
-	import maryfisher.sound.BaseSound;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...

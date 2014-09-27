@@ -39,6 +39,7 @@ package maryfisher.framework.view.core {
 		public function setUp(stage:Stage, controller:ViewController):void {
 			_stage = stage;
 			_scene = new Sprite();
+			_scene.mouseEnabled = false;
 			_stage.addChild(_scene);
 		}
 		

@@ -1,7 +1,6 @@
 package maryfisher.framework.core {
 	import flash.utils.Dictionary;
 	import maryfisher.framework.command.asset.LoadAssetCommand;
-	import maryfisher.framework.command.CommandSequencer;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.view.LoadingProgress;
 	import maryfisher.framework.data.AssetData;

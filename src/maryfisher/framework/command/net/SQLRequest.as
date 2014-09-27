@@ -4,12 +4,9 @@ package maryfisher.framework.command.net {
 	import flash.data.SQLStatement;
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
-	import flash.filesystem.File;
-	import flash.net.dns.SRVRecord;
-	import maryfisher.framework.command.AbstractCommand;
-	import maryfisher.framework.command.net.INetRequestCallback;
 	import maryfisher.framework.command.net.NetRequest;
 	import maryfisher.framework.data.NetData;
+	import maryfisher.framework.data.NetResultData;
 	
 	/**
 	 * ...
@@ -27,6 +24,7 @@ package maryfisher.framework.command.net {
 		static protected const DATE:String = "DATE";
 		static protected const XML_TYPE:String = "XML";
 		static protected const NONE:String = "NONE";
+        static protected const INT_PRIM:String = INTEGER + PRIMARY_KEY;
         static protected const INT_PRIM_AUT:String = INTEGER + PRIMARY_KEY + AUTOINCREMENT;
 		
 		static protected const LEFT_OUTER_JOIN:String = " LEFT OUTER JOIN ";
@@ -191,7 +189,8 @@ package maryfisher.framework.command.net {
 		}
 		
 		private function onError(e:SQLErrorEvent):void {
-			trace(e.error);
+			trace("[SQLRequst] onError", e.error);
+			finishRequest(new NetResultData(false, null, e.error.message));
 		}
 		
 		public function set connection(value:SQLConnection):void {

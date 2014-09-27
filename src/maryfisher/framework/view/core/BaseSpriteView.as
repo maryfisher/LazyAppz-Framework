@@ -7,7 +7,7 @@ package maryfisher.framework.view.core {
 	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.event.ViewEvent;
 	import maryfisher.framework.view.IViewComponent;
-	import maryfisher.view.ui.component.BaseSprite;
+	import maryfisher.framework.view.core.BaseSprite;
 	
 	/**
 	 * ...

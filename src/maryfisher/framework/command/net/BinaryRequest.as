@@ -20,7 +20,7 @@ package maryfisher.framework.command.net {
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
 			super.execute(requestData, netData, requestSpecs);
 			
-			var url:String = _netData.url;
+			var url:String = requestSpecs;//_netData.url;
 			var request:URLRequest;
 			
 			var _loader:URLLoader = new URLLoader();

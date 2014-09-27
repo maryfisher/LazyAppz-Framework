@@ -1,6 +1,5 @@
 package maryfisher.framework.net {
 	import maryfisher.framework.command.net.NetCommand;
-	import maryfisher.framework.command.net.NetRequest;
 	
 	/**
 	 * ...

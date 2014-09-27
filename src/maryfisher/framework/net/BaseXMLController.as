@@ -1,8 +1,6 @@
 package maryfisher.framework.net {
 	import flash.utils.Dictionary;
-	import maryfisher.framework.command.net.NetCommand;
 	import maryfisher.framework.command.net.NetRequest;
-	import maryfisher.framework.command.net.XMLRequest;
 	/**
 	 * ...
 	 * @author mary_fisher

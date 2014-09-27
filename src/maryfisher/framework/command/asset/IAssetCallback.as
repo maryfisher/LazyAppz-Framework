@@ -1,5 +1,4 @@
 package maryfisher.framework.command.asset {
-	import maryfisher.framework.command.asset.BaseAssetCommand;
 	
 	/**
 	 * ...

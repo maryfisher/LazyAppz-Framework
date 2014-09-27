@@ -36,15 +36,15 @@ package maryfisher.framework.net {
 		private function onNetStatusEvent(event: NetStatusEvent): void {
 			switch (event.info.code) {
 				case NETCONNECTION_CONNECT_FAILED:
-					trace(_("Connection failed!"));
+					trace("Connection failed!");
 					break;
 
 				case NETCONNECTION_CALL_FAILED:
-					trace(_("Calling service failed!"));
+					trace("Calling service failed!");
 					break;
 
 				case NETCONNECTION_CALL_BADVERSION:
-					trace(_("Server Script Error!"));
+					trace("Server Script Error!");
 					break;
 			}
 		}

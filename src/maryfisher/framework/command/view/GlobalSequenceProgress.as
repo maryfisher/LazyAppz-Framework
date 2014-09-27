@@ -9,6 +9,7 @@ package maryfisher.framework.command.view {
 		private var _currentSequence:int;
 		
 		public function GlobalSequenceProgress() {
+			super(0);
 			_sequences = new Vector.<SequenceProgress>();
 			_currentSequence = 0;
 		}

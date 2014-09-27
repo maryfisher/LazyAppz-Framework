@@ -15,7 +15,7 @@ package maryfisher.framework.command.net {
 		
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
 			
-			var bytes:ByteArray = new JPGEncoder(75).encode(requestData);
+			var bytes:ByteArray = new JPGEncoder(75).encode(requestData as BitmapData);
 			
 			super.execute(bytes, netData, requestSpecs);
 		}

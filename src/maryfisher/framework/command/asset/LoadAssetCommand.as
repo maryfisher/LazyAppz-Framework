@@ -1,20 +1,16 @@
 package maryfisher.framework.command.asset {
 	
 	import flash.display.BitmapData;
-	import flash.display.Sprite;
 	import flash.media.Sound;
 	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
-	import maryfisher.framework.command.loader.IImageLoadingCallback;
 	import maryfisher.framework.command.loader.ImageLoaderCommand;
 	import maryfisher.framework.command.loader.LoaderCommand;
 	import maryfisher.framework.command.loader.SoundLoaderCommand;
-	import maryfisher.framework.command.sound.SoundCommand;
 	import maryfisher.framework.command.view.ViewCommand;
 	import maryfisher.framework.core.AssetController;
 	import maryfisher.framework.data.AssetData;
 	import maryfisher.framework.event.ViewEvent;
-	import maryfisher.framework.sound.ISoundComponent;
 	import maryfisher.framework.view.IAssetBuilder;
 	import maryfisher.framework.view.IClonableViewComponent;
 	import maryfisher.framework.view.IImageBuilder;
