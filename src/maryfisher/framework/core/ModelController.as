@@ -5,7 +5,7 @@ package maryfisher.framework.core {
 	import flash.utils.getDefinitionByName;
 	import flash.utils.getQualifiedClassName;
 	import maryfisher.framework.model.AbstractModel;
-	import maryfisher.framework.model.AbstractProxy;
+	import maryfisher.framework.model.AbstractModelProxy;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -48,7 +48,7 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		static public function registerProxy(abstractProxy:AbstractProxy):void {
+		static public function registerProxy(abstractProxy:AbstractModelProxy):void {
 			if (!_instance || !_instance._models) {
 				return;
 			}
@@ -76,7 +76,7 @@ package maryfisher.framework.core {
                         if (methods.length() > 0)
                         {
                             var methodName:String = methods[0].@name;
-                            (registered as AbstractProxy).registerForUpdate(registered[methodName], methodName);
+                            (registered as AbstractModelProxy).registerForUpdate(registered[methodName], methodName);
                         }
                     }
 				}

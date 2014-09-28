@@ -57,11 +57,11 @@ package maryfisher.framework.model {
 			_sequenceListener[cmd.id](cmd);
 		}
 		
-		public function registerForUpdate(abstractProxy:AbstractProxy):void {
+		public function registerForUpdate(abstractProxy:AbstractModelProxy):void {
 			_updateSignal.add(abstractProxy.updateFromModel);
 		}
 		
-		public function unregisterForUpdate(abstractProxy:AbstractProxy):void {
+		public function unregisterForUpdate(abstractProxy:AbstractModelProxy):void {
 			_updateSignal.remove(abstractProxy.updateFromModel);
 		}
 		

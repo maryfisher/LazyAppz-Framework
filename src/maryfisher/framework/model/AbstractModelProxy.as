@@ -7,13 +7,13 @@ package maryfisher.framework.model {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class AbstractProxy {
+	public class AbstractModelProxy {
 		
 		protected var _models:Dictionary;
 		protected var _allModelsLoaded:Boolean = false;
 		private var _updateListeners:Dictionary;
 		
-		public function AbstractProxy() {
+		public function AbstractModelProxy() {
 			_models = new Dictionary();
 			_updateListeners = new Dictionary();
 			

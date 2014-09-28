@@ -19,6 +19,7 @@ package maryfisher.framework.core {
 		
 		static public const Z_NORMAL:int = 0;
 		static public const Z_BOTTOM:int = -1;
+		static public const Z_TOP:int = 1;
 		
 		static private var _instance:ViewController;
 		static private var _isFinished:Boolean;

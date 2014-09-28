@@ -1,6 +1,5 @@
 package maryfisher.framework.command.net {
 	import maryfisher.framework.data.NetData;
-	import maryfisher.framework.model.AbstractProxy;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...

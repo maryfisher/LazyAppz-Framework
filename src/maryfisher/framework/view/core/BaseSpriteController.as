@@ -12,7 +12,9 @@ package maryfisher.framework.view.core {
 	 * @author mary_fisher
 	 */
 	public class BaseSpriteController implements IViewController {
+		
 		private var _id:String;
+		private var _topView:IViewComponent;
 		
 		protected var _stage:Stage;
 		protected var _scene:Sprite;
@@ -25,8 +27,15 @@ package maryfisher.framework.view.core {
 		/* INTERFACE maryfisher.framework.core.IViewController */
 		
 		public function addView(view:IViewComponent):void {
-			if(view.zIndex == ViewController.Z_NORMAL){
+			if (view.zIndex == ViewController.Z_TOP) {
+				_topView = view;
 				_scene.addChild(view as DisplayObject);
+			}else if (view.zIndex == ViewController.Z_NORMAL) {
+				if (_topView) {
+					_scene.addChildAt(view as DisplayObject, _scene.numChildren - 1);
+				}else{
+					_scene.addChild(view as DisplayObject);
+				}
 			}else if (view.zIndex == ViewController.Z_BOTTOM) {
 				_scene.addChildAt(view as DisplayObject, 0);
 			}
