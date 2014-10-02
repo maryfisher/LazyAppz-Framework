@@ -10,7 +10,7 @@ package maryfisher.framework.view.core {
 	 */
 	public class BaseImageBuilder extends Sprite implements IImageBuilder {
 		
-		private var _datas:Dictionary;
+		private var _datas:Dictionary; /* class => BitmapData */
 		
 		public function BaseImageBuilder() {
 			_datas = new Dictionary();

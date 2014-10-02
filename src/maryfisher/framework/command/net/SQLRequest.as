@@ -171,6 +171,14 @@ package maryfisher.framework.command.net {
 		protected function createJoin(table:String, joinTable:String, tableId:String, joinTableId:String, joinType:String):String {
 			return joinType + joinTable + " ON " + table + "." + tableId + "=" + joinTable + "." + joinTableId;
 		}
+        
+        protected function tableInfo(table:String):String {
+            return "PRAGMA table_info(" + table + ")";
+        }
+        
+        protected function userVersion():String {
+            return "PRAGMA user_version";
+        }
 		
 		protected function createStatement(text:String, onResult:Function = null ):void {
 			if (onResult == null) onResult = onCreate;
