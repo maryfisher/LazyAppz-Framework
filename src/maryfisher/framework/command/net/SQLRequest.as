@@ -31,8 +31,8 @@ package maryfisher.framework.command.net {
 		static protected const CROSS_JOIN:String = " CROSS JOIN ";
 		static protected const INNER_JOIN:String = " INNER JOIN ";
 		
-		private var _connection:SQLConnection;
-		private var _statement:SQLStatement;
+		protected var _connection:SQLConnection;
+		protected var _statement:SQLStatement;
 		protected var _requestData:Object;
 		protected var _result:SQLResult;
 		protected var _resultData:Array;
