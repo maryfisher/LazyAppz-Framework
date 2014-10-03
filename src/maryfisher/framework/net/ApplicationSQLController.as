@@ -8,8 +8,8 @@ package maryfisher.framework.net {
         private var _useAppDir:Boolean;
 		
 		public function ApplicationSQLController(path:String, dbFileId:String, controllerID:String, useAppDir:Boolean = true) {
-			super(path, dbFileId, controllerID);
 			_useAppDir = useAppDir;
+			super(path, dbFileId, controllerID);
             
 		}
 		

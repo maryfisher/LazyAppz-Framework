@@ -21,6 +21,7 @@ package maryfisher.framework.net {
 		private var _controllerID:String;
 		private var _connection:SQLConnection;
 		private var _pendingRequests:Vector.<NetCommand>;
+		private var _connectionOpen:Boolean;
 		
 		/** TODO
 		 * database location, encryption
@@ -64,6 +65,7 @@ package maryfisher.framework.net {
         {
 			if (_pendingRequests.length == 0) {
 				_connection.close();
+				_connectionOpen = false;
 			}
             //_connection.removeEventListener(SQLEvent.COMMIT, onCommit);
             
@@ -108,8 +110,9 @@ package maryfisher.framework.net {
 			if (!r)
 				return;
 			_pendingRequests.push(cmd);
-			if (_pendingRequests.length > 1)
+			if (_connectionOpen)
 				return;
+			_connectionOpen = true;
 			_connection.open(_dbFile, "create", false, 512);
 		}
 		
