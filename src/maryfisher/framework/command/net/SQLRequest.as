@@ -201,6 +201,10 @@ package maryfisher.framework.command.net {
 			finishRequest(new NetResultData(false, null, e.error.message));
 		}
 		
+		protected function onSuccess(e:SQLEvent):void {
+			finishRequest(new NetResultData(true));
+		}
+		
 		public function set connection(value:SQLConnection):void {
 			_connection = value;
 		}
