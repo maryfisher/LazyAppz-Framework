@@ -22,6 +22,7 @@ package maryfisher.framework.net {
 			if (_savegame <= 0)
 				return;
             _dbFileId = _prefix + _savegame + _suffix;
+			trace("[DynamicSQLController] createDBFile", _dbFileId);
             super.createDBFile();
 			
 			//var resources:File = File.documentsDirectory;

@@ -25,7 +25,7 @@ package maryfisher.framework.command.net {
 			super.execute(requestData, netData, requestSpecs);
 			
 			var json:String = com.adobe.serialization.json.JSON.encode(requestData);
-			 var _loader:URLLoader = new URLLoader();
+			var _loader:URLLoader = new URLLoader();
 			_loader.addEventListener(Event.COMPLETE, onRequestComplete);
 			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
 			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
@@ -45,7 +45,7 @@ package maryfisher.framework.command.net {
 		
 		override protected function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
-			//trace(loader.data);
+			trace("[JSONRequest] onRequestComplete ", loader.data);
 			var data:Object = com.adobe.serialization.json.JSON.decode(loader.data);
 			if (data) {
 				finishRequest(adjustJSONDataObject(data));

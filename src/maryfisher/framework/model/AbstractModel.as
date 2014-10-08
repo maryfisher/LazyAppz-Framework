@@ -37,8 +37,8 @@ package maryfisher.framework.model {
 			_sequencer.addCommand(new NetCommand(id, requestData, this, "", false));
 		}
 		
-		protected function startSequencer():void {
-			_status = DATA_WAITING;
+		protected function startSequencer(doWaiting:Boolean = true):void {
+			if(doWaiting) _status = DATA_WAITING;
 			_sequencer.finishedExecutionSignal.addOnce(onFinished);
 			_sequencer.execute();
 		}
