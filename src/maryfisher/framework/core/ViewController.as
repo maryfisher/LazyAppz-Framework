@@ -92,11 +92,19 @@ package maryfisher.framework.core {
 		}
 		
 		static public function registerCommand(viewCommand:ViewCommand):void {
+            if (!_instance) {
+                trace("[ViewController] registerCommand - no instance of ViewController available! Trying to add view component '", viewCommand.view, "' of type '", viewCommand.viewType, "' with command type:", viewCommand.viewCommandType);
+                return;
+            }
 			_instance.executeCommand(viewCommand);
 			
 		}
 		
 		static public function registerStageCommand(stageCommand:StageCommand):void {
+            if (!_instance) {
+                trace("[ViewController] registerStageCommand - no instance of ViewController!");
+                return;
+            }
 			_instance.executeStageCommand(stageCommand);
 		}
 		

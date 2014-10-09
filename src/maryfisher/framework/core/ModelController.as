@@ -18,7 +18,6 @@ package maryfisher.framework.core {
 		
 		public function ModelController() {
 			_modelUpdates = new Dictionary();
-			
 		}
 		
 		static private function getInstance():ModelController {
@@ -31,7 +30,6 @@ package maryfisher.framework.core {
 		
 		static public function init(models:Dictionary):void {
 			getInstance()._models = models;
-			
 		}
 		
 		static public function initModels():void {
@@ -49,10 +47,27 @@ package maryfisher.framework.core {
 		}
 		
 		static public function registerProxy(abstractProxy:AbstractModelProxy):void {
-			if (!_instance || !_instance._models) {
+			if (!_instance) {
+                trace("[ModelController] registerProxy - no instance of ModelController available! Trying to inject into ", abstractProxy);
 				return;
 			}
+            if (!_instance._models) {
+                trace("[ModelController] registerProxy - no model mapping available! Trying to inject into ", abstractProxy);
+                return;
+            }
 			_instance.register(abstractProxy);
+		}
+		
+		static public function registerForModel(reg:*):void {
+			if (!_instance) {
+                trace("[ModelController] registerProxy - no instance of ModelController available! Trying to inject into ", reg);
+				return;
+			}
+            if (!_instance._models) {
+                trace("[ModelController] registerProxy - no model mapping available! Trying to inject into ", reg);
+                return;
+            }
+			_instance.register(reg);
 		}
 		
 		private function register(registered:*):void {
@@ -66,9 +81,10 @@ package maryfisher.framework.core {
 					if (accessors.length() > 0) {
 						registered[accessors[0].@name] = model;
 						registered.addModel(getDefinitionByName(modelName), model);
-						
-						
 					}
+                    
+                    if (!(registered is AbstractModelProxy) continue;
+                    
                     var constants:Array = _modelUpdates[modelName];
                     for each (var constantName:String in constants) 
                     {
@@ -81,13 +97,6 @@ package maryfisher.framework.core {
                     }
 				}
 			}
-		}
-		
-		static public function registerForModel(reg:*):void {
-			if (!_instance._models) {
-				return;
-			}
-			_instance.register(reg);
 		}
 	}
 }

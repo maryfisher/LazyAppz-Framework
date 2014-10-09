@@ -41,6 +41,10 @@ package maryfisher.framework.core {
 		}
 		
 		static public function registerCommand(cmd:NetCommand):void {
+            if (!_instance) {
+                trace("[NetController] registerCommand - no instance of NetController available! Trying to send request with id:", cmd.id);
+                return;
+            }
 			_instance.netrequest = cmd;
 		}
 		

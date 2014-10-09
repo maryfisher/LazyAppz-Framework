@@ -46,6 +46,10 @@ package maryfisher.framework.core {
 		}
 		
 		static public function registerAssetCommand(cmd:LoadAssetCommand):void {
+            if (!_instance) {
+                trace("[AssetController] registerAssetCommand - no instance of AssetController available! Trying to load asset with id:", cmd.id);
+                return;
+            }
 			_instance.executeAssetCommand(cmd);
 		}
 		
