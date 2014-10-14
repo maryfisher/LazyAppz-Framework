@@ -22,20 +22,21 @@ package maryfisher.framework.net {
 			if (_savegame <= 0)
 				return;
             _dbFileId = _prefix + _savegame + _suffix;
-			trace("[DynamicSQLController] createDBFile", _dbFileId);
+			trace("[DynamicIdSQLController] createDBFile", _dbFileId);
             super.createDBFile();
-			
-			//var resources:File = File.documentsDirectory;
-			//var ssc:File = new File(resources.nativePath + _path);
-			//ssc.createDirectory();
-			//_dbFile = ssc.resolvePath(_prefix + _savegame + _dbFileId);
 		}
 		
 		override public function registerRequest(cmd:NetCommand):void {
 			_savegame = int(cmd.requestSpecs);
 			createDBFile();
-			if (!_dbFile)
+			if (!_dbFile) {
+				if(CONFIG::debug){
+					trace("[DynamicIdSQLController] registerRequest no id for db file specified.");
+				}else {
+					throw new Error("[DynamicIdSQLController] registerRequest no id for db file specified.");
+				}
 				return;
+			}
 			
 			super.registerRequest(cmd);
 		}

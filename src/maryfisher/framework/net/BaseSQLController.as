@@ -1,12 +1,10 @@
 package maryfisher.framework.net {
-	import adobe.utils.CustomActions;
 	import flash.data.SQLConnection;
 	import flash.data.SQLTransactionLockType;
 	import flash.events.SQLErrorEvent;
 	import flash.events.SQLEvent;
 	import flash.filesystem.File;
 	import maryfisher.framework.command.net.NetCommand;
-	import maryfisher.framework.command.net.NetRequest;
 	import maryfisher.framework.command.net.SQLRequest;
 	
 	/**
@@ -24,7 +22,7 @@ package maryfisher.framework.net {
 		private var _connectionOpen:Boolean;
 		
 		/** TODO
-		 * database location, encryption
+		 * database encryption
 		 */
 		
 		public function BaseSQLController(path:String, dbFileId:String, controllerID:String) {
@@ -50,39 +48,34 @@ package maryfisher.framework.net {
 		
 		private function onOpenError(e:SQLErrorEvent):void {
 			// If a transaction is happening, roll it back
-            if (_connection.inTransaction)
-            {
-                _connection.addEventListener(SQLEvent.ROLLBACK, onRollback);
-                _connection.rollback();
-            }
-            
-            trace("[BaseSQLController]", e.error.message);
-            trace("[BaseSQLController]", e.error.details);
+			if (_connection.inTransaction) {
+				_connection.addEventListener(SQLEvent.ROLLBACK, onRollback);
+				_connection.rollback();
+			}
+			
+			trace("[BaseSQLController]", e.error.message);
+			trace("[BaseSQLController]", e.error.details);
 		}
-        
-        // Called after the transaction is committed
-        private function onCommit(event:SQLEvent):void
-        {
+		
+		// Called after the transaction is committed
+		private function onCommit(event:SQLEvent):void {
 			if (_pendingRequests.length == 0) {
 				_connection.close();
 				_connectionOpen = false;
+				trace("[BaseSQLController] commitHandler: Transaction complete");
 			}
-            //_connection.removeEventListener(SQLEvent.COMMIT, onCommit);
-            
-            trace("[BaseSQLController] commitHandler: Transaction complete");
-        }
-        
-        // Called when the transaction is rolled back
-        private function onRollback(event:SQLEvent):void
-        {
-            _connection.removeEventListener(SQLEvent.ROLLBACK, onRollback);
-            
-            // add additional error handling, close the database, etc.
-        }
+			
+		}
+		
+		// Called when the transaction is rolled back
+		private function onRollback(event:SQLEvent):void {
+			_connection.removeEventListener(SQLEvent.ROLLBACK, onRollback);
+		
+			// add additional error handling, close the database, etc.
+		}
 		
 		private function onDatabaseOpen(e:SQLEvent):void {
-			_connection.begin(SQLTransactionLockType.IMMEDIATE);
-			//sendNextRequest();
+			_connection.begin(SQLTransactionLockType.EXCLUSIVE);
 		}
 		
 		private function onRequestFinished(cmd:NetCommand):void {
@@ -93,10 +86,10 @@ package maryfisher.framework.net {
 			var cmd:NetCommand = _pendingRequests.shift();
 			if (!cmd) {
 				trace("[BaseSQLController] sendNextRequest: Commit transaction");
-				//_connection.close();
 				_connection.commit();
 				return;
 			}
+			trace("[BaseSQLController] sendNextRequest:", _dbFile.nativePath);
 			var r:SQLRequest = (cmd.netRequest as SQLRequest);
 			r.connection = _connection;
 			cmd.requestFinished.addOnce(onRequestFinished);
@@ -109,6 +102,7 @@ package maryfisher.framework.net {
 			var r:SQLRequest = (cmd.netRequest as SQLRequest);
 			if (!r)
 				return;
+			trace("[BaseSQLController] registerRequest:", cmd.id, "connection open:", _connectionOpen);
 			_pendingRequests.push(cmd);
 			if (_connectionOpen)
 				return;
@@ -121,17 +115,12 @@ package maryfisher.framework.net {
 			var ssc:File = new File(resources.nativePath + _path);
 			ssc.createDirectory();
 			_dbFile = ssc.resolvePath(_dbFileId);
-			//throw new Error("[BaseSQLController] createDBFile: Please overwrite this method!")
 		}
 		
 		/* INTERFACE maryfisher.framework.net.INetController */
 		
 		public function get controllerID():String {
 			return _controllerID;
-		}
-		
-		public function get requestType():String {
-			return NetRequest.TYPE_SQLLITE;
 		}
 	
 	}
