@@ -11,15 +11,17 @@ package maryfisher.framework.model {
 		
 		protected var _models:Dictionary;
 		protected var _allModelsLoaded:Boolean = false;
+		private var _priority:int;
 		private var _updateListeners:Dictionary;
 		
-		public function AbstractModelProxy() {
+		public function AbstractModelProxy(priority:int = 0) {
+			_priority = priority;
 			_models = new Dictionary();
 			_updateListeners = new Dictionary();
 			
 			ModelController.registerProxy(this);
 			
-			dataFinishedLoading("");
+			dataFinishedLoading(AbstractModel.LATEST_DATA);
 		}
 		
 		public function addModel(modelType:Class, model:AbstractModel):void {
@@ -32,7 +34,7 @@ package maryfisher.framework.model {
 			
 			for each (var model:AbstractModel in _models) {
 				if (model.status == AbstractModel.DATA_WAITING) {
-					//trace("[AbstractProxy] dataFinishedLoading", this, "model not loaded", model);
+					trace("[AbstractProxy] dataFinishedLoading", this, "model not loaded", model);
 					dataLoaded = false;
 					break;
 				}
@@ -68,6 +70,10 @@ package maryfisher.framework.model {
 			for each (var model:AbstractModel in _models) {
 				model.unregisterForUpdate(this);
 			}
+		}
+		
+		public function get priority():int {
+			return _priority;
 		}
 	}
 }

@@ -4,6 +4,7 @@ package maryfisher.framework.model {
 	import maryfisher.framework.command.CommandSequencer;
 	import maryfisher.framework.command.net.INetRequestCallback;
 	import maryfisher.framework.command.net.NetCommand;
+	import org.osflash.signals.DeluxeSignal;
 	import org.osflash.signals.Signal;
 	/**
 	 * ...
@@ -13,8 +14,11 @@ package maryfisher.framework.model {
 		//static public const DATA_READY:String = "modelDataReady";
 		public static const DATA_LOADED:String = 'modelDataLoaded';
 		public static const DATA_WAITING:String = 'modelDataWaiting';
+		static public const INITIAL_DATA:String = "initialData";
+		static public const LATEST_DATA:String = "latestData";
 		
-		private var _updateSignal:Signal;
+		private var _updateSignal:DeluxeSignal;
+		//private var _updateSignal:Signal;
 		private var _status:String;
 		private var _sequencer:CommandSequencer;
 		private var _sequenceListener:Dictionary;
@@ -22,8 +26,10 @@ package maryfisher.framework.model {
 		//private var _signature:Class; /* eg IThisModelProxy */
 		
 		public function AbstractModel() {
-			_updateSignal = new Signal(BaseModelUpdate);
+			_updateSignal = new DeluxeSignal(BaseModelUpdate);
+			//_updateSignal = new Signal(BaseModelUpdate);
 			_status = DATA_WAITING;
+			_dataType = INITIAL_DATA;
 		}
 		
 		public function init():void {
@@ -32,9 +38,9 @@ package maryfisher.framework.model {
 			_sequencer = new CommandSequencer();
 		}
 		
-		protected function addNetCommand(id:String, onComplete:Function, requestData:Object = null):void {
+		protected function addNetCommand(id:String, onComplete:Function, requestData:Object = null, requestSpecs:String = ""):void {
 			_sequenceListener[id] = onComplete;
-			_sequencer.addCommand(new NetCommand(id, requestData, this, "", false));
+			_sequencer.addCommand(new NetCommand(id, requestData, this, requestSpecs, false));
 		}
 		
 		protected function startSequencer(doWaiting:Boolean = true):void {
@@ -43,7 +49,7 @@ package maryfisher.framework.model {
 			_sequencer.execute();
 		}
 		
-		private function onFinished():void {
+		protected function onFinished():void {
 			status = DATA_LOADED;
 		}
 		
@@ -58,7 +64,7 @@ package maryfisher.framework.model {
 		}
 		
 		public function registerForUpdate(abstractProxy:AbstractModelProxy):void {
-			_updateSignal.add(abstractProxy.updateFromModel);
+			_updateSignal.addWithPriority(abstractProxy.updateFromModel, abstractProxy.priority);
 		}
 		
 		public function unregisterForUpdate(abstractProxy:AbstractModelProxy):void {
@@ -89,6 +95,10 @@ package maryfisher.framework.model {
 		
 		public function get className():String {
 			return getQualifiedClassName(this);
+		}
+		
+		public function get dataType():String {
+			return _dataType;
 		}
 	}
 

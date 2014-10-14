@@ -83,7 +83,7 @@ package maryfisher.framework.core {
 						registered.addModel(getDefinitionByName(modelName), model);
 					}
                     
-                    if (!(registered is AbstractModelProxy) continue;
+                    if (!(registered is AbstractModelProxy)) continue;
                     
                     var constants:Array = _modelUpdates[modelName];
                     for each (var constantName:String in constants) 
