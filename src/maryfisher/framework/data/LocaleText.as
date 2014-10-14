@@ -51,7 +51,7 @@ package maryfisher.framework.data {
 					}
 					var str:String = item.toXMLString();
 					index = text.indexOf(str, index + 1);
-					vec.push(new LocaleTextParameter(item, formattedText.indexOf(str), index));
+					vec.push(new LocaleTextParameter(item.name(), item, formattedText.indexOf(str), index));
 					formattedText = formattedText.replace(str, "");
 				}
 			//}catch (e:Error) {

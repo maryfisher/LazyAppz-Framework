@@ -21,7 +21,7 @@ package maryfisher.framework.core {
 		}
 		
 		static public function setTexts(texts:Array):void {
-			_texts && (_texts = new Dictionary());
+			!_texts && (_texts = new Dictionary());
 			for each (var item:Object in texts) {
 				var localeData:LocaleData = new LocaleData(item);
 				_texts[localeData.context + "_" + localeData.id] = localeData;

@@ -47,6 +47,10 @@ package maryfisher.framework.model {
 			//dispatch(new BaseLocaleUpdate(ON_LANGUAGE_CHANGED, _language));
 		}
 		
+		public function get language():String {
+			return _language;
+		}
+		
 	}
 
 }
