@@ -12,10 +12,6 @@ package maryfisher.framework.net {
 			
 		}
 		
-		override public function get requestType():String {
-			return NetRequest.TYPE_XML;
-		}
-		
 	}
 
 }

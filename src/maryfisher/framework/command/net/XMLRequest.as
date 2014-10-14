@@ -12,8 +12,7 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class XMLRequest extends NetRequest {
-		private var _baseUrl:String;
+	public class XMLRequest extends BaseURLRequest {
 		
 		public function XMLRequest() {
 			
@@ -22,37 +21,28 @@ package maryfisher.framework.command.net {
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
 			super.execute(requestData, netData, requestSpecs);
 			
-			var _url:String = netData.id;
-			var _loader:URLLoader = new URLLoader();
-			_loader.dataFormat = URLLoaderDataFormat.TEXT;
-			_loader.addEventListener(Event.COMPLETE, onRequestComplete);
-			_loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
-			_loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
+			//var _url:String = netData.id;
+			var loader:URLLoader = new URLLoader();
+			loader.dataFormat = URLLoaderDataFormat.TEXT;
+			loader.addEventListener(Event.COMPLETE, onRequestComplete);
+			loader.addEventListener(IOErrorEvent.IO_ERROR, onRequestError);
+			loader.addEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			
-			var request:URLRequest = new URLRequest(_baseUrl + _url + requestSpecs);
+			var request:URLRequest = new URLRequest(_baseUrl + _url + requestSpecs + ".xml");
 			request.method = URLRequestMethod.POST;
-			
-			_loader.load(request);
+			trace("[XMLRequest] execute load:", _baseUrl + _url + requestSpecs + ".xml");
+			loader.load(request);
 		}
 		
-		private function onSecurityError(e:SecurityErrorEvent):void {
-			
-		}
-		
-		private function onRequestError(e:IOErrorEvent):void {
-			
-		}
-		
-		protected function onRequestComplete(e:Event):void {
+		override protected function onRequestComplete(e:Event):void {
 			var loader:URLLoader = URLLoader(e.target);
+			loader.removeEventListener(Event.COMPLETE, onRequestComplete);
+			loader.removeEventListener(IOErrorEvent.IO_ERROR, onRequestError);
+			loader.removeEventListener(SecurityErrorEvent.SECURITY_ERROR, onSecurityError);
 			var data:XML = XML(loader.data);
 			if (data) {
 				finishRequest(data);
 			}
-		}
-		
-		override public function get requestType():String {
-			return TYPE_XML;
 		}
 	}
 

@@ -8,9 +8,9 @@ package maryfisher.framework.command.net {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class JPGRequest extends BinaryRequest {
+	public class JPGJSONRequest extends BinaryRequest {
 		
-		public function JPGRequest(){
+		public function JPGJSONRequest(){
 		}
 		
 		override public function execute(requestData:Object, netData:NetData, requestSpecs:String):void {
