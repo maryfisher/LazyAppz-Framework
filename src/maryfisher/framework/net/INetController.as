@@ -8,7 +8,6 @@ package maryfisher.framework.net {
 	public interface INetController {
 		function registerRequest(cmd:NetCommand):void;
 		function get controllerID():String;
-		function get requestType():String;
 	}
 	
 }
