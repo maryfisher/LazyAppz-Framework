@@ -68,8 +68,14 @@ package maryfisher.framework.data {
 				var endIndex:int = ltp.indexFormatted + ltp.text.length;
 				var paramType1:String = ltp.getAttributeNameByPos();
 				var paramType2:String = ltp.getAttributeValByPos();
+				var contentText:String;
+				if (ltp.text.length > 0) {
+					contentText = ltp.text;
+				}else {
+					paramMap.getContent(paramType1, paramType2);
+				}
 				
-				var spanStr:String = '<span class="' + paramMap.getCssClass(paramType1, paramType2) + '">' + ltp.text + '</span>';
+				var spanStr:String = '<span class="' + paramMap.getCssClass(paramType1, paramType2) + '">' + contentText + '</span>';
 				if (addLinks) {
 					spanStr ='<a href="event:' + paramMap.getLink(paramType1, paramType2) + '">' + spanStr + '</a>'
 				}
