@@ -9,11 +9,12 @@ package maryfisher.framework.data {
 		private var _text:String;
 		public var paramText:String;
 		public var formattedText:String;
-		private var _parameters:Dictionary; //elmId => XML
+		public var formattedHTMLText:String;
+		private var _parameters:Dictionary; //paramId => Vector.<LocaleTextParameter>
+		private var _allParameters:Vector.<LocaleTextParameter>; //paramId => Vector.<LocaleTextParameter>
 		
 		public function LocaleText(text:String) {
 			this.text = text || "";
-			
 		}
 		
 		public function getParams(param:String):Vector.<LocaleTextParameter> {
@@ -36,50 +37,44 @@ package maryfisher.framework.data {
 			_text = _text.split("\\\"").join("'");
 			_text = _text.split("\\\'").join('"');
 			_text = _text.replace(/\\n/g, '\n');
-			formattedText = text;
+			formattedText = _text;
 			
 			_parameters = new Dictionary();
+			_allParameters = new Vector.<LocaleTextParameter>();
 			var index:int = -1;
-			//if (this.text.indexOf("<pause") != -1 || this.text.indexOf("<option") != -1) {
-			//try {
-				var xml:XML = XML("<elm>" + formattedText + "</elm>");
-				for each (var item:XML in xml.elements("*")) {
-					var vec:Vector.<LocaleTextParameter> = _parameters[item.name()];
-					if (!vec) {
-						vec = new Vector.<LocaleTextParameter>();
-						_parameters[item.name()] = vec;
-					}
-					var str:String = item.toXMLString();
-					index = text.indexOf(str, index + 1);
-					vec.push(new LocaleTextParameter(item.name(), item, formattedText.indexOf(str), index));
-					formattedText = formattedText.replace(str, "");
+			var xml:XML = XML("<elm>" + formattedText + "</elm>");
+			for each (var item:XML in xml.elements("*")) {
+				var vec:Vector.<LocaleTextParameter> = _parameters[item.name()];
+				if (!vec) {
+					vec = new Vector.<LocaleTextParameter>();
+					_parameters[item.name()] = vec;
 				}
-			//}catch (e:Error) {
-				//trace("ERROR:", formattedText);
-			//}
+				var str:String = item.toXMLString();
+				index = text.indexOf(str, index + 1);
+				var ltp:LocaleTextParameter = new LocaleTextParameter(item.name(), item, formattedText.indexOf(str), index);
+				vec.push(ltp);
+				_allParameters.push(ltp);
+				formattedText = formattedText.replace(str, item.toString());
+			}
 			
-			//var index:int = -1;
-			//var i:int;
-			//for (var key:String in _parameters) {
-				//vec = _parameters[key];
-				//while ((index = this.text.indexOf("<" + key, index + 1)) != -1) {
-					//var elm:XML = xml.elements(key)[i];
-					//vec.push(new LocaleTextParameter(elm, index));
-					//formattedText = formattedText.replace(elm.toXMLString(), "");
-				//}
-				//i++;
-			//}
-			
-			//_breaks = new Vector.<int>();
-			//while ((index = this.text.indexOf("<pause time=", index + 1)) != -1) {
-				//formattedText = formattedText.replace(/<pause time=\"[0-9]*\.[0-9]\"\/\>/g, "");
-				//_breaks.push(index);
-			//}
-			//index = -1;
-			//while ((index = this.text.indexOf("<option", index + 1)) != -1) {
-				//formattedText = formattedText.replace(/<option id=\"\"\>/g, "");
-				//trace(formattedText);
-			//}
+		}
+		
+		public function formatToHTML(paramMap:LocaleTextParamMap, paramId:String = "param", addLinks:Boolean = false):void {
+			formattedHTMLText = formattedText;
+			for (var i:int = _allParameters.length - 1; i >= 0; i--) {
+				var ltp:LocaleTextParameter = _allParameters[i];
+				if (ltp.id != paramId) continue;
+				var startIndex:int = ltp.indexFormatted;
+				var endIndex:int = ltp.indexFormatted + ltp.text.length;
+				var paramType1:String = ltp.getAttributeNameByPos();
+				var paramType2:String = ltp.getAttributeValByPos();
+				
+				var spanStr:String = '<span class="' + paramMap.getCssClass(paramType1, paramType2) + '">' + ltp.text + '</span>';
+				if (addLinks) {
+					spanStr ='<a href="event:' + paramMap.getLink(paramType1, paramType2) + '">' + spanStr + '</a>'
+				}
+				formattedHTMLText = formattedHTMLText.substring(0, startIndex) + spanStr + formattedHTMLText.substring(endIndex, formattedHTMLText.length)
+			}
 		}
 		
 		public function getShortened(length:int = 20):String {
@@ -87,10 +82,6 @@ package maryfisher.framework.data {
 				return text;
 			}
 			return text.substr(0, length) + "...";
-		}
-		
-		public function getParameters():void {
-			
 		}
 		
 		public function clone():LocaleText {
