@@ -34,7 +34,7 @@ package maryfisher.framework.model {
 			
 			for each (var model:AbstractModel in _models) {
 				if (model.status == AbstractModel.DATA_WAITING) {
-					trace("[AbstractProxy] dataFinishedLoading", this, "model not loaded", model);
+					//trace("[AbstractProxy] dataFinishedLoading", this, "model not loaded", model);
 					dataLoaded = false;
 					break;
 				}
