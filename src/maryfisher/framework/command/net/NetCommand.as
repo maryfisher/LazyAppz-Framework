@@ -57,7 +57,7 @@ package maryfisher.framework.command.net {
 			_netRequest.execute(_requestData, _netData, _requestSpecs);
 		}
 		
-		protected function finishRequest(data:Object):void {
+		public function finishRequest(data:Object):void {
 			_resultData = data;
 			_requestFinished.dispatch(this);
 			_finishedExecutionSignal.dispatch();

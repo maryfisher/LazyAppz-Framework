@@ -36,7 +36,7 @@ package maryfisher.framework.model {
 		
 		public function getText(context:String, id:String):LocaleData {
 			var ld:LocaleData = _texts[context + "_" + id];
-			if (!ld) ld = new LocaleData("");
+			if (!ld) ld = new LocaleData({id: id, context: context});
 			ld.language = _language;
 			return ld;
 		}
