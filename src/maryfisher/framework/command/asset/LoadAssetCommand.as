@@ -2,6 +2,7 @@ package maryfisher.framework.command.asset {
 	
 	import flash.display.BitmapData;
 	import flash.media.Sound;
+	import flash.utils.getQualifiedClassName;
 	import maryfisher.framework.command.AbstractCommand;
 	import maryfisher.framework.command.loader.AssetLoaderCommand;
 	import maryfisher.framework.command.loader.ImageLoaderCommand;
@@ -23,7 +24,6 @@ package maryfisher.framework.command.asset {
 	 */
 	public class LoadAssetCommand extends AbstractCommand {
 		
-		//private var _callback:IAssetCallback;
 		private var _image:BitmapData;
 		private var _obj:Object;
 		private var _imageBuilder:IImageBuilder;
@@ -52,8 +52,6 @@ package maryfisher.framework.command.asset {
 			_finishedLoading.addOnce(callback.assetFinished);
 			
 			super(executeImmediatly);
-			//if(executeImediatly)
-				//execute();
 		}
 		
 		override public function execute():void {
@@ -61,9 +59,6 @@ package maryfisher.framework.command.asset {
 		}
 		
 		public function loadAsset(asData:AssetData):void {
-			/** TODO
-			 * 
-			 */
 			if(!asData || asData.assetClass == AssetLoaderCommand){
 				new AssetLoaderCommand(id, fileId, onAssetFinished);
 			}else if (asData.assetClass == SoundLoaderCommand) {
@@ -76,11 +71,7 @@ package maryfisher.framework.command.asset {
 		}
 		
 		private function onAssetFinished(cmd:LoaderCommand):void {
-			
-			//var obj:Sprite = (cmd as AssetLoaderCommand).asset;
-			
 			buildAsset(cmd.asset);
-			
 		}
 		
 		public function buildAsset(obj:*):void {
@@ -95,7 +86,6 @@ package maryfisher.framework.command.asset {
 				}
 			}else if (obj is IClonableViewComponent) {
 				_clonableViewComponent = (obj as IClonableViewComponent);
-				//_clonableViewComponent.addOnFinished(onClonableViewFinished);
 				_clonableViewComponent.addListener(ViewEvent.ON_FINISHED, onClonableViewFinished);
 				_clonableViewComponent.checkFinished();
 				return;
@@ -106,15 +96,11 @@ package maryfisher.framework.command.asset {
 				//_spriteSheet = obj as ISpriteSheet;
 			}else if (obj is IViewComponent) {
 				_viewComponent = obj as IViewComponent;
-				//_viewComponent.addOnFinished(onViewFinished);
 				_viewComponent.addListener(ViewEvent.ON_FINISHED, onViewFinished);
 				_viewComponent.checkFinished();
 				
 				return;
 			}else if (obj is Sound) {
-				/** TODO
-				 * 
-				 */
 				_soundComponent = (obj as Sound);
 			}else if (obj is BitmapData) {
 				_image = obj as BitmapData;
@@ -123,19 +109,19 @@ package maryfisher.framework.command.asset {
 			}else if (obj is IImageBuilder) {
 				_imageBuilder = obj as IImageBuilder;
 			}else {
-				//_loader = 
 				_obj = obj;
-				trace("[LoadAssetCommand] buildAsset: Problem with the asset type!", obj);
+				trace("[LoadAssetCommand] buildAsset: Problem with asset type:", getQualifiedClassName(obj));
 			}
 			setFinished();
 		}
 		
 		protected function onClonableViewFinished(e:ViewEvent):void {
+			/* TODO
+			 * original is never used
+			 */
 			_viewComponent = _clonableViewComponent.clone();
-			//if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			_viewComponent.addListener(ViewEvent.ON_FINISHED, onViewFinished);
 			_viewComponent.checkFinished();
-			//setFinished();
 		}
 		
 		public function setFinished():void {
@@ -144,13 +130,7 @@ package maryfisher.framework.command.asset {
 		}
 		
 		protected function onViewFinished(e:ViewEvent):void {
-			/* TODO
-			 * original is never used
-			 */
-			//if (_viewComponent is IClonableViewComponent) {
-				//_clonableViewComponent = (_viewComponent as IClonableViewComponent)
-				//_viewComponent = _clonableViewComponent.clone();
-			//}
+			
 			if (_addView) new ViewCommand(_viewComponent, ViewCommand.ADD_VIEW);
 			setFinished();
 		}

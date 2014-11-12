@@ -1,13 +1,10 @@
 package maryfisher.framework.view.core {
 	import flash.display.DisplayObject;
-	import flash.display.Sprite;
-	import flash.events.Event;
 	import maryfisher.framework.command.view.ViewCommand;
-	import maryfisher.framework.core.IKeyListener;
 	import maryfisher.framework.core.ViewController;
 	import maryfisher.framework.event.ViewEvent;
-	import maryfisher.framework.view.IViewComponent;
 	import maryfisher.framework.view.core.BaseSprite;
+	import maryfisher.framework.view.IViewComponent;
 	
 	/**
 	 * ...
@@ -28,13 +25,6 @@ package maryfisher.framework.view.core {
 			dispatchEvent(new ViewEvent(ViewEvent.ON_FINISHED));
 		}
 		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
-		
-		//public function addOnFinished(listener:Function):void {
-			//listener(null);
-			//addEventListener(ViewEvent.ON_FINISHED, listener);
-		//}
-		
 		public function checkFinished():void {
 			if(_dispatchFinish) dispatchFinishedLoading();
 		}
@@ -42,10 +32,6 @@ package maryfisher.framework.view.core {
 		public function destroy():void {
 			
 		}
-		
-		//public function addListener(type:String, listener:Function, useCapture:Boolean = false, priority:int = 0, useWeakReference:Boolean = false):void {
-			//addEventListener(type, listener, useCapture, priority, useWeakReference);
-		//}
 		
 		public function addView():void {
 			new ViewCommand(this);
@@ -71,14 +57,6 @@ package maryfisher.framework.view.core {
 			visible = false;
 		}
 		
-		//public function dispatch(e:Event):void {
-			//dispatchEvent(e);
-		//}
-		
-		//public function removeListener(type:String, listener:Function, useCapture:Boolean = false):void {
-			//removeEventListener(type, listener, useCapture);
-		//}
-		
 		public function addViewComponent(comp:IViewComponent):void {
 			addChild(comp as DisplayObject);
 		}
@@ -87,22 +65,13 @@ package maryfisher.framework.view.core {
 			removeChild(comp as DisplayObject);
 		}
 		
-		/* INTERFACE maryfisher.framework.view.IViewComponent */
-		
 		public function get zIndex():int {
 			return ViewController.Z_NORMAL;
 		}
-		
-		//public function hasListener(type:String):Boolean {
-			//return hasEventListener(type);
-		//}
 		
 		public function get componentType():String {
 			throw new Error("Override this method to set the correct componentType");
 			return "";
 		}
-		
-		
 	}
-
 }
