@@ -12,17 +12,18 @@ package maryfisher.framework.core {
 	 */
 	public class ModelController {
 		
-		protected var _models:Dictionary;
 		static private var _instance:ModelController;
+		
+		private var _models:Dictionary;
         private var _modelUpdates:Dictionary;
 		
-		public function ModelController() {
+		public function ModelController(blocker:SingletonBlocker) {
 			_modelUpdates = new Dictionary();
 		}
 		
 		static private function getInstance():ModelController {
 			if (!_instance) {
-				_instance = new ModelController();
+				_instance = new ModelController(new SingletonBlocker());
 				
 			}
 			return _instance;
@@ -98,5 +99,11 @@ package maryfisher.framework.core {
 				}
 			}
 		}
+	}
+}
+
+internal class SingletonBlocker {
+	public function SingletonBlocker() {
+		
 	}
 }

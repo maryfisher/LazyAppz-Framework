@@ -28,7 +28,7 @@ package maryfisher.framework.core {
 		private var _queuedLoader:Vector.<LoaderCommand>;
 		private var _prioritizedLoader:Vector.<LoaderCommand>;
 		
-		public function AssetController() {
+		public function AssetController(blocker:SingletonBlocker) {
 			
 			_cachedAssets = new Dictionary();
 			_cachedLoadedAssets = new Dictionary();
@@ -37,12 +37,18 @@ package maryfisher.framework.core {
 			_prioritizedLoader = new Vector.<LoaderCommand>();
 		}
 		
-		static public function getInstance():AssetController {
+		static private function getInstance():AssetController {
 			if (!_instance) {
-				_instance = new AssetController();
+				_instance = new AssetController(new SingletonBlocker());
 				
 			}
 			return _instance;
+		}
+		
+		static public function init(paths:Dictionary, mapping:Dictionary):void {
+			getInstance()._paths = paths;
+			getInstance()._mapping = mapping;
+			
 		}
 		
 		static public function registerAssetCommand(cmd:LoadAssetCommand):void {
@@ -53,7 +59,23 @@ package maryfisher.framework.core {
 			_instance.executeAssetCommand(cmd);
 		}
 		
-		public function executeAssetCommand(cmd:LoadAssetCommand):void {
+		static public function registerLoaderCommand(cmd:LoaderCommand):void {
+			if (!_instance) {
+                trace("[AssetController] registerLoaderCommand - no instance of AssetController available! Trying to load asset with id:", cmd.id);
+                return;
+            }
+			_instance.executeLoaderCommand(cmd);
+		}
+		
+		static public function registerForLoaderData(request:ILoaderDataRequest):void {
+			if (!_instance) {
+                trace("[AssetController] getLoaderData - no instance of AssetController available! Trying to get LoaderData with id:", request.loaderDataId);
+                return;
+            }
+			request.loaderData = _instance._paths[request.loaderDataId];
+		}
+		
+		private function executeAssetCommand(cmd:LoadAssetCommand):void {
 			var obj:*;
 			if (_cachedAssets[cmd.id + cmd.fileId] == null) {
 				var asData:AssetData = _mapping[cmd.id];
@@ -69,12 +91,6 @@ package maryfisher.framework.core {
 			}
 			
 			cmd.buildAsset(obj);
-		}
-		
-		static public function init(paths:Dictionary, mapping:Dictionary):void {
-			getInstance()._paths = paths;
-			getInstance()._mapping = mapping;
-			
 		}
 		
 		private function executeLoaderCommand(cmd:LoaderCommand):void {
@@ -108,7 +124,7 @@ package maryfisher.framework.core {
 			cmd.loadAsset(ld);
 		}
 		
-		public function unloadAsset(id:String):void {
+		private function unloadAsset(id:String):void {
 			_cachedLoadedAssets[id] = null;
 			_cachedAssets[id] = null;
 		}
@@ -135,14 +151,12 @@ package maryfisher.framework.core {
 			}
 		}
 		
-		static public function registerLoaderCommand(cmd:LoaderCommand):void {
-			_instance.executeLoaderCommand(cmd);
-		}
-		
-		static public function getLoaderData(id:String):LoaderData {
-			return _instance._paths[id];
-		}
-		
 	}
 
+}
+
+internal class SingletonBlocker {
+	public function SingletonBlocker() {
+		
+	}
 }
