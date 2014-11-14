@@ -68,8 +68,8 @@ package maryfisher.framework.command.net {
 		public function get resultData():Object { return _resultData; }
 		public function get netRequest():NetRequest { return _netRequest; }
 		public function get netData():NetData {	return _netData; }
-        
         public function get requestSpecs():String { return _requestSpecs; }
+        public function get requestData():Object { return _requestData; }
 	}
 
 }
