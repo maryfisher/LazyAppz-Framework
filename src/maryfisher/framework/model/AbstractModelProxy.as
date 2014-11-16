@@ -34,7 +34,7 @@ package maryfisher.framework.model {
 			
 			for each (var model:AbstractModel in _models) {
                 //Note this is so that proxies with no models don't trigger onModelsLoaded
-                var dataLoaded:Boolean = true;
+                dataLoaded = true;
 				if (model.status == AbstractModel.DATA_WAITING) {
 					//trace("[AbstractProxy] dataFinishedLoading", this, "model not loaded", model);
 					dataLoaded = false;

@@ -59,7 +59,7 @@ package maryfisher.framework.data {
 			
 		}
 		
-		public function formatToHTML(paramMap:LocaleTextParamMap, paramId:String = "param", addLinks:Boolean = false):void {
+		public function formatToHTML(paramMap:LocaleTextParamMap, paramId:String = "param", addLinks:Boolean = false):String {
 			formattedHTMLText = formattedText;
 			for (var i:int = _allParameters.length - 1; i >= 0; i--) {
 				var ltp:LocaleTextParameter = _allParameters[i];
@@ -72,7 +72,7 @@ package maryfisher.framework.data {
 				if (ltp.text.length > 0) {
 					contentText = ltp.text;
 				}else {
-					paramMap.getContent(paramType1, paramType2);
+					contentText = paramMap.getContent(paramType1, paramType2);
 				}
 				
 				var spanStr:String = '<span class="' + paramMap.getCssClass(paramType1, paramType2) + '">' + contentText + '</span>';
@@ -81,6 +81,8 @@ package maryfisher.framework.data {
 				}
 				formattedHTMLText = formattedHTMLText.substring(0, startIndex) + spanStr + formattedHTMLText.substring(endIndex, formattedHTMLText.length)
 			}
+			
+			return formattedHTMLText;
 		}
 		
 		public function getShortened(length:int = 20):String {
