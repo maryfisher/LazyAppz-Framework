@@ -20,12 +20,14 @@ package maryfisher.framework.net {
 		private var _connection:SQLConnection;
 		private var _pendingRequests:Vector.<NetCommand>;
 		private var _connectionOpen:Boolean;
+		private var _isReadOnly:Boolean;
 		
 		/** TODO
 		 * database encryption
 		 */
 		
-		public function BaseSQLController(path:String, dbFileId:String, controllerID:String) {
+		public function BaseSQLController(path:String, dbFileId:String, controllerID:String, isReadOnly:Boolean = true) {
+			_isReadOnly = isReadOnly;
 			_controllerID = controllerID;
 			_path = path;
 			_dbFileId = dbFileId;
@@ -35,14 +37,16 @@ package maryfisher.framework.net {
 			_connection = new SQLConnection();
 			_connection.addEventListener(SQLEvent.OPEN, onDatabaseOpen);
 			_connection.addEventListener(SQLErrorEvent.ERROR, onOpenError);
-			_connection.addEventListener(SQLEvent.BEGIN, onBegin);
-			_connection.addEventListener(SQLEvent.COMMIT, onCommit);
+			if(!_isReadOnly){
+				_connection.addEventListener(SQLEvent.BEGIN, onBegin);
+				_connection.addEventListener(SQLEvent.COMMIT, onCommit);
+			}
 			
 			createDBFile();
 		}
 		
 		private function onBegin(e:SQLEvent):void {
-			trace("[BaseSQLController] onBegin -> sendNextRequest")
+			//trace("[BaseSQLController] onBegin -> sendNextRequest")
 			sendNextRequest();
 		}
 		
@@ -62,7 +66,7 @@ package maryfisher.framework.net {
 			if (_pendingRequests.length == 0) {
 				_connection.close();
 				_connectionOpen = false;
-				trace("[BaseSQLController] commitHandler: Transaction complete");
+				//trace("[BaseSQLController] commitHandler: Transaction complete");
 			}
 			
 		}
@@ -75,7 +79,11 @@ package maryfisher.framework.net {
 		}
 		
 		private function onDatabaseOpen(e:SQLEvent):void {
-			_connection.begin(SQLTransactionLockType.EXCLUSIVE);
+			if (_isReadOnly) {
+				sendNextRequest();
+				return;
+			}
+			_connection.begin(SQLTransactionLockType.IMMEDIATE);
 		}
 		
 		private function onRequestFinished(cmd:NetCommand):void {
@@ -85,11 +93,16 @@ package maryfisher.framework.net {
 		private function sendNextRequest():void {
 			var cmd:NetCommand = _pendingRequests.shift();
 			if (!cmd) {
-				trace("[BaseSQLController] sendNextRequest: Commit transaction");
-				_connection.commit();
+				//trace("[BaseSQLController] sendNextRequest: Commit transaction");
+				if (!_isReadOnly) {
+					_connection.commit();
+					return;
+				}
+				_connection.close();
+				_connectionOpen = false;
 				return;
 			}
-			trace("[BaseSQLController] sendNextRequest:", _dbFile.nativePath);
+			//trace("[BaseSQLController] sendNextRequest:", _dbFile.nativePath);
 			var r:SQLRequest = (cmd.netRequest as SQLRequest);
 			r.connection = _connection;
 			cmd.requestFinished.addOnce(onRequestFinished);
@@ -102,7 +115,7 @@ package maryfisher.framework.net {
 			var r:SQLRequest = (cmd.netRequest as SQLRequest);
 			if (!r)
 				return;
-			trace("[BaseSQLController] registerRequest:", cmd.id, "connection open:", _connectionOpen);
+			//trace("[BaseSQLController] registerRequest:", cmd.id, "connection open:", _connectionOpen);
 			_pendingRequests.push(cmd);
 			if (_connectionOpen)
 				return;

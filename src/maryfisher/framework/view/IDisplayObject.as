@@ -6,7 +6,7 @@ package maryfisher.framework.view {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public interface IDisplayObject extends IEventListener{
+	public interface IDisplayObject {
 		function get width():Number;
 		function get height():Number;
 		function get x():Number;
@@ -17,12 +17,11 @@ package maryfisher.framework.view {
 		function get visible():Boolean;
 		function set alpha(value:Number):void;
 		function set clipRect(value:Rectangle):void;
-		function set filters(value:Array):void;
-		
+		//function set filters(value:Array):void;
 		/** TODO
 		 * addStageListener to make it independent from flash.display.Stage
 		 */
-		function get stage():Stage;
+		//function get stage():Stage;
 		
 	}
 	

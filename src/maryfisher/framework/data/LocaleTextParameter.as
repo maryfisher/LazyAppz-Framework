@@ -16,8 +16,8 @@ package maryfisher.framework.data {
 			this.indexFormatted = indexFormatted;
 			_node = content;
 			text = content.toString();
-			trace("[LocaleTextParameter]", getAttributeNameByPos());
-			trace("[LocaleTextParameter]", getAttributeValByPos());
+			//trace("[LocaleTextParameter]", getAttributeNameByPos());
+			//trace("[LocaleTextParameter]", getAttributeValByPos());
 		}
 		
 		public function getAttribute(att:String):String {

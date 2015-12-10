@@ -11,23 +11,19 @@ package maryfisher.framework.model {
 	 * @author mary_fisher
 	 */
 	public class AbstractModel implements INetRequestCallback {
-		//static public const DATA_READY:String = "modelDataReady";
-		public static const DATA_LOADED:String = 'modelDataLoaded';
-		public static const DATA_WAITING:String = 'modelDataWaiting';
+		
+		public static const DATA_LOADED:String = "modelDataLoaded";
+		public static const DATA_WAITING:String = "modelDataWaiting";
 		static public const INITIAL_DATA:String = "initialData";
-		static public const LATEST_DATA:String = "latestData";
 		
 		private var _updateSignal:DeluxeSignal;
-		//private var _updateSignal:Signal;
 		private var _status:String;
 		private var _sequencer:CommandSequencer;
 		private var _sequenceListener:Dictionary;
 		protected var _dataType:String;
-		//private var _signature:Class; /* eg IThisModelProxy */
 		
 		public function AbstractModel() {
 			_updateSignal = new DeluxeSignal(BaseModelUpdate);
-			//_updateSignal = new Signal(BaseModelUpdate);
 			_status = DATA_WAITING;
 			_dataType = INITIAL_DATA;
 		}
@@ -76,20 +72,17 @@ package maryfisher.framework.model {
 		}
 		
 		public function set status(status:String):void {
+			if (_status == status) return;
 			_status = status;
 			_updateSignal.dispatch(new ModelStatusUpdate(_status, _dataType));
 		}
-		
-		//public function set signature(value:Class):void {
-			//_signature = value;
-		//}
 		
 		protected function getBaseUpdate(id:String):BaseModelUpdate {
 			return new BaseModelUpdate(id);
 		}
 		
-		public function dispatch(update:BaseModelUpdate):void {
-			if (_status == DATA_WAITING) return;
+		public function dispatch(update:BaseModelUpdate, force:Boolean = false):void {
+			if (!force && _status == DATA_WAITING) return;
 			_updateSignal.dispatch(update);
 		}
 		

@@ -12,8 +12,8 @@ package maryfisher.framework.net {
 		private var _prefix:String;
         private var _suffix:String;
 		
-		public function DynamicIdSQLController(path:String, suffix:String, prefix:String, controllerID:String, useAppDir:Boolean) {
-			super(path, suffix, controllerID, useAppDir);
+		public function DynamicIdSQLController(path:String, suffix:String, prefix:String, controllerID:String, useAppDir:Boolean, isReadOnly:Boolean = true) {
+			super(path, suffix, controllerID, useAppDir, isReadOnly);
 			_prefix = prefix;
 		    _suffix = suffix;
 		}

@@ -59,6 +59,10 @@ package maryfisher.framework.data {
 			
 		}
 		
+		public function get allParameters():Vector.<LocaleTextParameter> {
+			return _allParameters;
+		}
+		
 		public function formatToHTML(paramMap:LocaleTextParamMap, paramId:String = "param", addLinks:Boolean = false):String {
 			formattedHTMLText = formattedText;
 			for (var i:int = _allParameters.length - 1; i >= 0; i--) {

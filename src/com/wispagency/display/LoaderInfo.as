@@ -242,7 +242,7 @@
 		 *                            in non-debugger builds (or when debugging is not enabled) or if the referenced object
 		 *                            does not have an associated LoaderInfo object (such as some objects used by the AIR runtime).
 		 */
-		public static function getLoaderInfoByDefinition(object:Object):LoaderInfo {
+		public static function getLoaderInfoByDefinition(object:Object):flash.display.LoaderInfo {
 			return flash.display.Loader['getLoaderInfoByDefinition'](object);
 		}
 		

@@ -46,7 +46,8 @@ package maryfisher.framework.command.view {
 		}
 		
 		protected function setProgress():void {
-			_progress = Math.min((_currentStep + 0.5) / _steps, 1);
+			//_progress = Math.min((_currentStep + 0.5) / _steps, 1);
+			_progress = _currentStep / _steps;
 			//_progress = Math.min((_currentStep) / _steps, 1);
 		}
 		

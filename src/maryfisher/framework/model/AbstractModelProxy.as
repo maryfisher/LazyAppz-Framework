@@ -9,6 +9,8 @@ package maryfisher.framework.model {
 	 */
 	public class AbstractModelProxy {
 		
+		static public const ALREADY_LOADED_DATA:String = "alreadyLoadedData";
+		
 		protected var _models:Dictionary;
 		protected var _allModelsLoaded:Boolean = false;
 		private var _priority:int;
@@ -21,7 +23,7 @@ package maryfisher.framework.model {
 			
 			ModelController.registerProxy(this);
 			
-			dataFinishedLoading(AbstractModel.LATEST_DATA);
+			dataFinishedLoading(ALREADY_LOADED_DATA);
 		}
 		
 		public function addModel(modelType:Class, model:AbstractModel):void {

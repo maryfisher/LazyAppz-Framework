@@ -100,6 +100,7 @@ package maryfisher.framework.core {
 			 */
 			
 			if (_cachedLoadedAssets[cmd.id + cmd.fileId] != null) {
+				cmd.loaderData = (_paths[cmd.id] as LoaderData);
 				cmd.asset = _cachedLoadedAssets[cmd.id + cmd.fileId];
 				cmd.setFinished();
 				return;

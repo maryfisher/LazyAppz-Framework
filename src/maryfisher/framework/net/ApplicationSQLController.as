@@ -1,16 +1,17 @@
 package maryfisher.framework.net {
 	import flash.filesystem.File;
+	
 	/**
 	 * ...
 	 * @author mary_fisher
 	 */
 	public class ApplicationSQLController extends BaseSQLController {
-        private var _useAppDir:Boolean;
+		private var _useAppDir:Boolean;
 		
-		public function ApplicationSQLController(path:String, dbFileId:String, controllerID:String, useAppDir:Boolean = true) {
+		public function ApplicationSQLController(path:String, dbFileId:String, controllerID:String, useAppDir:Boolean = true, isReadOnly:Boolean = true) {
 			_useAppDir = useAppDir;
-			super(path, dbFileId, controllerID);
-            
+			super(path, dbFileId, controllerID, isReadOnly);
+		
 		}
 		
 		override protected function createDBFile():void {
@@ -19,7 +20,7 @@ package maryfisher.framework.net {
 			ssc.createDirectory();
 			_dbFile = ssc.resolvePath(_dbFileId);
 		}
-		
+	
 	}
 
 }

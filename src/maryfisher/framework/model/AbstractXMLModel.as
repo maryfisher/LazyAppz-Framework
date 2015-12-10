@@ -4,9 +4,9 @@ package maryfisher.framework.model {
 	 * ...
 	 * @author mary_fisher
 	 */
-	public class AbstractConfigModel extends AbstractModel {
+	public class AbstractXMLModel extends AbstractModel {
 		
-		public function AbstractConfigModel() {
+		public function AbstractXMLModel() {
 			super();
 			
 		}

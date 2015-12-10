@@ -61,8 +61,8 @@ package maryfisher.framework.command.loader {
 		}
 		
 		public function leachLoading(cmd:LoaderCommand):void {
-			asset = cmd.asset;
 			_loaderData = cmd.loaderData;
+			asset = cmd.asset;
 			setFinished();
 		}
 		
@@ -78,6 +78,10 @@ package maryfisher.framework.command.loader {
 		
 		public function get loaderData():LoaderData {
 			return _loaderData;
+		}
+		
+		public function set loaderData(value:LoaderData):void {
+			_loaderData = value;
 		}
 		
 		public function get fileId():String {
