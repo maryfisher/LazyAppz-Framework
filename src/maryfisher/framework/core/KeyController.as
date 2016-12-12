@@ -87,7 +87,10 @@ package maryfisher.framework.core {
 			var l:int = keys.length;
 			for (var i:int = 0; i < l; i++) {
 				var vec:Vector.<IKeyListener> = _keyUp[keys[i]];
-				vec.splice(vec.indexOf(keyListener), 1);
+				if (!vec) return;
+				var index:int = vec.indexOf(keyListener);
+				if(index > -1)
+					vec.splice(index, 1);
 			}
 		}
 		

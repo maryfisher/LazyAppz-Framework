@@ -1,5 +1,6 @@
 package maryfisher.framework.data {
 	import flash.geom.Point;
+	import flash.geom.Vector3D;
 	/**
 	 * ...
 	 * @author mary_fisher
@@ -33,6 +34,15 @@ package maryfisher.framework.data {
 				return new Point(s[0], s[1]);
 			}else {
 				return new Point();
+			}
+		}
+		
+		protected function getVector(str:String, del:String = ","):Vector3D {
+			if (validateString(str)) {
+				var s:Array = str.split(del);
+				return new Vector3D(s[0], s[1], s[2]);
+			}else {
+				return new Vector3D();
 			}
 		}
 		

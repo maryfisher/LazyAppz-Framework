@@ -15,9 +15,11 @@ package maryfisher.framework.net {
 		}
 		
 		override protected function createDBFile():void {
-			var resources:File = _useAppDir ? File.applicationDirectory : File.documentsDirectory;
-			var ssc:File = new File(resources.nativePath + _path);
+			var resources:File, ssc:File;
+			resources = _useAppDir ? File.applicationDirectory : File.documentsDirectory;
+			ssc = new File(resources.nativePath + "/" + _path);
 			ssc.createDirectory();
+			
 			_dbFile = ssc.resolvePath(_dbFileId);
 		}
 	
